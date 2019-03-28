@@ -1,0 +1,9 @@
+.container {
+    padding-top: 50px;
+}
+
+.error{
+    color: red;
+    font-size: small;
+    font-style: italic;
+}

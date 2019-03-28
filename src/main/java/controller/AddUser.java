@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,19 +11,17 @@ import java.sql.*;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 /**
  *
  * @author raphaelcja
  */
-@WebServlet(name = "CheckUser", urlPatterns = {"/check_user"})
-public class CheckUser extends HttpServlet {
+@WebServlet(name = "AddUser", urlPatterns = {"/add_user"})
+public class AddUser extends HttpServlet {
     
     @Resource(name="jdbc/Bandersnatch")
     private DataSource ds;
@@ -40,10 +38,6 @@ public class CheckUser extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        boolean badLogin = false;
-        HttpSession session = request.getSession();
-        if(isLoginValid(request)) session.setAttribute("utilisateur", request.getParameter("login"));
-        else badLogin = true;
         
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
@@ -51,39 +45,45 @@ public class CheckUser extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>User Check</title>");
+            out.println("<title>Registration</title>");  
             // TODO: add reference for stylesheet
             out.println("<meta charset=\"UTF-8\">");
             out.println("</head>");
-            out.println("<body>");  
-            if(badLogin) {
-                out.println("<p>Incorrect login or password</p>");
-                out.println("<p>Retour vers <a href=\"index.jsp\">l'accueil</a></p>");
-            }
-            else {
-                out.println("<p>You are logged in</p>");
-                out.println("<p>Aller vers <a href=\"user_main_page.jsp\">la page de l'utilisateur</a></p>");
-            }
+            out.println("<body>");
+            if(!insertUser(request)) out.println("<p>Error during registration</p>");
+            out.println(traiteDonnees(request));
+            out.println("<p>Retour vers <a href=\"index.jsp\">l'accueil</a></p>");
             out.println("</body>");
             out.println("</html>");
         }
     }
     
-    private boolean isLoginValid(HttpServletRequest request) {
-                
-        String query = "SELECT login, password FROM Users WHERE login=? AND password=?";
+    private boolean insertUser(HttpServletRequest request) {
+        String query = "INSERT INTO Users VALUES (?, ?, ?, ?)";
         
         try (Connection conn = ds.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, request.getParameter("login"));
             ps.setString(2, request.getParameter("password"));
-            ResultSet rs = ps.executeQuery();
-            if(rs != null && rs.next()) return true;
+            ps.setString(3, request.getParameter("nom"));
+            ps.setString(4, request.getParameter("prenom"));
+            int i = ps.executeUpdate();
+            if(i == 1) return true;
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return false;
+    }
+    
+    private String traiteDonnees(HttpServletRequest request) {
+        String nom = request.getParameter("nom");
+        String prenom = request.getParameter("prenom");
+        
+        if (nom.equals("") || prenom.equals("")) {
+            return "<p>Erreur : tous les champs doivent être remplis.</p>";
+        }
+        else return "<p>Bienvenue " + prenom + " " + nom + ".</p>";        
     }
 
     /**

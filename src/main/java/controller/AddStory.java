@@ -3,28 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 /**
  *
  * @author raphaelcja
  */
-@WebServlet(name = "CheckUser", urlPatterns = {"/check_user"})
-public class CheckUser extends HttpServlet {
-    
+@WebServlet(name = "AddStory", urlPatterns = {"/add_story"})
+public class AddStory extends HttpServlet {
+
     @Resource(name="jdbc/Bandersnatch")
     private DataSource ds;
 
@@ -40,10 +40,8 @@ public class CheckUser extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        boolean badLogin = false;
-        HttpSession session = request.getSession();
-        if(isLoginValid(request)) session.setAttribute("utilisateur", request.getParameter("login"));
-        else badLogin = true;
+        
+        String ecriture = request.getParameter("ecriture");
         
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
@@ -51,39 +49,31 @@ public class CheckUser extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>User Check</title>");
+            out.println("<title>New Story</title>");  
             // TODO: add reference for stylesheet
             out.println("<meta charset=\"UTF-8\">");
             out.println("</head>");
-            out.println("<body>");  
-            if(badLogin) {
-                out.println("<p>Incorrect login or password</p>");
-                out.println("<p>Retour vers <a href=\"index.jsp\">l'accueil</a></p>");
+            out.println("<body>");
+            if(!insertParag(request)) {
+                out.println("<p>Error during story creation</p>");
+                out.println("<p>Retour vers <a href=\"user_main_page.jsp\">la page de l'utilisateur</a></p>");
             }
             else {
-                out.println("<p>You are logged in</p>");
-                out.println("<p>Aller vers <a href=\"user_main_page.jsp\">la page de l'utilisateur</a></p>");
+                if(ecriture.equals("libre"))
+                    out.println("<p><a href=\"add_option.jsp\">Continuez</a> avec la création des choix</p>");
+                else if (ecriture.equals("invitation"))
+                    out.println("<p>Avant ajouter des choix, <a href=\"invite.jsp\">continuez</a> avec les invitations</p>");
+                else
+                    out.println("<p>Aucune mode d'écriture choisie</p>");
             }
             out.println("</body>");
             out.println("</html>");
         }
     }
     
-    private boolean isLoginValid(HttpServletRequest request) {
-                
-        String query = "SELECT login, password FROM Users WHERE login=? AND password=?";
-        
-        try (Connection conn = ds.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, request.getParameter("login"));
-            ps.setString(2, request.getParameter("password"));
-            ResultSet rs = ps.executeQuery();
-            if(rs != null && rs.next()) return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+    private boolean insertParag(HttpServletRequest request) {
+        //TODO
+        return true;
     }
 
     /**
@@ -95,5 +85,4 @@ public class CheckUser extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
