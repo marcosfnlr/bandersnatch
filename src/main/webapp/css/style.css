@@ -1,8 +1,16 @@
+.navbar {
+    background-color: black;
+}
+
+.navbar-dark .navbar-brand {
+    color: red;
+}
+
 .container {
     padding-top: 50px;
 }
 
-.error{
+.error {
     color: red;
     font-size: small;
     font-style: italic;
