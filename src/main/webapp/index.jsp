@@ -54,7 +54,7 @@
                     class="far fa-laugh-wink"></i></p>
         </div>
         <div class="col-12 col-lg-4">
-            <form class="custom-validation" method="post" action="CheckUser" accept-charset="UTF-8" novalidate>
+            <form class="custom-validation" method="post" action="user_controller" accept-charset="UTF-8" novalidate>
                 <h1>Login</h1>
                 <div class="form-row justify-content-center">
                     <div class="col-12 mb-3">
@@ -71,6 +71,7 @@
                 <div class="row justify-content-center">
                     <button type="submit" class="btn btn-danger">Login</button>
                 </div>
+                <input type="hidden" name="action" value="check_user" />
             </form>
         </div>
     </div>

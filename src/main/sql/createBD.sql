@@ -8,13 +8,13 @@
  * Created: 28-Mar-2019
  */
 
-DROP TABLE Users;
+DROP TABLE Account;
 
-CREATE TABLE Users(
+CREATE TABLE Account(
     login varchar2(10) PRIMARY KEY,
     password varchar2(100) NOT NULL,
     nom varchar2(100) NOT NULL,
     prenom varchar2(50) NOT NULL
 );
-INSERT INTO Users VALUES ('toto', 'toto', 'Hey', 'Ho');
-INSERT INTO Users VALUES ('titi', 'titi', 'Hi', 'Ha');
+INSERT INTO Account VALUES ('toto', 'toto', 'Hey', 'Ho');
+INSERT INTO Account VALUES ('titi', 'titi', 'Hi', 'Ha');

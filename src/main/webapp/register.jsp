@@ -12,7 +12,7 @@
         <title>Registration</title>
     </head>
     <body>
-        <form action="add_user" method="post" accept-charset="UTF-8">
+        <form action="user_controller" method="post" accept-charset="UTF-8">
             <p> Nom : <input type="text" name="nom" size="15"/></p>
             
             <p> Prénom : <input type="text" name="prenom" size="15"/></p>
@@ -23,9 +23,12 @@
             
             <p> Mot de passe : <input type="password" name="password" size="15"/></p>
             
+            <a href="index.jsp">Annuler</a>
             
             <p><input type="submit" name="creer" value="Créer"/></p>
-                
+            
+            <input type="hidden" name="action" value="add_user" />
+            
         </form>
     </body>
 </html>
