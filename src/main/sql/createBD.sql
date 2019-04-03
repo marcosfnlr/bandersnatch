@@ -19,8 +19,8 @@ DROP TABLE Account;
 CREATE TABLE Account(
     id_account VARCHAR2(10) PRIMARY KEY NOT NULL,
     password VARCHAR2(100) NOT NULL,
-    surname VARCHAR2(100) NOT NULL,
-    name VARCHAR2(50) NOT NULL
+    last_name VARCHAR2(100) NOT NULL,
+    first_name VARCHAR2(50) NOT NULL
 );
 
 CREATE TABLE Book(
