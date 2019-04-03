@@ -13,13 +13,13 @@
     </head>
     <body>
         <form action="user_controller" method="post" accept-charset="UTF-8">
-            <p> Nom : <input type="text" name="nom" size="15"/></p>
+            <p> Nom : <input type="text" name="last_name" size="15"/></p>
             
-            <p> Prénom : <input type="text" name="prenom" size="15"/></p>
+            <p> Prénom : <input type="text" name="first_name" size="15"/></p>
             
             <hr style="border: 1px solid black;" />
             
-            <p> Login : <input type="text" name="login" size="15"/></p>
+            <p> Login : <input type="text" name="id_account" size="15"/></p>
             
             <p> Mot de passe : <input type="password" name="password" size="15"/></p>
             

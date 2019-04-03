@@ -58,8 +58,8 @@
                 <h1>Login</h1>
                 <div class="form-row justify-content-center">
                     <div class="col-12 mb-3">
-                        <label for="login">Utilisateur:</label>
-                        <input type="text" class="form-control" id="login" name="login" required>
+                        <label for="id_account">Utilisateur:</label>
+                        <input type="text" class="form-control" id="id_account" name="id_account" required>
                     </div>
                 </div>
                 <div class="form-row justify-content-center">

@@ -103,7 +103,7 @@ public class UserController extends HttpServlet {
                 if(actionCheckUser(request, response, userDAO)) { // correct login
                     //String message = "Vous êtes logged-in";
                     //request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(message, TypeFeedback.SUCCESS)));
-                    request.getSession().setAttribute("utilisateur", request.getParameter("login"));
+                    request.getSession().setAttribute("utilisateur", request.getParameter("id_account"));
                     request.getRequestDispatcher("/user_main_page.jsp").forward(request, response);
                 } else { // incorrect login
                     String errorMessage = "Mauvaise combinaison utilisateur et mot de passe";
@@ -126,23 +126,22 @@ public class UserController extends HttpServlet {
     private void actionAddUser(HttpServletRequest request, HttpServletResponse response, 
             UserDAO userDAO) throws ServletException, IOException {
         
-        String login = request.getParameter("login");
+        String idAccount = request.getParameter("id_account");
         String password = request.getParameter("password");
-        String nom = request.getParameter("nom");
-        String prenom = request.getParameter("prenom");
-        userDAO.addUser(login, password, nom, prenom);
-        //request.getRequestDispatcher("index.jsp").forward(request, response);
+        String lastName = request.getParameter("last_name");
+        String firstName = request.getParameter("first_name");
+        userDAO.addUser(idAccount, password, lastName, firstName);
     }
     
     /**
-     * Checks if user exists with correct login and password.
+     * Checks if user exists with correct id_account and password.
      */
     private boolean actionCheckUser(HttpServletRequest request, HttpServletResponse response, 
             UserDAO userDAO) throws ServletException, IOException {
         
-        String login = request.getParameter("login");
+        String idAccount = request.getParameter("id_account");
         String password = request.getParameter("password");
-        return userDAO.checkUser(login, password);
+        return userDAO.checkUser(idAccount, password);
     }
     
     

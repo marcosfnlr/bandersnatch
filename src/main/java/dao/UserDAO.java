@@ -36,8 +36,8 @@ public class UserDAO extends AbstractDataBaseDAO {
             ) {
             ResultSet rs = st.executeQuery("SELECT * FROM Account");
             while (rs.next()) {
-                User user = new User(rs.getString("login"), rs.getString("password"),
-                rs.getString("nom"), rs.getString("prenom"));
+                User user = new User(rs.getString("id_account"), rs.getString("password"),
+                rs.getString("last_name"), rs.getString("first_name"));
                 list.add(user);
             }
         } catch (SQLException e) {
@@ -50,16 +50,16 @@ public class UserDAO extends AbstractDataBaseDAO {
     /**
      * Adds user on table Account.
      */
-    public void addUser(String login, String password, String nom, String prenom) {
-        String query = "INSERT INTO Account (login, password, nom, prenom) VALUES (?,?,?,?)";
+    public void addUser(String idAccount, String password, String lastName, String firstName) {
+        String query = "INSERT INTO Account (id_account, password, last_name, first_name) VALUES (?,?,?,?)";
         try (
             Connection conn = getConn();
             PreparedStatement ps = conn.prepareStatement(query);
             ) {
-            ps.setString(1, login);
+            ps.setString(1, idAccount);
             ps.setString(2, password);
-            ps.setString(3, nom);
-            ps.setString(4, prenom);
+            ps.setString(3, lastName);
+            ps.setString(4, firstName);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
@@ -67,37 +67,37 @@ public class UserDAO extends AbstractDataBaseDAO {
     }
     
     /**
-     * Gets user using login identifier from table Account.
+     * Gets user with id_account identifier from table Account.
      */
-    public User getUser(String login) {
-        String password, nom, prenom;
+    public User getUser(String idAccount) {
+        String password, lastName, firstName;
         try(
             Connection conn = getConn();
             Statement st = conn.createStatement();
             ) {
-            ResultSet rs = st.executeQuery("SELECT * FROM Account WHERE login=" + login);
+            ResultSet rs = st.executeQuery("SELECT * FROM Account WHERE id_account=" + idAccount);
             rs.next();
             password = rs.getString("password");
-            nom = rs.getString("nom");
-            prenom = rs.getString("prenom");
+            lastName = rs.getString("last_name");
+            firstName = rs.getString("first_name");
             
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
         }
         
-        return new User(login, password, nom, prenom);
+        return new User(idAccount, password, lastName, firstName);
     }
     
     /**
-     * Checks user using login identifier and password from table Account.
+     * Checks user with id_account identifier and password from table Account.
      */
-    public boolean checkUser(String login, String password) {
+    public boolean checkUser(String idAccount, String password) {
 
-        String query = "SELECT login, password FROM Account WHERE login=? AND password=?";
+        String query = "SELECT id_account, password FROM Account WHERE id_account=? AND password=?";
 
         try (Connection conn = getConn()) {
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, login);
+            ps.setString(1, idAccount);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
             if (rs != null && rs.next()) return true;

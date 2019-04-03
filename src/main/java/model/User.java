@@ -11,37 +11,37 @@ package model;
  */
 public class User {
     
-    private final String login;
+    private final String idAccount;
     private final String password;
-    private final String nom;
-    private final String prenom;
+    private final String lastName;
+    private final String firstName;
 
-    public User(String login, String password, String nom, String prenom) {
-        this.login = login;
+    public User(String idAccount, String password, String lastName, String firstName) {
+        this.idAccount = idAccount;
         this.password = password;
-        this.nom = nom;
-        this.prenom = prenom;
+        this.lastName = lastName;
+        this.firstName = firstName;
     }
 
-    public String getLogin() {
-        return login;
+    public String getIdAccount() {
+        return idAccount;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public String getNom() {
-        return nom;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getPrenom() {
-        return prenom;
+    public String getFirstName() {
+        return firstName;
     }
 
     @Override
     public String toString() {
-        return "User{" + "login=" + login + ", nom=" + nom + ", prenom=" + prenom + '}';
+        return "User{" + "idAccount=" + idAccount + ", lastName=" + lastName + ", firstName=" + firstName + '}';
     }
     
     
