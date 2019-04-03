@@ -8,7 +8,7 @@
  * Created: 28-Mar-2019
  */
 
-WHENEVER SQLERROR CONTINUE NONE
+/*WHENEVER SQLERROR CONTINUE NONE*/
 DROP TABLE Invitation;
 DROP TABLE History;
 DROP TABLE Choice;
@@ -26,7 +26,7 @@ CREATE TABLE Account(
 CREATE TABLE Book(
     id_book INT GENERATED ALWAYS as IDENTITY PRIMARY KEY NOT NULL,
     title VARCHAR2(100) NOT NULL,
-    open NUMBER(1) NOT NULL,
+    open_write NUMBER(1) NOT NULL,
     published NUMBER(1) NOT NULL,
     fk_book_account VARCHAR2(10) NOT NULL,
     FOREIGN KEY (fk_book_account) REFERENCES Account(id_account)
@@ -46,7 +46,7 @@ CREATE TABLE Choice(
     id_choice INT GENERATED ALWAYS as IDENTITY PRIMARY KEY NOT NULL,
     text VARCHAR2(250) NOT NULL,
     locked NUMBER(1) NOT NULL,
-    final NUMBER(1) NOT NULL,
+    only_choice NUMBER(1) NOT NULL,
     cond_should_pass NUMBER(1),
     fk_choice_parag_orig INT NOT NULL,
     fk_choice_parag_dest INT NOT NULL,

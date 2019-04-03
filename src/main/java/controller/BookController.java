@@ -148,6 +148,8 @@ public class BookController extends HttpServlet{
     
     /**
      * Deletes a book.
+     * It's called when first paragraph of book is deleted.
+     * Constraints of first paragraph deletion are in paragraph controller
      */
     private void actionDeleteBook(HttpServletRequest request, HttpServletResponse response, 
             BookDAO bookDAO) throws ServletException, IOException {
@@ -163,6 +165,7 @@ public class BookController extends HttpServlet{
     private void actionPublishBook(HttpServletRequest request, HttpServletResponse response, 
             BookDAO bookDAO) throws ServletException, IOException {
         
+        //TODO : check if user is creator
         int idBook = Integer.parseInt(request.getParameter("idBook"));
         boolean published = Boolean.parseBoolean(request.getParameter("published"));
         bookDAO.publishBook(idBook, published);
