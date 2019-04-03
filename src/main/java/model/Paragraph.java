@@ -11,22 +11,22 @@ package model;
  */
 public class Paragraph {
     
-    private final int idParag;
+    private final int idParagraph;
     private final String text;
     private final boolean conclusion;
-    private final int idBook;
-    private final String author;
+    private final Book book;
+    private final User author;
 
-    public Paragraph(int idParag, String text, boolean conclusion, int idBook, String author) {
-        this.idParag = idParag;
+    public Paragraph(int idParagraph, String text, boolean conclusion, Book book, User author) {
+        this.idParagraph = idParagraph;
         this.text = text;
         this.conclusion = conclusion;
-        this.idBook = idBook;
+        this.book = book;
         this.author = author;
     }
 
-    public int getIdParag() {
-        return idParag;
+    public int getIdParagraph() {
+        return idParagraph;
     }
 
     public String getText() {
@@ -37,17 +37,17 @@ public class Paragraph {
         return conclusion;
     }
 
-    public int getIdBook() {
-        return idBook;
+    public Book getBook() {
+        return book;
     }
 
-    public String getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
     @Override
     public String toString() {
-        return "Paragraph{" + "idParag=" + idParag + ", text=" + text + ", conclusion=" + conclusion + ", idBook=" + idBook + ", author=" + author + '}';
+        return "Paragraph{" + "idParagraph=" + idParagraph + ", text=" + text + ", conclusion=" + conclusion + ", book=" + book + ", author=" + author + '}';
     }
     
     

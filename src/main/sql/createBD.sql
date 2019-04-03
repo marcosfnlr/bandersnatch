@@ -28,18 +28,24 @@ CREATE TABLE Book(
     title VARCHAR2(100) NOT NULL,
     open_write NUMBER(1) NOT NULL,
     published NUMBER(1) NOT NULL,
-    fk_book_account VARCHAR2(10) NOT NULL,
-    FOREIGN KEY (fk_book_account) REFERENCES Account(id_account)
+    fk_account VARCHAR2(10) NOT NULL,
+    FOREIGN KEY (fk_account) REFERENCES Account(id_account)
 );
 
 CREATE TABLE Paragraph(
     id_paragraph INT GENERATED ALWAYS as IDENTITY PRIMARY KEY NOT NULL,
     text VARCHAR2(1000) NOT NULL,
     conclusion NUMBER(1) NOT NULL,
-    fk_paragraph_book INT NOT NULL,
-    fk_paragraph_account VARCHAR2(10) NOT NULL,
-    FOREIGN KEY (fk_paragraph_book) REFERENCES Book(id_book),
-    FOREIGN KEY (fk_paragraph_account) REFERENCES Account(id_account)
+    fk_book INT NOT NULL,
+    fk_account VARCHAR2(10) NOT NULL,
+    FOREIGN KEY (fk_book) REFERENCES Book(id_book),
+    FOREIGN KEY (fk_account) REFERENCES Account(id_account)
+);
+
+/* Paragraph need to exist first */
+ALTER TABLE Book ADD (
+    fk_first_parag INT NOT NULL,
+    FOREIGN KEY (fk_first_parag) REFERENCES Paragraph(id_paragraph)
 );
 
 CREATE TABLE Choice(
@@ -48,29 +54,29 @@ CREATE TABLE Choice(
     locked NUMBER(1) NOT NULL,
     only_choice NUMBER(1) NOT NULL,
     cond_should_pass NUMBER(1),
-    fk_choice_parag_orig INT NOT NULL,
-    fk_choice_parag_dest INT NOT NULL,
-    fk_choice_parag_cond INT,
-    FOREIGN KEY (fk_choice_parag_orig) REFERENCES Paragraph(id_paragraph),
-    FOREIGN KEY (fk_choice_parag_dest) REFERENCES Paragraph(id_paragraph),
-    FOREIGN KEY (fk_choice_parag_cond) REFERENCES Paragraph(id_paragraph)
+    fk_parag_orig INT NOT NULL,
+    fk_parag_dest INT NOT NULL,
+    fk_parag_cond INT,
+    FOREIGN KEY (fk_parag_orig) REFERENCES Paragraph(id_paragraph),
+    FOREIGN KEY (fk_parag_dest) REFERENCES Paragraph(id_paragraph),
+    FOREIGN KEY (fk_parag_cond) REFERENCES Paragraph(id_paragraph)
 );
 
 CREATE TABLE History(
-    fk_history_account VARCHAR2(10) NOT NULL,
-    fk_history_book INT NOT NULL,
-    fk_history_choice INT NOT NULL,
+    fk_account VARCHAR2(10) NOT NULL,
+    fk_book INT NOT NULL,
+    fk_choice INT NOT NULL,
     creation_date TIMESTAMP NOT NULL,
-    PRIMARY KEY (fk_history_account, fk_history_book, fk_history_choice),
-    FOREIGN KEY (fk_history_account) REFERENCES Account(id_account),
-    FOREIGN KEY (fk_history_book) REFERENCES Book(id_book),
-    FOREIGN KEY (fk_history_choice) REFERENCES Choice(id_choice)
+    PRIMARY KEY (fk_account, fk_book, fk_choice),
+    FOREIGN KEY (fk_account) REFERENCES Account(id_account),
+    FOREIGN KEY (fk_book) REFERENCES Book(id_book),
+    FOREIGN KEY (fk_choice) REFERENCES Choice(id_choice)
 );
 
 CREATE TABLE Invitation(
-    fk_invitation_account VARCHAR2(10) NOT NULL,
-    fk_invitation_book INT NOT NULL,
-    PRIMARY KEY (fk_invitation_account, fk_invitation_book),
-    FOREIGN KEY (fk_invitation_account) REFERENCES Account(id_account),
-    FOREIGN KEY (fk_invitation_book) REFERENCES Book(id_book)
+    fk_account VARCHAR2(10) NOT NULL,
+    fk_book INT NOT NULL,
+    PRIMARY KEY (fk_account, fk_book),
+    FOREIGN KEY (fk_account) REFERENCES Account(id_account),
+    FOREIGN KEY (fk_book) REFERENCES Book(id_book)
 );

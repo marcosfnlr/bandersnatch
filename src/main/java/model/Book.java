@@ -5,9 +5,6 @@
  */
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author raphaelcja
@@ -16,18 +13,18 @@ public class Book {
     
     private final int idBook;
     private final String title;
-    private final boolean open;
+    private final boolean openToWrite;
     private final boolean published;
-    private final String creator;
-    private List<String> authors = new ArrayList<String>();
+    private final User creator;
+    private final Paragraph firstParagraph;
 
-    public Book(int idBook, String title, boolean open, boolean published, String creator) {
+    public Book(int idBook, String title, boolean openToWrite, boolean published, User creator, Paragraph firstParagraph) {
         this.idBook = idBook;
         this.title = title;
-        this.open = open;
+        this.openToWrite = openToWrite;
         this.published = published;
         this.creator = creator;
-        authors.add(creator);
+        this.firstParagraph = firstParagraph;
     }
 
     public int getIdBook() {
@@ -38,25 +35,25 @@ public class Book {
         return title;
     }
 
-    public boolean isOpen() {
-        return open;
+    public boolean isOpenToWrite() {
+        return openToWrite;
     }
 
     public boolean isPublished() {
         return published;
     }
 
-    public String getCreator() {
+    public User getCreator() {
         return creator;
     }
 
-    public List<String> getAuthors() {
-        return authors;
+    public Paragraph getFirstParagraph() {
+        return firstParagraph;
     }
 
     @Override
     public String toString() {
-        return "Book{" + "idBook=" + idBook + ", title=" + title + ", open=" + open + ", published=" + published + ", creator=" + creator + ", authors=" + authors + '}';
+        return "Book{" + "idBook=" + idBook + ", title=" + title + ", openToWrite=" + openToWrite + ", published=" + published + ", creator=" + creator + ", fistParagraph=" + firstParagraph +'}';
     }
     
     
