@@ -29,7 +29,7 @@ public class UserController extends HttpServlet {
     @Resource(name = "jdbc/Bandersnatch")
     private DataSource ds;
     
-    // error pages
+    // error messages
     private void invalidParameters(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         String errorMessage = "Paramètres invalides";

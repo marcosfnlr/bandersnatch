@@ -8,14 +8,20 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import model.Book;
+import model.Paragraph;
+import model.User;
 
 /**
  *
  * @author raphaelcja
  */
 public class BookDAO extends AbstractDataBaseDAO {
+    
+    @Resource(name = "jdbc/Bandersnatch")
+    private DataSource ds;
     
     public BookDAO(DataSource ds) {
         super(ds);
@@ -26,6 +32,8 @@ public class BookDAO extends AbstractDataBaseDAO {
      */
     public List<Book> getListPublishedBooks() {
         List<Book> list = new ArrayList<Book>();
+        UserDAO userDAO = new UserDAO(ds);
+        ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
         
         try(
             Connection conn = getConn();
@@ -33,8 +41,10 @@ public class BookDAO extends AbstractDataBaseDAO {
             ) {
             ResultSet rs = st.executeQuery("SELECT * FROM Book WHERE published=1");
             while (rs.next()){
-                Book book = new Book(rs.getInt("idBook"), rs.getString("title"), rs.getBoolean("open"), 
-                    rs.getBoolean("published"), rs.getString("creator"));
+                User user = userDAO.getUser(rs.getString("fk_account"));
+                Paragraph paragraph = paragraphDAO.getParagraph(rs.getInt("fk_first_parag"));
+                Book book = new Book(rs.getInt("id_book"), rs.getString("title"), rs.getBoolean("open_write"), 
+                    rs.getBoolean("published"), user, paragraph);
                 list.add(book);
             }
             
@@ -48,16 +58,17 @@ public class BookDAO extends AbstractDataBaseDAO {
     /**
      * Adds book on table Book.
      */
-    public void addBook(String title, Boolean open, Boolean published, String creator) {
-        String query = "INSERT INTO Book (title, open, published, creator) VALUES (?,?,?,?)";
+    public void addBook(String title, boolean openToWrite, boolean published, User creator, Paragraph firstParagraph) {
+        String query = "INSERT INTO Book (title, open_write, published, fk_account, fk_first_parag) VALUES (?,?,?,?,?)";
         try(
             Connection conn = getConn();
             PreparedStatement ps = conn.prepareStatement(query);
             ) {
             ps.setString(1, title);
-            ps.setBoolean(2, open);
+            ps.setBoolean(2, openToWrite);
             ps.setBoolean(3, published);
-            ps.setString(4, creator);
+            ps.setString(4, creator.getIdAccount());
+            ps.setInt(5, firstParagraph.getIdParagraph());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
@@ -68,8 +79,13 @@ public class BookDAO extends AbstractDataBaseDAO {
      * Gets book with idBook identifier from table Book.
      */
     public Book getBook(int idBook) {
-        String title, creator;
-        Boolean open, published;
+        String title;
+        boolean openToWrite, published;
+        User creator;
+        Paragraph firstParagraph;
+        UserDAO userDAO = new UserDAO(ds);
+        ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
+        
         
         try(
             Connection conn = getConn();
@@ -78,14 +94,15 @@ public class BookDAO extends AbstractDataBaseDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM Book WHERE idBook=" + idBook);
             rs.next();
             title = rs.getString("title");
-            open = rs.getBoolean("open");
+            openToWrite = rs.getBoolean("open_write");
             published = rs.getBoolean("published");
-            creator = rs.getString("creator");
+            creator =  userDAO.getUser(rs.getString("fk_account"));
+            firstParagraph = paragraphDAO.getParagraph(rs.getInt("fk_first_parag"));
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
         }
         
-        return new Book(idBook, title, open, published, creator);
+        return new Book(idBook, title, openToWrite, published, creator, firstParagraph);
     }
     
     /**
@@ -94,7 +111,7 @@ public class BookDAO extends AbstractDataBaseDAO {
     public void deleteBook(int idBook) {
         try(
             Connection conn = getConn();
-            PreparedStatement ps = conn.prepareStatement("DELETE FROM Book WHERE idBook=?");
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM Book WHERE id_book=?");
             ) {
             ps.setInt(1, idBook);
             ps.executeUpdate();
@@ -109,12 +126,12 @@ public class BookDAO extends AbstractDataBaseDAO {
     public void publishBook(int idBook, boolean publish) {
         try (
 	     Connection conn = getConn();
-	     PreparedStatement st = conn.prepareStatement
-	       ("UPDATE Book SET publish=? WHERE idBook=?");
+	     PreparedStatement ps = conn.prepareStatement
+	       ("UPDATE Book SET published=? WHERE id_book=?");
 	     ) {
-            st.setBoolean(1, publish);
-            st.setInt(2, idBook);
-            st.executeUpdate();
+            ps.setBoolean(1, publish);
+            ps.setInt(2, idBook);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
         }

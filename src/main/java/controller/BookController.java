@@ -29,7 +29,7 @@ public class BookController extends HttpServlet{
     @Resource(name = "jdbc/Bandersnatch")
     private DataSource ds;
     
-    // error pages
+    // error messages
     private void invalidParameters(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         String errorMessage = "Paramètres invalides";
@@ -98,7 +98,7 @@ public class BookController extends HttpServlet{
     }
     
     /**
-     * POST : controls actions of addBooks, deleteBook, publishBook.
+     * POST : controls actions of addBook, deleteBook, publishBook.
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws IOException, ServletException {
@@ -148,7 +148,7 @@ public class BookController extends HttpServlet{
     
     /**
      * Deletes a book.
-     * It's called when first paragraph of book is deleted.
+     * It's called when first paragraph of book is deleted. How to do it best ?
      * Constraints of first paragraph deletion are in paragraph controller
      */
     private void actionDeleteBook(HttpServletRequest request, HttpServletResponse response, 
