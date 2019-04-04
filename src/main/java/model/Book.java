@@ -15,10 +15,10 @@ public class Book {
     private final String title;
     private final boolean openToWrite;
     private final boolean published;
-    private final User creator;
+    private final Account creator;
     private final Paragraph firstParagraph;
 
-    public Book(int idBook, String title, boolean openToWrite, boolean published, User creator, Paragraph firstParagraph) {
+    public Book(int idBook, String title, boolean openToWrite, boolean published, Account creator, Paragraph firstParagraph) {
         this.idBook = idBook;
         this.title = title;
         this.openToWrite = openToWrite;
@@ -43,7 +43,7 @@ public class Book {
         return published;
     }
 
-    public User getCreator() {
+    public Account getCreator() {
         return creator;
     }
 

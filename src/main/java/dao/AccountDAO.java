@@ -9,26 +9,23 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
-import model.User;
+import model.Account;
 
 /**
  *
  * @author raphaelcja
- * 
- * Here all the queries are made on the table Account due to 
- * the fact that User is a keyword of sqlplus.
  */
-public class UserDAO extends AbstractDataBaseDAO {
+public class AccountDAO extends AbstractDataBaseDAO {
     
-    public UserDAO(DataSource ds) {
+    public AccountDAO(DataSource ds) {
         super(ds);
     }
     
     /**
-     * Returns list of users from table Account.
+     * Returns list of accounts from table Account.
      */
-    public List<User> getListUsers() {
-        List<User> list = new ArrayList<User>();
+    public List<Account> getListAccounts() {
+        List<Account> list = new ArrayList<Account>();
         
         try(
             Connection conn = getConn();
@@ -36,9 +33,9 @@ public class UserDAO extends AbstractDataBaseDAO {
             ) {
             ResultSet rs = st.executeQuery("SELECT * FROM Account");
             while (rs.next()) {
-                User user = new User(rs.getString("id_account"), rs.getString("password"),
+                Account account = new Account(rs.getString("id_account"), rs.getString("password"),
                 rs.getString("last_name"), rs.getString("first_name"));
-                list.add(user);
+                list.add(account);
             }
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
@@ -48,9 +45,9 @@ public class UserDAO extends AbstractDataBaseDAO {
     }
     
     /**
-     * Adds user on table Account.
+     * Adds account on table Account.
      */
-    public void addUser(String idAccount, String password, String lastName, String firstName) {
+    public void addAccount(String idAccount, String password, String lastName, String firstName) {
         String query = "INSERT INTO Account (id_account, password, last_name, first_name) VALUES (?,?,?,?)";
         try (
             Connection conn = getConn();
@@ -67,9 +64,9 @@ public class UserDAO extends AbstractDataBaseDAO {
     }
     
     /**
-     * Gets user with id_account identifier from table Account.
+     * Gets account with id_account identifier from table Account.
      */
-    public User getUser(String idAccount) {
+    public Account getAccount(String idAccount) {
         String password, lastName, firstName;
         try(
             Connection conn = getConn();
@@ -85,13 +82,13 @@ public class UserDAO extends AbstractDataBaseDAO {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
         }
         
-        return new User(idAccount, password, lastName, firstName);
+        return new Account(idAccount, password, lastName, firstName);
     }
     
     /**
-     * Checks user with id_account identifier and password from table Account.
+     * Checks account with id_account identifier and password from table Account.
      */
-    public boolean checkUser(String idAccount, String password) {
+    public boolean checkAccount(String idAccount, String password) {
 
         String query = "SELECT id_account, password FROM Account WHERE id_account=? AND password=?";
 

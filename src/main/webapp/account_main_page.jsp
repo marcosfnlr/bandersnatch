@@ -1,5 +1,5 @@
 <%-- 
-    Document   : user_main_page
+    Document   : account_main_page
     Created on : 28-Mar-2019, 05:27:02
     Author     : raphaelcja
 --%>
@@ -12,11 +12,11 @@
         <title>Main Page</title>
     </head>
     <body>
-        <form action="user_controller" method="get" accept-charset="UTF-8">   
+        <form action="account_controller" method="get" accept-charset="UTF-8">   
             <label class='logout'>
             <input type="submit" name="logout" value="Logout"/> 
             </label>
-            <input type="hidden" name="action" value="logout_user" />
+            <input type="hidden" name="action" value="logout_account" />
         </form>
         <h1>Mode Lecture</h1>
         <h2 id="catalogue" class="1">Catalogue</h2>

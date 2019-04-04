@@ -9,14 +9,14 @@ package model;
  *
  * @author raphaelcja
  */
-public class User {
+public class Account {
     
     private final String idAccount;
     private final String password;
     private final String lastName;
     private final String firstName;
 
-    public User(String idAccount, String password, String lastName, String firstName) {
+    public Account(String idAccount, String password, String lastName, String firstName) {
         this.idAccount = idAccount;
         this.password = password;
         this.lastName = lastName;
@@ -41,7 +41,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "idAccount=" + idAccount + ", lastName=" + lastName + ", firstName=" + firstName + '}';
+        return "Account{" + "idAccount=" + idAccount + ", lastName=" + lastName + ", firstName=" + firstName + '}';
     }
     
     

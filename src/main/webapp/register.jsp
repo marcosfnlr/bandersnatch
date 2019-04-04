@@ -12,7 +12,7 @@
         <title>Registration</title>
     </head>
     <body>
-        <form action="user_controller" method="post" accept-charset="UTF-8">
+        <form action="account_controller" method="post" accept-charset="UTF-8">
             <p> Nom : <input type="text" name="last_name" size="15"/></p>
             
             <p> Prénom : <input type="text" name="first_name" size="15"/></p>
@@ -27,7 +27,7 @@
             
             <p><input type="submit" name="creer" value="Créer"/></p>
             
-            <input type="hidden" name="action" value="add_user" />
+            <input type="hidden" name="action" value="add_account" />
             
         </form>
     </body>

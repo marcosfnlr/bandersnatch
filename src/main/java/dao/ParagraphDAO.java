@@ -23,7 +23,7 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
     
     /**
      * Returns list of paragraphs from a book.
-     * TODO : where to verify user
+     * TODO : where to verify account
      */
     public List<Paragraph> getListParagraphs(int idBook) {
         List<Paragraph> list = new ArrayList<Paragraph>();
@@ -69,7 +69,7 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
     
     /**
      * Gets paragraph with idParagraph identifier from table Paragraph.
-     * TODO : if used to edit text, where to check user ?
+     * TODO : if used to edit text, where to check account ?
      */
     public Paragraph getParagraph(int idParagraph) {
         String text, fk_account;

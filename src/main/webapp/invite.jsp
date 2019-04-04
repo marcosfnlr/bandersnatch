@@ -13,7 +13,7 @@
     </head>
     <body>
         <form action="invite" method="post" accept-charset="UTF-8">
-            <p>TODO: multiselect list with all available users</p>
+            <p>TODO: multiselect list with all available accounts</p>
             <p><input type="submit" name="inviter" value="Inviter"/></p>
         </form>
     </body>
