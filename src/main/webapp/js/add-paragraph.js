@@ -15,7 +15,7 @@ $(document).ready(function () {
     $("#addChoix").click(function () {
         $("#choices").append('<div class="form-row align-items-center" id="choix' + count + '">\n' +
             '                <div class="col-11 mb-3">\n' +
-            '                    <textarea class="form-control choix" name="choix" rows="2" required></textarea>\n' +
+            '                    <textarea class="form-control choix" name="choice_text" rows="2" required></textarea>\n' +
             '                    <div class="invalid-tooltip">\n' +
             '                        Donne-moi un sens.\n' +
             '                    </div>\n' +

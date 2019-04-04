@@ -144,12 +144,13 @@ public class ParagraphController extends HttpServlet {
     private void actionAddParagraph(HttpServletRequest request, HttpServletResponse response, 
             ParagraphDAO paragraphDAO) throws ServletException, IOException {
         
-        String text = request.getParameter("text");
+        String text = request.getParameter("parag_text");
+        boolean beginning = Boolean.parseBoolean(request.getParameter("beginning"));
         boolean conclusion = Boolean.parseBoolean(request.getParameter("conclusion"));
         int book = Integer.parseInt(request.getParameter("book"));
         String author = request.getParameter("author");
         
-        paragraphDAO.addParagraph(text, conclusion, book, author);
+        paragraphDAO.addParagraph(text, beginning, conclusion, book, author);
     }
     
     /**

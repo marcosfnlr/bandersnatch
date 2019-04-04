@@ -103,7 +103,7 @@ public class AccountController extends HttpServlet {
                 if(actionCheckAccount(request, response, accountDAO)) { // correct login
                     //String message = "Vous êtes logged-in";
                     //request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(message, TypeFeedback.SUCCESS)));
-                    request.getSession().setAttribute("utilisateur", request.getParameter("id_account"));
+                    request.getSession().setAttribute("id_account", request.getParameter("id_account"));
                     request.getRequestDispatcher("/account_main_page.jsp").forward(request, response);
                 } else { // incorrect login
                     String errorMessage = "Mauvaise combinaison utilisateur et mot de passe";

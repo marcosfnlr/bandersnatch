@@ -43,26 +43,26 @@
     </div>
 </nav>
 <div class="container">
-    <h1><%=request.getParameter("nom")%>
+    <h1><%=request.getParameter("title")%>
     </h1>
-    <form action="AddParagraphController" class="custom-validation" novalidate>
+    <form action="paragraph_controller" method="post" class="custom-validation" novalidate>
         <%
             String isNew = request.getParameter("isNew");
             if ("true".equals(isNew)) {
         %>
-        <input type="hidden" name="nom" value="<%=request.getParameter("nom")%>">
-        <input type="hidden" name="isLibre" value="<%=request.getParameter("mode")%>">
+        <input type="hidden" name="title" value="<%=request.getParameter("title")%>">
+        <input type="hidden" name="open_write" value="<%=request.getParameter("open_write")%>">
         <%
         } else {
         %>
-        <input type="hidden" name="choixId" value="<%=request.getParameter("choixId")%>">
+        <input type="hidden" name="id_choice" value="<%=request.getParameter("id_choice")%>">
         <%
             }
         %>
         <div class="form-row">
             <div class="col-12 mb-2">
-                <label for="texte">Texte du paragraphe:</label>
-                <textarea class="form-control" id="texte" name="texte" rows="3" required></textarea>
+                <label for="parag_text">Texte du paragraphe:</label>
+                <textarea class="form-control" id="text" name="parag_text" rows="3" required></textarea>
                 <div class="invalid-tooltip">
                     Donne-moi une vie.
                 </div>
@@ -71,7 +71,7 @@
         <div class="form-row">
             <div class="col-12 mb-3">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="isConclusion" id="isConclusion">
+                    <input class="form-check-input" type="checkbox" name="conclusion" id="isConclusion">
                     <label class="form-check-label" for="isConclusion">J'suis la conclusion!</label>
                 </div>
             </div>
@@ -88,7 +88,7 @@
         <div id="choices">
             <div class="form-row align-items-center" id="choix1">
                 <div class="col-11 mb-3">
-                    <textarea class="form-control choix" name="choix" rows="2" required></textarea>
+                    <textarea class="form-control choix" name="choice_text" rows="2" required></textarea>
                     <div class="invalid-tooltip">
                         Donne-moi un sens.
                     </div>

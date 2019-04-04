@@ -9,12 +9,12 @@
  */
 
 /*WHENEVER SQLERROR CONTINUE NONE*/
-DROP TABLE Invitation;
-DROP TABLE History;
-DROP TABLE Choice;
-DROP TABLE Paragraph;
-DROP TABLE Book;
-DROP TABLE Account;
+DROP TABLE Invitation CASCADE CONSTRAINTS;
+DROP TABLE History CASCADE CONSTRAINTS;
+DROP TABLE Choice CASCADE CONSTRAINTS;
+DROP TABLE Paragraph CASCADE CONSTRAINTS;
+DROP TABLE Book CASCADE CONSTRAINTS;
+DROP TABLE Account CASCADE CONSTRAINTS;
 
 CREATE TABLE Account(
     id_account VARCHAR2(10) PRIMARY KEY NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE Account(
 );
 
 CREATE TABLE Book(
-    id_book INT GENERATED ALWAYS as IDENTITY PRIMARY KEY NOT NULL,
+    id_book INT GENERATED ALWAYS as IDENTITY PRIMARY KEY,
     title VARCHAR2(100) NOT NULL,
     open_write NUMBER(1) NOT NULL,
     published NUMBER(1) NOT NULL,
@@ -33,8 +33,9 @@ CREATE TABLE Book(
 );
 
 CREATE TABLE Paragraph(
-    id_paragraph INT GENERATED ALWAYS as IDENTITY PRIMARY KEY NOT NULL,
+    id_paragraph INT GENERATED ALWAYS as IDENTITY PRIMARY KEY,
     text VARCHAR2(1000) NOT NULL,
+    beginning NUMBER(1) NOT NULL,
     conclusion NUMBER(1) NOT NULL,
     fk_book INT NOT NULL,
     fk_account VARCHAR2(10) NOT NULL,
@@ -42,14 +43,8 @@ CREATE TABLE Paragraph(
     FOREIGN KEY (fk_account) REFERENCES Account(id_account)
 );
 
-/* Paragraph need to exist first */
-ALTER TABLE Book ADD (
-    fk_first_parag INT NOT NULL,
-    FOREIGN KEY (fk_first_parag) REFERENCES Paragraph(id_paragraph)
-);
-
 CREATE TABLE Choice(
-    id_choice INT GENERATED ALWAYS as IDENTITY PRIMARY KEY NOT NULL,
+    id_choice INT GENERATED ALWAYS as IDENTITY PRIMARY KEY,
     text VARCHAR2(250) NOT NULL,
     locked NUMBER(1) NOT NULL,
     only_choice NUMBER(1) NOT NULL,

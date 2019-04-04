@@ -116,7 +116,7 @@ public class BookController extends HttpServlet{
         try {
             if(action.equals("add_book")) {
                 actionAddBook(request, response, bookDAO);
-                //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
+                request.getRequestDispatcher("/add_parag.jsp").forward(request, response);
             } else if(action.equals("delete_book")) {
                 actionDeleteBook(request, response, bookDAO);
                 //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
@@ -139,12 +139,11 @@ public class BookController extends HttpServlet{
             BookDAO bookDAO) throws ServletException, IOException {
         
         String title = request.getParameter("title");
-        boolean openToWrite = Boolean.parseBoolean(request.getParameter("open"));
-        boolean published = Boolean.parseBoolean(request.getParameter("published"));
-        String creator = request.getParameter("creator"); 
-        int firstParagraph = Integer.parseInt(request.getParameter("first_paragraph"));
+        boolean openToWrite = Boolean.parseBoolean(request.getParameter("open_write"));
+        boolean published = false; // TODO : make initial data base value as false
+        String creator = (String)request.getSession().getAttribute("id_account"); 
         
-        bookDAO.addBook(title, openToWrite, published, creator, firstParagraph);
+        bookDAO.addBook(title, openToWrite, published, creator);
     }
     
     

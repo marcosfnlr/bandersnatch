@@ -47,34 +47,35 @@
 </nav>
 <div class="container">
     <h1>Nouvelle Histoire</h1>
-    <form action="add_parag.jsp" class="custom-validation" novalidate>
+    <form action="book_controller" method="post" class="custom-validation" novalidate>
         <input type="hidden" name="isNew" value="true">
         <div class="form-row">
             <div class="col-12 col-lg-8 mb-3">
-                <label for="nom">Nom de l'histoire:</label>
-                <input type="text" class="form-control" id="nom" name="nom" placeholder="Entrez nom" required>
+                <label for="title">Nom de l'histoire:</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="Entrez nom" required>
                 <div class="invalid-tooltip">
                     Dis-moi un nom cool.
                 </div>
             </div>
             <div class="col-12 col-lg-4 mb-3">
-                <label for="mode">Mode écriture:</label>
-                <div id="mode">
+                <label for="open_write">Mode écriture:</label>
+                <div id="open_write">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="mode" id="modeLibre" value="true"
+                        <input class="form-check-input" type="radio" name="open_write" id="modeOpen" value="true"
                                checked="checked">
-                        <label class="form-check-label" for="modeLibre">Libre</label>
+                        <label class="form-check-label" for="modeOpen">Libre</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="mode" id="modeInvitation" value="false">
+                        <input class="form-check-input" type="radio" name="open_write" id="modeInvitation" value="false">
                         <label class="form-check-label" for="modeInvitation">Sur invitation</label>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row justify-content-center">
-            <button id="creer" type="submit" class="btn btn-danger">Créer</button>
+            <button id="create" type="submit" class="btn btn-danger">Créer</button>
         </div>
+        <input type="hidden" name="action" value="add_book" />
     </form>
 </div>
 </body>

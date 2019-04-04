@@ -42,8 +42,8 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
             while(rs.next()) {
                 Book book = bookDAO.getBook(rs.getInt("fk_book"));
                 Account account = accountDAO.getAccount(rs.getString("fk_account"));
-                Paragraph p = new Paragraph(rs.getInt("id_paragraph"), rs.getString("text"), rs.getBoolean("conclusion"), 
-                    book, account);
+                Paragraph p = new Paragraph(rs.getInt("id_paragraph"), rs.getString("text"), rs.getBoolean("beginning"), 
+                        rs.getBoolean("conclusion"), book, account);
                 list.add(p);
             }
             
@@ -57,16 +57,17 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
     /**
      * Adds paragraph on table Paragraph.
      */
-    public void addParagraph(String text, boolean conclusion, int book, String author) {
-        String query = "INSERT INTO Paragraph (text, conclusion, fk_book, fk_account) VALUES (?,?,?,?)";
+    public void addParagraph(String text, boolean beginning, boolean conclusion, int book, String author) {
+        String query = "INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES (?,?,?,?,?)";
         try(
             Connection conn = getConn();
             PreparedStatement ps = conn.prepareStatement(query);
             ) {
             ps.setString(1, text);
-            ps.setBoolean(2, conclusion);
-            ps.setInt(3, book);
-            ps.setString(4, author);
+            ps.setBoolean(2, beginning);
+            ps.setBoolean(3, conclusion);
+            ps.setInt(4, book);
+            ps.setString(5, author);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
@@ -79,7 +80,7 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
      */
     public Paragraph getParagraph(int idParagraph) {
         String text;
-        boolean conclusion;
+        boolean beginning, conclusion;
         Book book;
         Account author;
         BookDAO bookDAO = new BookDAO(dataSource);
@@ -93,6 +94,7 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
             ResultSet rs = st.executeQuery("SELECT * FROM Paragraph WHERE id_paragraph=" + idParagraph);
             rs.next();
             text = rs.getString("text");
+            beginning = rs.getBoolean("beginning");
             conclusion = rs.getBoolean("conclusion");
             book = bookDAO.getBook(rs.getInt("fk_book"));
             author = accountDAO.getAccount(rs.getString("fk_account"));
@@ -101,7 +103,7 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
         }
         
-        return new Paragraph(idParagraph, text, conclusion, book, author);
+        return new Paragraph(idParagraph, text, beginning, conclusion, book, author);
     }
     
     /**

@@ -16,15 +16,13 @@ public class Book {
     private final boolean openToWrite;
     private final boolean published;
     private final Account creator;
-    private final Paragraph firstParagraph;
 
-    public Book(int idBook, String title, boolean openToWrite, boolean published, Account creator, Paragraph firstParagraph) {
+    public Book(int idBook, String title, boolean openToWrite, boolean published, Account creator) {
         this.idBook = idBook;
         this.title = title;
         this.openToWrite = openToWrite;
         this.published = published;
         this.creator = creator;
-        this.firstParagraph = firstParagraph;
     }
 
     public int getIdBook() {
@@ -47,13 +45,9 @@ public class Book {
         return creator;
     }
 
-    public Paragraph getFirstParagraph() {
-        return firstParagraph;
-    }
-
     @Override
     public String toString() {
-        return "Book{" + "idBook=" + idBook + ", title=" + title + ", openToWrite=" + openToWrite + ", published=" + published + ", creator=" + creator + ", fistParagraph=" + firstParagraph +'}';
+        return "Book{" + "idBook=" + idBook + ", title=" + title + ", openToWrite=" + openToWrite + ", published=" + published + ", creator=" + creator +'}';
     }
     
     

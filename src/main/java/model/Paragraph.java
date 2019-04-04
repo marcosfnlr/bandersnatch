@@ -13,13 +13,15 @@ public class Paragraph {
     
     private final int idParagraph;
     private final String text;
+    private final boolean beginning;
     private final boolean conclusion;
     private final Book book;
     private final Account author;
 
-    public Paragraph(int idParagraph, String text, boolean conclusion, Book book, Account author) {
+    public Paragraph(int idParagraph, String text, boolean beginning, boolean conclusion, Book book, Account author) {
         this.idParagraph = idParagraph;
         this.text = text;
+        this.beginning = beginning;
         this.conclusion = conclusion;
         this.book = book;
         this.author = author;
@@ -31,6 +33,10 @@ public class Paragraph {
 
     public String getText() {
         return text;
+    }
+    
+    public boolean isBeginning() {
+        return beginning;
     }
 
     public boolean isConclusion() {
@@ -47,7 +53,9 @@ public class Paragraph {
 
     @Override
     public String toString() {
-        return "Paragraph{" + "idParagraph=" + idParagraph + ", text=" + text + ", conclusion=" + conclusion + ", book=" + book + ", author=" + author + '}';
+        return "Paragraph{" + "idParagraph=" + idParagraph + ", text=" + text + 
+                ", beginning=" + beginning + ", conclusion=" + conclusion + 
+                ", book=" + book + ", author=" + author + '}';
     }
     
     

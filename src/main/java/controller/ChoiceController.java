@@ -139,7 +139,7 @@ public class ChoiceController extends HttpServlet {
     private void actionAddChoice(HttpServletRequest request, HttpServletResponse response, 
             ChoiceDAO choiceDAO) throws ServletException, IOException {
         
-        String text = request.getParameter("text");
+        String text = request.getParameter("choice_text");
         boolean locked = Boolean.parseBoolean(request.getParameter("locked"));
         boolean onlyChoice = Boolean.parseBoolean(request.getParameter("only_choice"));
         boolean condShouldPass = Boolean.parseBoolean(request.getParameter("cond_should_pass"));
