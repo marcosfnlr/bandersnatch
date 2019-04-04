@@ -67,7 +67,7 @@ public class ParagraphController extends HttpServlet {
     }
     
     /**
-     * Gets all information of a paragraph given its identifier idParagraph. 
+     * Gets all information of a paragraph given its identifier id_paragraph. 
      */
     private void actionGetParagraph(HttpServletRequest request, HttpServletResponse response, 
             ParagraphDAO paragraphDAO) throws ServletException, IOException {
@@ -100,10 +100,10 @@ public class ParagraphController extends HttpServlet {
         
         String text = request.getParameter("text");
         boolean conclusion = Boolean.parseBoolean(request.getParameter("conclusion"));
-        int fk_book = Integer.parseInt(request.getParameter("fk_book"));
-        String fk_account = request.getParameter("fk_account");
+        int book = Integer.parseInt(request.getParameter("book"));
+        String author = request.getParameter("author");
         
-        paragraphDAO.addParagraph(text, conclusion, fk_book, fk_account);
+        paragraphDAO.addParagraph(text, conclusion, book, author);
     }
     
     /**

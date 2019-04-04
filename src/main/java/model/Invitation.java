@@ -1,16 +1,16 @@
 package model;
 
 public class Invitation {
-    private final User user;
+    private final Account account;
     private final Book book;
 
-    public Invitation(User user, Book book) {
-        this.user = user;
+    public Invitation(Account account, Book book) {
+        this.account = account;
         this.book = book;
     }
 
-    public User getUser() {
-        return user;
+    public Account getAccount() {
+        return account;
     }
 
     public Book getBook() {
@@ -19,6 +19,6 @@ public class Invitation {
 
     @Override
     public String toString() {
-        return "Invitation{" + "user=" + user + ", book=" + book +'}';
+        return "Invitation{" + "account=" + account + ", book=" + book +'}';
     }
 }

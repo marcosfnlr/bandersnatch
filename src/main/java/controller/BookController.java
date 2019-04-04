@@ -57,6 +57,7 @@ public class BookController extends HttpServlet{
 
         try {
             if (action == null) {
+                //TODO : where to redirect here?
                 //request.getRequestDispatcher("/index.jsp").forward(request, response);
             } else if (action.equals("list_published_books")){
                 actionListPublishedBooks(request, response, bookDAO);
@@ -138,11 +139,12 @@ public class BookController extends HttpServlet{
             BookDAO bookDAO) throws ServletException, IOException {
         
         String title = request.getParameter("title");
-        boolean open = Boolean.parseBoolean(request.getParameter("open"));
+        boolean openToWrite = Boolean.parseBoolean(request.getParameter("open"));
         boolean published = Boolean.parseBoolean(request.getParameter("published"));
-        String creator = request.getParameter("creator");
+        String creator = request.getParameter("creator"); 
+        int firstParagraph = Integer.parseInt(request.getParameter("first_paragraph"));
         
-        bookDAO.addBook(title, open, published, creator);
+        bookDAO.addBook(title, openToWrite, published, creator, firstParagraph);
     }
     
     

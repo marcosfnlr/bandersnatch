@@ -4,20 +4,20 @@ import java.sql.Timestamp;
 
 public class History {
 
-    private final User user;
+    private final Account account;
     private final Book book;
     private final Choice choice;
     private Timestamp  dateCreated;
 
-    public History(User user, Book book, Choice choice, Timestamp  dateCreated) {
-        this.user = user;
+    public History(Account account, Book book, Choice choice, Timestamp  dateCreated) {
+        this.account = account;
         this.book = book;
         this.choice = choice;
         this.dateCreated = dateCreated;
     }
 
-    public User getUser() {
-        return user;
+    public Account getAccount() {
+        return account;
     }
 
     public Book getBook() {
@@ -34,6 +34,6 @@ public class History {
 
     @Override
     public String toString() {
-        return "History{" + "user=" + user + ", book=" + book + ", choice=" + choice + ", dateCreated=" + dateCreated +'}';
+        return "History{" + "account=" + account + ", book=" + book + ", choice=" + choice + ", dateCreated=" + dateCreated +'}';
     }
 }

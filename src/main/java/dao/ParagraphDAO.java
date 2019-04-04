@@ -9,6 +9,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
+import model.Account;
+import model.Book;
 import model.Paragraph;
 
 /**
@@ -27,7 +29,9 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
      */
     public List<Paragraph> getListParagraphs(int idBook) {
         List<Paragraph> list = new ArrayList<Paragraph>();
-        String query = "SELECT * FROM Paragraph WHERE fk_paragraph_book=?";
+        BookDAO bookDAO = new BookDAO(dataSource);
+        AccountDAO accountDAO = new AccountDAO(dataSource);
+        String query = "SELECT * FROM Paragraph WHERE fk_book=?";
                 
         try(
             Connection conn = getConn();
@@ -36,8 +40,10 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
             ps.setInt(1, idBook);
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                Paragraph p = new Paragraph(rs.getInt("idParagraph"), rs.getString("text"), rs.getBoolean("conclusion"), 
-                    rs.getInt("fk_paragraph_book"), rs.getString("fk_paragraph_account"));
+                Book book = bookDAO.getBook(rs.getInt("fk_book"));
+                Account account = accountDAO.getAccount(rs.getString("fk_account"));
+                Paragraph p = new Paragraph(rs.getInt("id_paragraph"), rs.getString("text"), rs.getBoolean("conclusion"), 
+                    book, account);
                 list.add(p);
             }
             
@@ -51,16 +57,16 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
     /**
      * Adds paragraph on table Paragraph.
      */
-    public void addParagraph(String text, Boolean conclusion, int fk_book, String fk_account) {
-        String query = "INSERT INTO Paragraph (text, conclusion, fk_paragraph_book, fk_paragraph_account) VALUES (?,?,?,?)";
+    public void addParagraph(String text, boolean conclusion, int book, String author) {
+        String query = "INSERT INTO Paragraph (text, conclusion, fk_book, fk_account) VALUES (?,?,?,?)";
         try(
             Connection conn = getConn();
             PreparedStatement ps = conn.prepareStatement(query);
             ) {
             ps.setString(1, text);
             ps.setBoolean(2, conclusion);
-            ps.setInt(3, fk_book);
-            ps.setString(4, fk_account);
+            ps.setInt(3, book);
+            ps.setString(4, author);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
@@ -68,13 +74,17 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
     }
     
     /**
-     * Gets paragraph with idParagraph identifier from table Paragraph.
+     * Gets paragraph with id_paragraph identifier from table Paragraph.
      * TODO : if used to edit text, where to check account ?
      */
     public Paragraph getParagraph(int idParagraph) {
-        String text, fk_account;
-        int fk_book;
+        String text;
         boolean conclusion;
+        Book book;
+        Account author;
+        BookDAO bookDAO = new BookDAO(dataSource);
+        AccountDAO accountDAO = new AccountDAO(dataSource);
+        
         
         try(
             Connection conn = getConn();
@@ -84,18 +94,18 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
             rs.next();
             text = rs.getString("text");
             conclusion = rs.getBoolean("conclusion");
-            fk_book = rs.getInt("fk_paragraph_book");
-            fk_account = rs.getString("fk_paragraph_account");
+            book = bookDAO.getBook(rs.getInt("fk_book"));
+            author = accountDAO.getAccount(rs.getString("fk_account"));
             
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
         }
         
-        return new Paragraph(idParagraph, text, conclusion, fk_book, fk_account);
+        return new Paragraph(idParagraph, text, conclusion, book, author);
     }
     
     /**
-     * Deletes paragraph with idParagraph identifier from table Paragraph.
+     * Deletes paragraph with id_paragraph identifier from table Paragraph.
      * TODO : constraints of deletion. here or controller?
      */
     public void deleteParagraph(int idParagraph) {
@@ -111,7 +121,7 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
     }
     
     /**
-     * Modifies paragraph text with idParagraph identifier from table Paragraph.
+     * Modifies paragraph text with id_paragraph identifier from table Paragraph.
      * TODO : constraints of modification. here or controller?
      */
     public void modifyParagraph(int idParagraph, String text) {

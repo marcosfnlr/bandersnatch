@@ -55,7 +55,7 @@ public class BookDAO extends AbstractDataBaseDAO {
     /**
      * Adds book on table Book.
      */
-    public void addBook(String title, boolean openToWrite, boolean published, Account creator, Paragraph firstParagraph) {
+    public void addBook(String title, boolean openToWrite, boolean published, String creator, int firstParagraph) {
         String query = "INSERT INTO Book (title, open_write, published, fk_account, fk_first_parag) VALUES (?,?,?,?,?)";
         try(
             Connection conn = getConn();
@@ -64,8 +64,8 @@ public class BookDAO extends AbstractDataBaseDAO {
             ps.setString(1, title);
             ps.setBoolean(2, openToWrite);
             ps.setBoolean(3, published);
-            ps.setString(4, creator.getIdAccount());
-            ps.setInt(5, firstParagraph.getIdParagraph());
+            ps.setString(4, creator);
+            ps.setInt(5, firstParagraph);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
@@ -73,7 +73,7 @@ public class BookDAO extends AbstractDataBaseDAO {
     }
     
     /**
-     * Gets book with idBook identifier from table Book.
+     * Gets book with id_book identifier from table Book.
      */
     public Book getBook(int idBook) {
         String title;
@@ -88,7 +88,7 @@ public class BookDAO extends AbstractDataBaseDAO {
             Connection conn = getConn();
             Statement st = conn.createStatement();
             ) {
-            ResultSet rs = st.executeQuery("SELECT * FROM Book WHERE idBook=" + idBook);
+            ResultSet rs = st.executeQuery("SELECT * FROM Book WHERE id_book=" + idBook);
             rs.next();
             title = rs.getString("title");
             openToWrite = rs.getBoolean("open_write");
@@ -103,7 +103,7 @@ public class BookDAO extends AbstractDataBaseDAO {
     }
     
     /**
-     * Deletes book with idBook identifier from table Book.
+     * Deletes book with id_book identifier from table Book.
      */
     public void deleteBook(int idBook) {
         try(
@@ -118,7 +118,7 @@ public class BookDAO extends AbstractDataBaseDAO {
     }
     
     /**
-     * Modifies book publishing status with idBook identifier from table Book.
+     * Modifies book publishing status with id_book identifier from table Book.
      */
     public void publishBook(int idBook, boolean publish) {
         try (

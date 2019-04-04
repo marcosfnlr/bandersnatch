@@ -15,9 +15,9 @@ public class Paragraph {
     private final String text;
     private final boolean conclusion;
     private final Book book;
-    private final User author;
+    private final Account author;
 
-    public Paragraph(int idParagraph, String text, boolean conclusion, Book book, User author) {
+    public Paragraph(int idParagraph, String text, boolean conclusion, Book book, Account author) {
         this.idParagraph = idParagraph;
         this.text = text;
         this.conclusion = conclusion;
@@ -41,7 +41,7 @@ public class Paragraph {
         return book;
     }
 
-    public User getAuthor() {
+    public Account getAuthor() {
         return author;
     }
 
