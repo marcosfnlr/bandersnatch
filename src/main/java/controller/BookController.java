@@ -46,7 +46,7 @@ public class BookController extends HttpServlet{
     }
     
     /**
-     * GET : controls actions of getListPublishedBooks, getBook.
+     * GET : controls actions of listPublishedBooks, getBook.
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws IOException, ServletException {
@@ -77,7 +77,7 @@ public class BookController extends HttpServlet{
     private void actionListPublishedBooks(HttpServletRequest request, HttpServletResponse response, 
             BookDAO bookDAO) throws ServletException, IOException {
         
-        List<Book> publishedBooks = bookDAO.getListPublishedBooks();
+        List<Book> publishedBooks = bookDAO.listPublishedBooks();
         request.setAttribute("published_books", publishedBooks);
         //request.getRequestDispatcher("TODO INSERT PAGE").forward(request, response);
     }

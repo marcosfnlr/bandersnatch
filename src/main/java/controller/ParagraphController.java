@@ -46,10 +46,29 @@ public class ParagraphController extends HttpServlet {
     }
     
     /**
-     * GET : controls actions of getListParagraphs, getParagraph.
+     * GET : controls actions of listParagraphs, getParagraph.
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws IOException, ServletException {
+        
+        request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
+        ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
+        
+        try {
+            if (action == null) {
+                //TODO : where to redirect here?
+                //request.getRequestDispatcher("/index.jsp").forward(request, response);
+            } else if (action.equals("list_paragraphs")){
+                actionListParagraphs(request, response, paragraphDAO);
+            } else if (action.equals("get_paragraph")){
+                actionGetParagraph(request, response, paragraphDAO);
+            } else {
+                invalidParameters(request, response);
+            }
+        } catch (DAOException e) {
+            erreurBD(request, response, e);
+        }
         
     }
     
@@ -57,12 +76,12 @@ public class ParagraphController extends HttpServlet {
      * Lists all paragraphs from a book. 
      * TODO : when to use ?
      */
-    private void actionGetListParagraphs(HttpServletRequest request, HttpServletResponse response, 
+    private void actionListParagraphs(HttpServletRequest request, HttpServletResponse response, 
             ParagraphDAO paragraphDAO) throws ServletException, IOException {
         
         //needs to know from which book the paragraphs are from
         int idBook = Integer.parseInt(request.getParameter("id_book"));
-        List<Paragraph> paragraphs = paragraphDAO.getListParagraphs(idBook);
+        List<Paragraph> paragraphs = paragraphDAO.listParagraphs(idBook);
         request.setAttribute("paragraphs", paragraphs);
     }
     
@@ -89,6 +108,33 @@ public class ParagraphController extends HttpServlet {
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws IOException, ServletException {
+        
+        request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
+        ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
+        
+        if (action == null) {
+            invalidParameters(request, response);
+            return;
+        }
+        
+        try {
+            if(action.equals("add_paragraph")) {
+                actionAddParagraph(request, response, paragraphDAO);
+                //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
+            } else if(action.equals("delete_paragraph")) {
+                actionDeleteParagraph(request, response, paragraphDAO);
+                //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
+            } else if(action.equals("modify_paragraph")) {
+                actionModifyParagraph(request, response, paragraphDAO);
+                //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
+            } else {
+                invalidParameters(request, response);
+                return;
+            }
+        } catch (DAOException e) {
+            erreurBD(request, response, e);
+        }
         
     }
     

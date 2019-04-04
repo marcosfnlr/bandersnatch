@@ -27,7 +27,7 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
      * Returns list of paragraphs from a book.
      * TODO : where to verify account
      */
-    public List<Paragraph> getListParagraphs(int idBook) {
+    public List<Paragraph> listParagraphs(int idBook) {
         List<Paragraph> list = new ArrayList<Paragraph>();
         BookDAO bookDAO = new BookDAO(dataSource);
         AccountDAO accountDAO = new AccountDAO(dataSource);

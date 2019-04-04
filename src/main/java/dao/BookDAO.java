@@ -27,7 +27,7 @@ public class BookDAO extends AbstractDataBaseDAO {
     /**
      * Returns list of published books from table Book.
      */
-    public List<Book> getListPublishedBooks() {
+    public List<Book> listPublishedBooks() {
         List<Book> list = new ArrayList<Book>();
         AccountDAO accountDAO = new AccountDAO(dataSource);
         ParagraphDAO paragraphDAO = new ParagraphDAO(dataSource);
