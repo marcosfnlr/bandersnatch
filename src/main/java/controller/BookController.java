@@ -112,10 +112,11 @@ public class BookController extends HttpServlet{
             invalidParameters(request, response);
             return;
         }
-        
+                
         try {
             if(action.equals("add_book")) {
-                actionAddBook(request, response, bookDAO);
+                int idBook = actionAddBook(request, response, bookDAO);
+                request.setAttribute("id_book", idBook);
                 request.getRequestDispatcher("/add_parag.jsp").forward(request, response);
             } else if(action.equals("delete_book")) {
                 actionDeleteBook(request, response, bookDAO);
@@ -133,9 +134,9 @@ public class BookController extends HttpServlet{
     }
     
     /**
-     * Adds a book.
+     * Adds a book and returns its generated id.
      */
-    private void actionAddBook(HttpServletRequest request, HttpServletResponse response, 
+    private int actionAddBook(HttpServletRequest request, HttpServletResponse response, 
             BookDAO bookDAO) throws ServletException, IOException {
         
         String title = request.getParameter("title");
@@ -143,7 +144,7 @@ public class BookController extends HttpServlet{
         boolean published = false; // TODO : make initial data base value as false
         String creator = (String)request.getSession().getAttribute("id_account"); 
         
-        bookDAO.addBook(title, openToWrite, published, creator);
+        return bookDAO.addBook(title, openToWrite, published, creator);
     }
     
     

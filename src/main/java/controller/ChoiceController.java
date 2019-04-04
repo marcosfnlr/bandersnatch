@@ -119,7 +119,7 @@ public class ChoiceController extends HttpServlet {
         try {
             if(action.equals("add_choice")) {
                 actionAddChoice(request, response, choiceDAO);
-                //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
+                request.getRequestDispatcher("/account_main_page.jsp").forward(request, response);
             } else if(action.equals("delete_choice")) {
                 actionDeleteChoice(request, response, choiceDAO);
                 //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
@@ -134,20 +134,20 @@ public class ChoiceController extends HttpServlet {
     }
     
     /**
-     * Adds a choice to a paragraph.
+     * Adds a choice to a paragraph and returns its id.
      */
-    private void actionAddChoice(HttpServletRequest request, HttpServletResponse response, 
+    private int actionAddChoice(HttpServletRequest request, HttpServletResponse response, 
             ChoiceDAO choiceDAO) throws ServletException, IOException {
         
         String text = request.getParameter("choice_text");
-        boolean locked = Boolean.parseBoolean(request.getParameter("locked"));
-        boolean onlyChoice = Boolean.parseBoolean(request.getParameter("only_choice"));
-        boolean condShouldPass = Boolean.parseBoolean(request.getParameter("cond_should_pass"));
+        boolean locked = false; //TODO default is false
+        boolean onlyChoice = false;//TODO for now is always false Boolean.parseBoolean(request.getParameter("only_choice"));
+        boolean condShouldPass = false;//TODO for now is always false Boolean.parseBoolean(request.getParameter("cond_should_pass"));
         int paragOrigin = Integer.parseInt(request.getParameter("id_parag_origin"));
         int paragDest = Integer.parseInt(request.getParameter("id_parag_dest"));
         int paragCond = Integer.parseInt(request.getParameter("id_parag_cond"));
         
-        choiceDAO.addChoice(text, locked, onlyChoice, condShouldPass, paragOrigin, paragDest, paragCond);
+        return choiceDAO.addChoice(text, locked, onlyChoice, condShouldPass, paragOrigin, paragDest, paragCond);
     }
     
     /**

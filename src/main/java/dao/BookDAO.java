@@ -50,22 +50,29 @@ public class BookDAO extends AbstractDataBaseDAO {
     }
     
     /**
-     * Adds book on table Book.
+     * Adds book on table Book and returns its generated id.
      */
-    public void addBook(String title, boolean openToWrite, boolean published, String creator) {
+    public int addBook(String title, boolean openToWrite, boolean published, String creator) {
         String query = "INSERT INTO Book (title, open_write, published, fk_account) VALUES (?,?,?,?)";
+        int idBook = 0;
+        String returnCols[] = {"id_book"};
         try(
             Connection conn = getConn();
-            PreparedStatement ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query, returnCols);
             ) {
             ps.setString(1, title);
             ps.setBoolean(2, openToWrite);
             ps.setBoolean(3, published);
             ps.setString(4, creator);
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if(rs.next())
+                idBook = rs.getInt(1);
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
         }
+        
+        return idBook;
     }
     
     /**

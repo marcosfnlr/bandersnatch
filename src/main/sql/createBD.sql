@@ -50,7 +50,7 @@ CREATE TABLE Choice(
     only_choice NUMBER(1) NOT NULL,
     cond_should_pass NUMBER(1),
     fk_parag_orig INT NOT NULL,
-    fk_parag_dest INT NOT NULL,
+    fk_parag_dest INT DEFAULT 0,
     fk_parag_cond INT,
     FOREIGN KEY (fk_parag_orig) REFERENCES Paragraph(id_paragraph),
     FOREIGN KEY (fk_parag_dest) REFERENCES Paragraph(id_paragraph),
@@ -75,3 +75,6 @@ CREATE TABLE Invitation(
     FOREIGN KEY (fk_account) REFERENCES Account(id_account),
     FOREIGN KEY (fk_book) REFERENCES Book(id_book)
 );
+
+SELECT * FROM Book;
+SELECT * FROM Paragraph;

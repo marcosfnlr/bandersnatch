@@ -55,13 +55,15 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
     }
     
     /**
-     * Adds paragraph on table Paragraph.
+     * Adds paragraph on table Paragraph and returns its id.
      */
-    public void addParagraph(String text, boolean beginning, boolean conclusion, int book, String author) {
+    public int addParagraph(String text, boolean beginning, boolean conclusion, int book, String author) {
         String query = "INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES (?,?,?,?,?)";
+        int idParagraph = 0;
+        String returnCols[] = {"id_paragraph"};
         try(
             Connection conn = getConn();
-            PreparedStatement ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query, returnCols);
             ) {
             ps.setString(1, text);
             ps.setBoolean(2, beginning);
@@ -69,9 +71,14 @@ public class ParagraphDAO extends AbstractDataBaseDAO {
             ps.setInt(4, book);
             ps.setString(5, author);
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if(rs.next())
+                idParagraph = rs.getInt(1);
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
         }
+        
+        return idParagraph;
     }
     
     /**

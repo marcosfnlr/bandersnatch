@@ -120,8 +120,10 @@ public class ParagraphController extends HttpServlet {
         
         try {
             if(action.equals("add_paragraph")) {
-                actionAddParagraph(request, response, paragraphDAO);
-                //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
+                int idParagOrigin = actionAddParagraph(request, response, paragraphDAO);
+                request.setAttribute("id_parag_orig", idParagOrigin);
+                //request.setAttribute("action", "add_choice"); //WRONG
+                request.getRequestDispatcher("/account_main_page.jsp").forward(request, response);
             } else if(action.equals("delete_paragraph")) {
                 actionDeleteParagraph(request, response, paragraphDAO);
                 //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
@@ -139,18 +141,18 @@ public class ParagraphController extends HttpServlet {
     }
     
     /**
-     * Adds a paragraph to a book.
+     * Adds a paragraph to a book and returns its id.
      */
-    private void actionAddParagraph(HttpServletRequest request, HttpServletResponse response, 
+    private int actionAddParagraph(HttpServletRequest request, HttpServletResponse response, 
             ParagraphDAO paragraphDAO) throws ServletException, IOException {
         
         String text = request.getParameter("parag_text");
         boolean beginning = Boolean.parseBoolean(request.getParameter("beginning"));
         boolean conclusion = Boolean.parseBoolean(request.getParameter("conclusion"));
-        int book = Integer.parseInt(request.getParameter("book"));
-        String author = request.getParameter("author");
+        int book = Integer.parseInt(request.getParameter("id_book"));
+        String author = (String)request.getSession().getAttribute("id_account");
         
-        paragraphDAO.addParagraph(text, beginning, conclusion, book, author);
+        return paragraphDAO.addParagraph(text, beginning, conclusion, book, author);
     }
     
     /**

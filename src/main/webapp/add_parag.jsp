@@ -52,6 +52,7 @@
         %>
         <input type="hidden" name="title" value="<%=request.getParameter("title")%>">
         <input type="hidden" name="open_write" value="<%=request.getParameter("open_write")%>">
+        <input type="hidden" name="beginning" value="true">
         <%
         } else {
         %>
@@ -59,6 +60,7 @@
         <%
             }
         %>
+        <input type="hidden" name="id_book" value="${id_book}">
         <div class="form-row">
             <div class="col-12 mb-2">
                 <label for="parag_text">Texte du paragraphe:</label>
@@ -98,6 +100,7 @@
         <div class="row justify-content-center">
             <button type="submit" class="btn btn-danger">Ajouter</button>
         </div>
+        <input type="hidden" name="action" value="add_paragraph" />
     </form>
 </div>
 </body>

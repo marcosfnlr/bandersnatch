@@ -54,12 +54,13 @@ public class ChoiceDAO extends AbstractDataBaseDAO {
     }
     
     /**
-     * Adds choice on table Choice.
+     * Adds choice on table Choice and returns its id.
      */
-    public void addChoice(String text, boolean locked, boolean onlyChoice, boolean condShouldPass, 
+    public int addChoice(String text, boolean locked, boolean onlyChoice, boolean condShouldPass, 
             int paragOrigin, int paragDest, int paragCond) {
         String query = "INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig, "
                 + "fk_parag_dest, fk_parag_cond) VALUES (?,?,?,?,?,?,?)";
+        int idChoice = 0;
         try(
             Connection conn = getConn();
             PreparedStatement ps = conn.prepareStatement(query);
@@ -72,9 +73,14 @@ public class ChoiceDAO extends AbstractDataBaseDAO {
             ps.setInt(6, paragDest);
             ps.setInt(7, paragCond);
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if(rs.next())
+                idChoice = rs.getInt(1);
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
         }
+        
+        return idChoice;
     }
     
     /**
