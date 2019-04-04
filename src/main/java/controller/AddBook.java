@@ -22,8 +22,8 @@ import javax.sql.DataSource;
  *
  * @author raphaelcja
  */
-@WebServlet(name = "AddStory", urlPatterns = {"/add_story"})
-public class AddStory extends HttpServlet {
+@WebServlet(name = "AddBook", urlPatterns = {"/add_book"})
+public class AddBook extends HttpServlet {
 
     @Resource(name="jdbc/Bandersnatch")
     private DataSource ds;
@@ -49,18 +49,18 @@ public class AddStory extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>New Story</title>");  
+            out.println("<title>New Book</title>");  
             // TODO: add reference for stylesheet
             out.println("<meta charset=\"UTF-8\">");
             out.println("</head>");
             out.println("<body>");
             if(!insertParag(request)) {
-                out.println("<p>Error during story creation</p>");
+                out.println("<p>Error during book creation</p>");
                 out.println("<p>Retour vers <a href=\"user_main_page.jsp\">la page de l'utilisateur</a></p>");
             }
             else {
                 if(ecriture.equals("libre"))
-                    out.println("<p><a href=\"add_option.jsp\">Continuez</a> avec la création des choix</p>");
+                    out.println("<p><a href=\"add_choice.jsp\">Continuez</a> avec la création des choix</p>");
                 else if (ecriture.equals("invitation"))
                     out.println("<p>Avant ajouter des choix, <a href=\"invite.jsp\">continuez</a> avec les invitations</p>");
                 else

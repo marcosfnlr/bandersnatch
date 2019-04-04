@@ -83,4 +83,80 @@ public class ChoiceController extends HttpServlet {
         List<Choice> choices = choiceDAO.listParagraphChoices(idParagOrig);
         request.setAttribute("choices", choices);
     }
+    
+    /**
+     * Gets all information of a choice given its identifier id_choice. 
+     */
+    private void actionGetChoice(HttpServletRequest request, HttpServletResponse response, 
+            ChoiceDAO choiceDAO) throws ServletException, IOException {
+        
+        int idChoice = Integer.parseInt(request.getParameter("id_choice"));
+        String view = request.getParameter("view");
+        // TODO : review here ; need to show authors when show book
+        if (view.equals("delete_choice")) {
+            Choice choice = choiceDAO.getChoice(idChoice);
+            request.setAttribute("choice", choice);
+            request.getRequestDispatcher("WEB-INF/" + view + ".jsp").forward(request, response);
+        }
+        else invalidParameters(request, response);
+    }
+    
+    /**
+     * POST : controls actions of addChoice, deleteChoice.
+     */
+    public void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws IOException, ServletException {
+        
+        request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
+        ChoiceDAO choiceDAO = new ChoiceDAO(ds);
+        
+        if (action == null) {
+            invalidParameters(request, response);
+            return;
+        }
+        
+        try {
+            if(action.equals("add_choice")) {
+                actionAddChoice(request, response, choiceDAO);
+                //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
+            } else if(action.equals("delete_choice")) {
+                actionDeleteChoice(request, response, choiceDAO);
+                //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
+            } else {
+                invalidParameters(request, response);
+                return;
+            }
+        } catch (DAOException e) {
+            erreurBD(request, response, e);
+        }
+        
+    }
+    
+    /**
+     * Adds a choice to a paragraph.
+     */
+    private void actionAddChoice(HttpServletRequest request, HttpServletResponse response, 
+            ChoiceDAO choiceDAO) throws ServletException, IOException {
+        
+        String text = request.getParameter("text");
+        boolean locked = Boolean.parseBoolean(request.getParameter("locked"));
+        boolean onlyChoice = Boolean.parseBoolean(request.getParameter("only_choice"));
+        boolean condShouldPass = Boolean.parseBoolean(request.getParameter("cond_should_pass"));
+        int paragOrigin = Integer.parseInt(request.getParameter("id_parag_origin"));
+        int paragDest = Integer.parseInt(request.getParameter("id_parag_dest"));
+        int paragCond = Integer.parseInt(request.getParameter("id_parag_cond"));
+        
+        choiceDAO.addChoice(text, locked, onlyChoice, condShouldPass, paragOrigin, paragDest, paragCond);
+    }
+    
+    /**
+     * Deletes a choice of a paragraph.
+     */
+    private void actionDeleteChoice(HttpServletRequest request, HttpServletResponse response, 
+            ChoiceDAO choiceDAO) throws ServletException, IOException {
+        
+        int idChoice = Integer.parseInt(request.getParameter("id_choice"));
+        choiceDAO.deleteChoice(idChoice);
+    }
 }

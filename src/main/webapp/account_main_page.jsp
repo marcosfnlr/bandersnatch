@@ -24,7 +24,7 @@
             <li><span class="titre">Livre 1 - Example</span></li>
         </ul>
         <h1>Mode Écriture</h1>
-        <p><a href="add_story.jsp">Créer une nouvelle histoire</a></p>
+        <p><a href="add_book.jsp">Créer une nouvelle histoire</a></p>
         <h2 id="catalogue" class="1">Catalogue</h2>
         <ul>
             <li><span class="titre">Livre 1</span></li>

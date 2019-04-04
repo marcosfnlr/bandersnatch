@@ -57,7 +57,7 @@ public class AddParag extends HttpServlet {
                 out.println("<p>Retour vers <a href=\"user_main_page.jsp\">la page de l'utilisateur</a></p>");
             }
             else {
-                out.println("<p><a href=\"add_option.jsp\">Continuez</a> avec la création des choix</p>");
+                out.println("<p><a href=\"add_choice.jsp\">Continuez</a> avec la création des choix</p>");
                 out.println("<p>Ou retournez vers <a href=\"user_main_page.jsp\">la page de l'utilisateur</a></p>");
             }
             out.println("</body>");

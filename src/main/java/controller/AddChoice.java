@@ -22,8 +22,8 @@ import javax.sql.DataSource;
  *
  * @author raphaelcja
  */
-@WebServlet(name = "AddOption", urlPatterns = {"/add_option"})
-public class AddOption extends HttpServlet {
+@WebServlet(name = "AddChoice", urlPatterns = {"/add_choice"})
+public class AddChoice extends HttpServlet {
 
     @Resource(name="jdbc/Bandersnatch")
     private DataSource ds;
@@ -47,18 +47,18 @@ public class AddOption extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>New Option</title>");  
+            out.println("<title>New Choice</title>");  
             // TODO: add reference for stylesheet
             out.println("<meta charset=\"UTF-8\">");
             out.println("</head>");
             out.println("<body>");
-            if(!insertOption(request)) {
-                out.println("<p>Error during option creation</p>");
-                out.println("<p><a href=\"add_option.jsp\">Essayez</a> une autre fois</p>");
+            if(!insertChoice(request)) {
+                out.println("<p>Error during choice creation</p>");
+                out.println("<p><a href=\"add_choice.jsp\">Essayez</a> une autre fois</p>");
                 out.println("<p>Retournez vers <a href=\"user_main_page.jsp\">la page de l'utilisateur</a></p>");
             }
             else {
-                out.println("<p><a href=\"add_option.jsp\">Continuez</a> avec la création d'une autre choix</p>");
+                out.println("<p><a href=\"add_choice.jsp\">Continuez</a> avec la création d'une autre choix</p>");
                 out.println("<p>Retournez vers <a href=\"user_main_page.jsp\">la page de l'utilisateur</a></p>");
             }
             out.println("</body>");
@@ -66,7 +66,7 @@ public class AddOption extends HttpServlet {
         }
     }
     
-    private boolean insertOption(HttpServletRequest request) {
+    private boolean insertChoice(HttpServletRequest request) {
         //TODO
         return true;
     }

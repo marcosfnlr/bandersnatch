@@ -57,7 +57,7 @@ public class Invite extends HttpServlet {
                 out.println("<p>Retour vers <a href=\"user_main_page.jsp\">la page de l'utilisateur</a></p>");
             }
             else {
-                out.println("<p>Finalement <a href=\"add_option.jsp\">continuez</a> avec la création des choix</p>");
+                out.println("<p>Finalement <a href=\"add_choice.jsp\">continuez</a> avec la création des choix</p>");
             }
             out.println("</body>");
             out.println("</html>");
