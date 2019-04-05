@@ -121,9 +121,10 @@ public class ParagraphController extends HttpServlet {
         try {
             if(action.equals("add_paragraph")) {
                 int idParagOrigin = actionAddParagraph(request, response, paragraphDAO);
+                //TODO : is it best in another way ?
                 request.setAttribute("id_parag_orig", idParagOrigin);
-                //request.setAttribute("action", "add_choice"); //WRONG
-                request.getRequestDispatcher("/account_main_page.jsp").forward(request, response);
+                request.setAttribute("action", "add_choice");
+                request.getRequestDispatcher("choice_controller").forward(request, response);
             } else if(action.equals("delete_paragraph")) {
                 actionDeleteParagraph(request, response, paragraphDAO);
                 //request.getRequestDispatcher("TODO goes to which page").forward(request, response);

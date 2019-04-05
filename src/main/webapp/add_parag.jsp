@@ -90,7 +90,7 @@
         <div id="choices">
             <div class="form-row align-items-center" id="choix1">
                 <div class="col-11 mb-3">
-                    <textarea class="form-control choix" name="choice_text" rows="2" required></textarea>
+                    <textarea class="form-control choix" name="choices_text" rows="2" required></textarea>
                     <div class="invalid-tooltip">
                         Donne-moi un sens.
                     </div>

@@ -61,9 +61,10 @@ public class ChoiceDAO extends AbstractDataBaseDAO {
         String query = "INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig, "
                 + "fk_parag_dest, fk_parag_cond) VALUES (?,?,?,?,?,?,?)";
         int idChoice = 0;
+        String returnCols[] = {"id_choice"};
         try(
             Connection conn = getConn();
-            PreparedStatement ps = conn.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query, returnCols);
             ) {
             ps.setString(1, text);
             ps.setBoolean(2, locked);
