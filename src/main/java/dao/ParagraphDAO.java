@@ -17,7 +17,7 @@ import model.Paragraph;
  *
  * @author raphaelcja
  */
-public class ParagraphDAO extends AbstractDataBaseDAO {
+public class ParagraphDAO extends AbstractDAO {
     
     public ParagraphDAO(DataSource ds) {
         super(ds);

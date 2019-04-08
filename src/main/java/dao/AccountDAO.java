@@ -15,7 +15,7 @@ import model.Account;
  *
  * @author raphaelcja
  */
-public class AccountDAO extends AbstractDataBaseDAO {
+public class AccountDAO extends AbstractDAO {
     
     public AccountDAO(DataSource ds) {
         super(ds);

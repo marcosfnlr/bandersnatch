@@ -16,7 +16,7 @@ import model.Paragraph;
  *
  * @author raphaelcja
  */
-public class ChoiceDAO extends AbstractDataBaseDAO {
+public class ChoiceDAO extends AbstractDAO {
     
     public ChoiceDAO(DataSource ds) {
         super(ds);

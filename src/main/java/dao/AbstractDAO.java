@@ -13,11 +13,11 @@ import javax.sql.DataSource;
  *
  * @author raphaelcja
  */
-public class AbstractDataBaseDAO {
+public abstract class AbstractDAO {
     
     protected final DataSource dataSource;
     
-    protected AbstractDataBaseDAO(DataSource ds) {
+    protected AbstractDAO(DataSource ds) {
         this.dataSource = ds;
     }
 
