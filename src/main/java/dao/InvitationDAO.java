@@ -19,15 +19,15 @@ public class InvitationDAO extends AbstractDAO {
     /**
      * Adds invitation on table Invitation.
      */
-    public void addInvitation(Invitation invitation) {
+    public void addInvitation(String idAccount, int idBook) {
         String query = "INSERT INTO Invitation (fk_account, fk_book) VALUES (?,?)";
 
         try(
                 Connection conn = getConn();
                 PreparedStatement ps = conn.prepareStatement(query);
         ) {
-            ps.setString(1, invitation.getAccount().getIdAccount());
-            ps.setInt(2, invitation.getBook().getIdBook());
+            ps.setString(1, idAccount);
+            ps.setInt(2, idBook);
             int count = ps.executeUpdate();
             if(count < 1) {
                 throw new DAOException("Erreur dans la creation de l'invitation");

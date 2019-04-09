@@ -47,16 +47,16 @@ public class AccountDAO extends AbstractDAO {
     /**
      * Adds account on table Account.
      */
-    public void addAccount(Account account) {
+    public void addAccount(String idAccount, String password, String lastName, String firstName) {
         String query = "INSERT INTO Account (id_account, password, last_name, first_name) VALUES (?,?,?,?)";
         try (
             Connection conn = getConn();
             PreparedStatement ps = conn.prepareStatement(query);
             ) {
-            ps.setString(1, account.getIdAccount());
-            ps.setString(2, account.getPassword());
-            ps.setString(3, account.getLastName());
-            ps.setString(4, account.getFirstName());
+            ps.setString(1, idAccount);
+            ps.setString(2, password);
+            ps.setString(3, lastName);
+            ps.setString(4, firstName);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
@@ -88,14 +88,14 @@ public class AccountDAO extends AbstractDAO {
     /**
      * Checks account with id_account identifier and password from table Account.
      */
-    public boolean checkAccount(Account account) {
+    public boolean checkAccount(String idAccount, String password) {
 
         String query = "SELECT id_account, password FROM Account WHERE id_account=? AND password=?";
 
         try (Connection conn = getConn()) {
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, account.getIdAccount());
-            ps.setString(2, account.getPassword());
+            ps.setString(1, idAccount);
+            ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
             if (rs != null && rs.next()) return true;
         } catch (SQLException e) {

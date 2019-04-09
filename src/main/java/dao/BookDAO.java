@@ -52,7 +52,7 @@ public class BookDAO extends AbstractDAO {
     /**
      * Adds book on table Book and returns its generated id.
      */
-    public int addBook(Book book) {
+    public int addBook(String title, boolean openToWrite, boolean published, String creator) {
         String query = "INSERT INTO Book (title, open_write, published, fk_account) VALUES (?,?,?,?)";
         int idBook = 0;
         String returnCols[] = {"id_book"};
@@ -60,10 +60,10 @@ public class BookDAO extends AbstractDAO {
             Connection conn = getConn();
             PreparedStatement ps = conn.prepareStatement(query, returnCols);
             ) {
-            ps.setString(1, book.getTitle());
-            ps.setBoolean(2, book.isOpenToWrite());
-            ps.setBoolean(3, book.isPublished());
-            ps.setString(4, book.getCreator().getIdAccount());
+            ps.setString(1, title);
+            ps.setBoolean(2, openToWrite);
+            ps.setBoolean(3, published);
+            ps.setString(4, creator);
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next())

@@ -56,7 +56,8 @@ public class ChoiceDAO extends AbstractDAO {
     /**
      * Adds choice on table Choice and returns its id.
      */
-    public int addChoice(Choice choice) {
+    public int addChoice(String text, boolean locked, boolean onlyChoice, boolean condShouldPass,
+            int paragOrigin, int paragDest, int paragCond) {
         String query = "INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig, "
                 + "fk_parag_dest, fk_parag_cond) VALUES (?,?,?,?,?,?,?)";
         int idChoice = 0;
@@ -65,13 +66,13 @@ public class ChoiceDAO extends AbstractDAO {
             Connection conn = getConn();
             PreparedStatement ps = conn.prepareStatement(query, returnCols);
             ) {
-            ps.setString(1, choice.getText());
-            ps.setBoolean(2, choice.isLocked());
-            ps.setBoolean(3, choice.isOnlyChoice());
-            ps.setBoolean(4, choice.isCondShouldPass());
-            ps.setInt(5, choice.getParagOrigin().getIdParagraph());
-            ps.setInt(6, choice.getParagDest().getIdParagraph());
-            ps.setInt(7, choice.getParagCond().getIdParagraph());
+            ps.setString(1, text);
+            ps.setBoolean(2, locked);
+            ps.setBoolean(3, onlyChoice);
+            ps.setBoolean(4, condShouldPass);
+            ps.setInt(5, paragOrigin);
+            ps.setInt(6, paragDest);
+            ps.setInt(7, paragCond);
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next())
@@ -148,13 +149,13 @@ public class ChoiceDAO extends AbstractDAO {
     /**
      * Change Choice to locked or unlocked based on the boolean parameter.
      */
-    public void setLocked(int idChoice, boolean isLocked) {
+    public void setLocked(Choice choice, boolean isLocked) {
         try (
                 Connection conn = getConn();
                 PreparedStatement ps = conn.prepareStatement("UPDATE Choice SET locked=? WHERE id_choice=?");
         ) {
             ps.setBoolean(1, isLocked);
-            ps.setInt(2, idChoice);
+            ps.setInt(2, choice.getIdChoice());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);

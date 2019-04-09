@@ -101,6 +101,7 @@ public class AccountController extends AbstractController {
         String password = request.getParameter("password");
         String lastName = request.getParameter("last_name");
         String firstName = request.getParameter("first_name");
+
         accountDAO.addAccount(idAccount, password, lastName, firstName);
     }
     
