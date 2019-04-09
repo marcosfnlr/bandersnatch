@@ -25,56 +25,25 @@ import model.Book;
  *
  * @author raphaelcja
  */
-@WebServlet(name = "CreateBookController", urlPatterns = {"/create_book_controller"})
-public class CreateBookController extends HttpServlet {
+@WebServlet(name = "CreateParagraphController", urlPatterns = {"/create_paragraph_controller"})
+public class CreateParagraphController extends AbstractController {
 
     @Resource(name = "jdbc/Bandersnatch")
     private DataSource ds;
     
-    // error messages
-    private void invalidParameters(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        String errorMessage = "Paramètres invalides";
-        request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
+    @Override
+    protected void processGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
     
-    private void erreurBD(HttpServletRequest request, HttpServletResponse response, DAOException e) 
-            throws ServletException, IOException {
-        e.printStackTrace();
-        String errorMessage = "Une erreur d’accès à la base de données vient de se produire : " + e.getMessage();
-        request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
-    }
-    
-    /**
-     * GET.
-     */
-    public void doGet(HttpServletRequest request, HttpServletResponse response) 
-            throws IOException, ServletException {
-        
-        
-    }
-    
-    
-    /**
-     * POST.
-     */
-    public void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws IOException, ServletException {
-        
-        request.setCharacterEncoding("UTF-8");
-        String action = request.getParameter("action");
+    @Override
+    protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         
         BookDAO bookDAO = new BookDAO(ds);
         ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
         ChoiceDAO choiceDAO = new ChoiceDAO(ds);
-        
-        if (action == null) {
-            invalidParameters(request, response);
-            return;
-        }
-                
+              
         try {
             if(action.equals("create_book")) {
                 int idBook = actionAddBook(request, response, bookDAO);
@@ -89,6 +58,9 @@ public class CreateBookController extends HttpServlet {
                     actionAddChoice(request, response, choiceDAO);
                 }
                 
+            } else if(action.equals("add_paragraph")) {
+                    
+                
             } else {
                 invalidParameters(request, response);
                 return;
@@ -99,6 +71,8 @@ public class CreateBookController extends HttpServlet {
         
         request.getRequestDispatcher("/account_main_page.jsp").forward(request, response);
     }
+    
+   
     
     
     /**
@@ -148,4 +122,5 @@ public class CreateBookController extends HttpServlet {
         return choiceDAO.addChoice(text, locked, onlyChoice, condShouldPass, paragOrigin, paragDest, paragCond);
         //return choiceDAO.addChoice("text", false, false, false, 1, 1, 1);
     }
+
 }
