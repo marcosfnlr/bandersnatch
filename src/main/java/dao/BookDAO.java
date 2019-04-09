@@ -27,7 +27,7 @@ public class BookDAO extends AbstractDAO {
      * Returns list of published books from table Book.
      */
     public List<Book> listPublishedBooks() {
-        List<Book> list = new ArrayList<Book>();
+        List<Book> list = new ArrayList<>();
         AccountDAO accountDAO = new AccountDAO(dataSource);
         
         try(
@@ -52,7 +52,7 @@ public class BookDAO extends AbstractDAO {
     /**
      * Adds book on table Book and returns its generated id.
      */
-    public int addBook(String title, boolean openToWrite, boolean published, String creator) {
+    public int addBook(Book book) {
         String query = "INSERT INTO Book (title, open_write, published, fk_account) VALUES (?,?,?,?)";
         int idBook = 0;
         String returnCols[] = {"id_book"};
@@ -60,10 +60,10 @@ public class BookDAO extends AbstractDAO {
             Connection conn = getConn();
             PreparedStatement ps = conn.prepareStatement(query, returnCols);
             ) {
-            ps.setString(1, title);
-            ps.setBoolean(2, openToWrite);
-            ps.setBoolean(3, published);
-            ps.setString(4, creator);
+            ps.setString(1, book.getTitle());
+            ps.setBoolean(2, book.isOpenToWrite());
+            ps.setBoolean(3, book.isPublished());
+            ps.setString(4, book.getCreator().getIdAccount());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next())

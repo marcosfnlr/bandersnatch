@@ -58,6 +58,10 @@ public class Choice {
         return paragDest;
     }
 
+    public Paragraph getParagCond() {
+        return paragCond;
+    }
+
     @Override
     public String toString() {
         return "Choice{" + "idChoice=" + idChoice + ", text=" + text + ", locked=" + locked + ", onlyChoice=" + onlyChoice + ", condShouldPass=" + condShouldPass  + ", paragOrigin=" + paragOrigin + ", paragDest=" + paragDest + ", paragCond=" + paragCond + '}';

@@ -21,7 +21,7 @@ public class HistoryDAO extends AbstractDAO {
     /**
      * Adds history on table History.
      */
-    public void addHistory(String idAccount, int idBook, int idChoice) {
+    public void addHistory(History history) {
         String query = "INSERT INTO History (fk_account, fk_book, fk_choice, creation_date) "
                 + "VALUES (?,?,?,?)";
 
@@ -33,9 +33,9 @@ public class HistoryDAO extends AbstractDAO {
                 Connection conn = getConn();
                 PreparedStatement ps = conn.prepareStatement(query);
         ) {
-            ps.setString(1, idAccount);
-            ps.setInt(2, idBook);
-            ps.setInt(3, idChoice);
+            ps.setString(1, history.getAccount().getIdAccount());
+            ps.setInt(2, history.getBook().getIdBook());
+            ps.setInt(3, history.getChoice().getIdChoice());
             ps.setTimestamp(4, currentTimestamp);
             int count = ps.executeUpdate();
             if(count < 1) {
@@ -49,7 +49,7 @@ public class HistoryDAO extends AbstractDAO {
     /**
      * Deletes history with specific id_account, id_book and id_choice from table History.
      */
-    public void deleteHistory(String idAccount, int idBook,int idChoice) {
+    public void deleteHistory(String idAccount, int idBook, int idChoice) {
         String query = "DELETE FROM History WHERE fk_account=? AND fk_book=? AND fk_choice=?";
 
         try(
