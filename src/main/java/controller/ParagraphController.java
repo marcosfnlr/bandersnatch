@@ -24,35 +24,15 @@ import model.Paragraph;
  * @author raphaelcja
  */
 @WebServlet(name = "ParagraphController", urlPatterns = {"/paragraph_controller"})
-public class ParagraphController extends HttpServlet {
+public class ParagraphController extends AbstractController {
     
-    @Resource(name = "jdbc/Bandersnatch")
-    private DataSource ds;
 
-    // error messages
-    private void invalidParameters(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        String errorMessage = "Paramètres invalides";
-        request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
-    }
-    
-    private void erreurBD(HttpServletRequest request, HttpServletResponse response, DAOException e) 
-            throws ServletException, IOException {
-        e.printStackTrace();
-        String errorMessage = "Une erreur d’accès à la base de données vient de se produire : " + e.getMessage();
-        request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
-    }
     
     /**
      * GET : controls actions of listParagraphs, getParagraph.
      */
-    public void doGet(HttpServletRequest request, HttpServletResponse response) 
-            throws IOException, ServletException {
-        
-        request.setCharacterEncoding("UTF-8");
-        String action = request.getParameter("action");
+    @Override
+    protected void processGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
         
         try {
@@ -69,9 +49,8 @@ public class ParagraphController extends HttpServlet {
         } catch (DAOException e) {
             erreurBD(request, response, e);
         }
-        
     }
-    
+
     /**
      * Lists all paragraphs from a book. 
      * TODO : when to use ?
@@ -106,43 +85,12 @@ public class ParagraphController extends HttpServlet {
     /**
      * POST : controls actions of addParagraph, deleteParagraph, modifyParagraph.
      */
-    public void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws IOException, ServletException {
-        
-        request.setCharacterEncoding("UTF-8");
-        String action = request.getParameter("action");
+    @Override
+    protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
         
-        if (action == null) {
-            invalidParameters(request, response);
-            return;
-        }
-        
         try {
-            if(action.equals("add_paragraph")) {
-                int idParag = actionAddParagraph(request, response, paragraphDAO);
-                boolean isFirstParag = Boolean.parseBoolean(request.getParameter("is_new_book"));
-                //TODO : is there a better way to go change controllers ??
-                
-                if(!isFirstParag) {
-                    // TODO: id_choice_orig is still null because no jsp sets it yet
-                    int idChoiceOrigin = 0;//Integer.parseInt(request.getParameter("id_choice_orig"));
-                    
-                    
-                    // this is the choice whose paragraph is being redacted
-                    //UPDATE Choice SET id_parag_dest=? WHERE id_choice=?
-                    //id_parag_dest=idParagOrigin
-                    //id_choice=id_choice
-                    request.setAttribute("action", "set_parag_dest");
-                }
-
-                
-                request.setAttribute("id_parag_orig", idParag);
-                request.setAttribute("action", "add_choice");
-                
-                request.getRequestDispatcher("choice_controller").forward(request, response);
-                
-            } else if(action.equals("delete_paragraph")) {
+            if(action.equals("delete_paragraph")) {
                 actionDeleteParagraph(request, response, paragraphDAO);
                 //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
             } else if(action.equals("modify_paragraph")) {
@@ -155,22 +103,6 @@ public class ParagraphController extends HttpServlet {
         } catch (DAOException e) {
             erreurBD(request, response, e);
         }
-        
-    }
-    
-    /**
-     * Adds a paragraph to a book and returns its id.
-     */
-    private int actionAddParagraph(HttpServletRequest request, HttpServletResponse response, 
-            ParagraphDAO paragraphDAO) throws ServletException, IOException {
-        
-        String text = request.getParameter("parag_text");
-        boolean beginning = Boolean.parseBoolean(request.getParameter("beginning"));
-        boolean conclusion = Boolean.parseBoolean(request.getParameter("conclusion"));
-        int book = Integer.parseInt(request.getParameter("id_book"));
-        String author = (String)request.getSession().getAttribute("id_account");
-        
-        return paragraphDAO.addParagraph(text, beginning, conclusion, book, author);
     }
     
     /**

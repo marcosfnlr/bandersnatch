@@ -24,35 +24,13 @@ import model.Account;
  * @author raphaelcja
  */
 @WebServlet(name = "AccountController", urlPatterns = {"/account_controller"})
-public class AccountController extends HttpServlet {
-    
-    @Resource(name = "jdbc/Bandersnatch")
-    private DataSource ds;
-    
-    // error messages
-    private void invalidParameters(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        String errorMessage = "Paramètres invalides";
-        request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
-    }
-    
-    private void erreurBD(HttpServletRequest request, HttpServletResponse response, DAOException e) 
-            throws ServletException, IOException {
-        e.printStackTrace();
-        String errorMessage = "Une erreur d’accès à la base de données vient de se produire : " + e.getMessage();
-        request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
-    }
+public class AccountController extends AbstractController {
     
     /**
      * GET : controls actions of logoutAccount.
      */
-    public void doGet(HttpServletRequest request, HttpServletResponse response) 
-            throws IOException, ServletException {
-        
-        request.setCharacterEncoding("UTF-8");
-        String action = request.getParameter("action");
+    @Override
+    protected void processGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         AccountDAO accountDAO = new AccountDAO(ds);
 
         try {
@@ -67,7 +45,7 @@ public class AccountController extends HttpServlet {
             erreurBD(request, response, e);
         }
     }
-    
+
     
     /**
      * Account logout.
@@ -82,17 +60,9 @@ public class AccountController extends HttpServlet {
     /**
      * POST : controls actions of addAccount, checkAccount.
      */
-    public void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws IOException, ServletException {
-        
-        request.setCharacterEncoding("UTF-8");
-        String action = request.getParameter("action");
+    @Override
+    protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         AccountDAO accountDAO = new AccountDAO(ds);
-        
-        if (action == null) {
-            invalidParameters(request, response);
-            return;
-        }
                         
         try {
             if (action.equals("add_account")) {
@@ -119,6 +89,7 @@ public class AccountController extends HttpServlet {
             erreurBD(request, response, e);
         }
     }
+ 
     
     /**
      * Adds a account.
@@ -143,6 +114,8 @@ public class AccountController extends HttpServlet {
         String password = request.getParameter("password");
         return accountDAO.checkAccount(idAccount, password);
     }
+
+    
     
     
 }

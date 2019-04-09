@@ -45,7 +45,7 @@ CREATE TABLE Paragraph(
 CREATE TABLE Choice(
     id_choice INT GENERATED ALWAYS as IDENTITY PRIMARY KEY,
     text VARCHAR2(250) NOT NULL,
-    locked NUMBER(1) NOT NULL,
+    locked NUMBER(1) DEFAULT 0,
     only_choice NUMBER(1) NOT NULL,
     cond_should_pass NUMBER(1),
     fk_parag_orig INT NOT NULL,

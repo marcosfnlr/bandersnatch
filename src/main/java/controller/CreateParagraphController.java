@@ -46,20 +46,35 @@ public class CreateParagraphController extends AbstractController {
               
         try {
             if(action.equals("create_book")) {
-                int idBook = actionAddBook(request, response, bookDAO);
+                int idBook = addBook(request, response, bookDAO);
                 request.setAttribute("id_book", idBook);
                 
-                int idParag = actionAddParagraph(request, response, paragraphDAO);
+                int idParag = addParagraph(request, response, paragraphDAO);
                 request.setAttribute("id_parag_orig", idParag);
                 
                 String text[] = request.getParameterValues("choices_text");
                 for(int i = 0; i < text.length; i++) {
                     request.setAttribute("choice_text", text[i]);
-                    actionAddChoice(request, response, choiceDAO);
+                    int idChoice = addChoice(request, response, choiceDAO);
                 }
                 
             } else if(action.equals("add_paragraph")) {
-                    
+                int idBook = Integer.parseInt(String.valueOf(request.getParameter("id_book")));
+                request.setAttribute("id_book", idBook);
+                
+                int idParag = addParagraph(request, response, paragraphDAO);
+                request.setAttribute("id_parag_orig", idParag);
+                
+                String text[] = request.getParameterValues("choices_text");
+                for(int i = 0; i < text.length; i++) {
+                    request.setAttribute("choice_text", text[i]);
+                    int idChoice = addChoice(request, response, choiceDAO);
+                } 
+                
+                request.setAttribute("id_parag_dest", idParag);
+                setParagDest(request, response, choiceDAO);
+                
+                
                 
             } else {
                 invalidParameters(request, response);
@@ -78,7 +93,7 @@ public class CreateParagraphController extends AbstractController {
     /**
      * Adds a book and returns its generated id.
      */
-    private int actionAddBook(HttpServletRequest request, HttpServletResponse response, 
+    private int addBook(HttpServletRequest request, HttpServletResponse response, 
             BookDAO bookDAO) throws ServletException, IOException {
         
         String title = request.getParameter("title");
@@ -92,7 +107,7 @@ public class CreateParagraphController extends AbstractController {
     /**
      * Adds a paragraph to a book and returns its id.
      */
-    private int actionAddParagraph(HttpServletRequest request, HttpServletResponse response, 
+    private int addParagraph(HttpServletRequest request, HttpServletResponse response, 
             ParagraphDAO paragraphDAO) throws ServletException, IOException {
         
         String text = request.getParameter("parag_text");
@@ -107,7 +122,7 @@ public class CreateParagraphController extends AbstractController {
     /**
      * Adds a choice to a paragraph and returns its id.
      */
-    private int actionAddChoice(HttpServletRequest request, HttpServletResponse response, 
+    private int addChoice(HttpServletRequest request, HttpServletResponse response, 
             ChoiceDAO choiceDAO) throws ServletException, IOException {
         
         //String text = request.getParameter("choice_text");
@@ -120,7 +135,17 @@ public class CreateParagraphController extends AbstractController {
         int paragCond = 1;//Integer.parseInt(request.getParameter("id_parag_cond"));
         
         return choiceDAO.addChoice(text, locked, onlyChoice, condShouldPass, paragOrigin, paragDest, paragCond);
-        //return choiceDAO.addChoice("text", false, false, false, 1, 1, 1);
+    }
+    
+    /**
+     * Updates destiny paragraph of a choice.
+     */
+    protected void setParagDest(HttpServletRequest request, HttpServletResponse response, 
+            ChoiceDAO choiceDAO) throws ServletException, IOException {
+        
+        int idChoice = Integer.parseInt(request.getParameter("id_choice_orig"));
+        int idParagDest = Integer.parseInt(String.valueOf(request.getAttribute("id_parag_dest")));;
+        choiceDAO.setParagDest(idChoice, idParagDest);
     }
 
 }

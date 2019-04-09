@@ -24,35 +24,15 @@ import model.Choice;
  * @author raphaelcja
  */
 @WebServlet(name = "ChoiceController", urlPatterns = {"/choice_controller"})
-public class ChoiceController extends HttpServlet {
+public class ChoiceController extends AbstractController {
 
-    @Resource(name = "jdbc/Bandersnatch")
-    private DataSource ds;
-
-    // error messages
-    private void invalidParameters(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        String errorMessage = "Paramètres invalides";
-        request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
-    }
     
-    private void erreurBD(HttpServletRequest request, HttpServletResponse response, DAOException e) 
-            throws ServletException, IOException {
-        e.printStackTrace();
-        String errorMessage = "Une erreur d’accès à la base de données vient de se produire : " + e.getMessage();
-        request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
-    }
     
     /**
      * GET : controls actions of listParagraphChoices, getChoice.
      */
-    public void doGet(HttpServletRequest request, HttpServletResponse response) 
-            throws IOException, ServletException {
-        
-        request.setCharacterEncoding("UTF-8");
-        String action = request.getParameter("action");
+    @Override
+    protected void processGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         ChoiceDAO choiceDAO = new ChoiceDAO(ds);
         
         try {
@@ -107,28 +87,12 @@ public class ChoiceController extends HttpServlet {
     /**
      * POST : controls actions of addChoice, deleteChoice.
      */
-    public void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws IOException, ServletException {
-        
-        request.setCharacterEncoding("UTF-8");
-        //String action = request.getParameter("action");
+    @Override
+    protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         ChoiceDAO choiceDAO = new ChoiceDAO(ds);
-        String action = (String)request.getAttribute("action");
-        
-        if (action == null) {
-            invalidParameters(request, response);
-            return;
-        }
-        
+
         try {
-            if(action.equals("add_choice")) {
-                String text[] = request.getParameterValues("choices_text");
-                for(int i = 0; i < text.length; i++) {
-                    request.setAttribute("choice_text", text[i]);
-                    actionAddChoice(request, response, choiceDAO);
-                }
-                request.getRequestDispatcher("/account_main_page.jsp").forward(request, response);
-            } else if(action.equals("delete_choice")) {
+            if(action.equals("delete_choice")) {
                 actionDeleteChoice(request, response, choiceDAO);
                 //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
             } else {
@@ -138,28 +102,8 @@ public class ChoiceController extends HttpServlet {
         } catch (DAOException e) {
             erreurBD(request, response, e);
         }
-        
     }
-    
-    /**
-     * Adds a choice to a paragraph and returns its id.
-     */
-    private int actionAddChoice(HttpServletRequest request, HttpServletResponse response, 
-            ChoiceDAO choiceDAO) throws ServletException, IOException {
         
-        //String text = request.getParameter("choice_text");
-        String text = String.valueOf(request.getAttribute("choice_text"));
-        boolean locked = false; //TODO default is false
-        boolean onlyChoice = false;//TODO for now is always false Boolean.parseBoolean(request.getParameter("only_choice"));
-        boolean condShouldPass = false;//TODO for now is always false Boolean.parseBoolean(request.getParameter("cond_should_pass"));
-        int paragOrigin = Integer.parseInt(String.valueOf(request.getAttribute("id_parag_orig")));
-        int paragDest = 1;//Integer.parseInt(request.getParameter("id_parag_dest"));
-        int paragCond = 1;//Integer.parseInt(request.getParameter("id_parag_cond"));
-        
-        return choiceDAO.addChoice(text, locked, onlyChoice, condShouldPass, paragOrigin, paragDest, paragCond);
-        //return choiceDAO.addChoice("text", false, false, false, 1, 1, 1);
-    }
-    
     /**
      * Deletes a choice of a paragraph.
      */

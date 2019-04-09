@@ -24,35 +24,13 @@ import model.Book;
  * @author raphaelcja
  */
 @WebServlet(name = "BookController", urlPatterns = {"/book_controller"})
-public class BookController extends HttpServlet{
-    
-    @Resource(name = "jdbc/Bandersnatch")
-    private DataSource ds;
-    
-    // error messages
-    private void invalidParameters(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        String errorMessage = "Paramètres invalides";
-        request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
-    }
-    
-    private void erreurBD(HttpServletRequest request, HttpServletResponse response, DAOException e) 
-            throws ServletException, IOException {
-        e.printStackTrace();
-        String errorMessage = "Une erreur d’accès à la base de données vient de se produire : " + e.getMessage();
-        request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
-    }
+public class BookController extends AbstractController{
     
     /**
      * GET : controls actions of listPublishedBooks, getBook.
      */
-    public void doGet(HttpServletRequest request, HttpServletResponse response) 
-            throws IOException, ServletException {
-        
-        request.setCharacterEncoding("UTF-8");
-        String action = request.getParameter("action");
+    @Override
+    protected void processGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         BookDAO bookDAO = new BookDAO(ds);
 
         try {
@@ -70,7 +48,7 @@ public class BookController extends HttpServlet{
             erreurBD(request, response, e);
         }
     }
-    
+   
     /**
      * Lists all published books. 
      */
@@ -101,11 +79,8 @@ public class BookController extends HttpServlet{
     /**
      * POST : controls actions of addBook, deleteBook, publishBook.
      */
-    public void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws IOException, ServletException {
-        
-        request.setCharacterEncoding("UTF-8");
-        String action = request.getParameter("action");
+    @Override
+    protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         BookDAO bookDAO = new BookDAO(ds);
         
         if (action == null) {
@@ -114,11 +89,7 @@ public class BookController extends HttpServlet{
         }
                 
         try {
-            if(action.equals("add_book")) {
-                int idBook = actionAddBook(request, response, bookDAO);
-                request.setAttribute("id_book", idBook);
-                request.getRequestDispatcher("/add_parag.jsp").forward(request, response);
-            } else if(action.equals("delete_book")) {
+            if(action.equals("delete_book")) {
                 actionDeleteBook(request, response, bookDAO);
                 //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
             } else if(action.equals("publish_book")) {
@@ -132,21 +103,6 @@ public class BookController extends HttpServlet{
             erreurBD(request, response, e);
         }
     }
-    
-    /**
-     * Adds a book and returns its generated id.
-     */
-    private int actionAddBook(HttpServletRequest request, HttpServletResponse response, 
-            BookDAO bookDAO) throws ServletException, IOException {
-        
-        String title = request.getParameter("title");
-        boolean openToWrite = Boolean.parseBoolean(request.getParameter("open_write"));
-        boolean published = false; // TODO : make initial data base value as false
-        String creator = (String)request.getSession().getAttribute("id_account"); 
-        
-        return bookDAO.addBook(title, openToWrite, published, creator);
-    }
-    
     
     /**
      * Deletes a book.
@@ -172,4 +128,6 @@ public class BookController extends HttpServlet{
         boolean published = Boolean.parseBoolean(request.getParameter("published"));
         bookDAO.publishBook(idBook, published);
     }
+
+
 }
