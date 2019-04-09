@@ -167,7 +167,7 @@ public class BookController extends HttpServlet{
     private void actionPublishBook(HttpServletRequest request, HttpServletResponse response, 
             BookDAO bookDAO) throws ServletException, IOException {
         
-        //TODO : check if account is creator
+        //TODO : check if account is creator and check if exists at least one conclusion
         int idBook = Integer.parseInt(request.getParameter("idBook"));
         boolean published = Boolean.parseBoolean(request.getParameter("published"));
         bookDAO.publishBook(idBook, published);

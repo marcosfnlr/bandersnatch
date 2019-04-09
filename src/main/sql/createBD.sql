@@ -8,7 +8,6 @@
  * Created: 28-Mar-2019
  */
 
-/*WHENEVER SQLERROR CONTINUE NONE*/
 DROP TABLE Invitation CASCADE CONSTRAINTS;
 DROP TABLE History CASCADE CONSTRAINTS;
 DROP TABLE Choice CASCADE CONSTRAINTS;
@@ -27,7 +26,7 @@ CREATE TABLE Book(
     id_book INT GENERATED ALWAYS as IDENTITY PRIMARY KEY,
     title VARCHAR2(100) NOT NULL,
     open_write NUMBER(1) NOT NULL,
-    published NUMBER(1) NOT NULL,
+    published NUMBER(1) DEFAULT 0,
     fk_account VARCHAR2(10) NOT NULL,
     FOREIGN KEY (fk_account) REFERENCES Account(id_account)
 );
@@ -50,8 +49,8 @@ CREATE TABLE Choice(
     only_choice NUMBER(1) NOT NULL,
     cond_should_pass NUMBER(1),
     fk_parag_orig INT NOT NULL,
-    fk_parag_dest INT NOT NULL,
-    fk_parag_cond INT,
+    fk_parag_dest INT DEFAULT NULL,
+    fk_parag_cond INT DEFAULT NULL,
     FOREIGN KEY (fk_parag_orig) REFERENCES Paragraph(id_paragraph),
     FOREIGN KEY (fk_parag_dest) REFERENCES Paragraph(id_paragraph),
     FOREIGN KEY (fk_parag_cond) REFERENCES Paragraph(id_paragraph)
@@ -76,6 +75,7 @@ CREATE TABLE Invitation(
     FOREIGN KEY (fk_book) REFERENCES Book(id_book)
 );
 
+SELECT * FROM Account;
 SELECT * FROM Book;
 SELECT * FROM Paragraph;
 SELECT * FROM Choice;

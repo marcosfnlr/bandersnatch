@@ -131,6 +131,24 @@ public class ChoiceDAO extends AbstractDAO {
         }
     }
     
+    
+    /**
+     * Modifies choice with id_choice identifier from table Choice by updating it's destiny paragraph.
+     */
+    public void setParagDest(int idChoice, int idParagDest) {
+        try (
+	     Connection conn = getConn();
+	     PreparedStatement ps = conn.prepareStatement
+	       ("UPDATE Choice SET id_parag_dest=? WHERE id_choice=?");
+	     ) {
+            ps.setInt(1, idParagDest);
+            ps.setInt(2, idChoice);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
+        }
+    }
+    
     /**
      * TODO : should we have modify?
      */

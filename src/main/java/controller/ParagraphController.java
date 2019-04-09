@@ -120,11 +120,28 @@ public class ParagraphController extends HttpServlet {
         
         try {
             if(action.equals("add_paragraph")) {
-                int idParagOrigin = actionAddParagraph(request, response, paragraphDAO);
-                //TODO : is it best in another way ?
-                request.setAttribute("id_parag_orig", idParagOrigin);
+                int idParag = actionAddParagraph(request, response, paragraphDAO);
+                boolean isFirstParag = Boolean.parseBoolean(request.getParameter("is_new_book"));
+                //TODO : is there a better way to go change controllers ??
+                
+                if(!isFirstParag) {
+                    // TODO: id_choice_orig is still null because no jsp sets it yet
+                    int idChoiceOrigin = 0;//Integer.parseInt(request.getParameter("id_choice_orig"));
+                    
+                    
+                    // this is the choice whose paragraph is being redacted
+                    //UPDATE Choice SET id_parag_dest=? WHERE id_choice=?
+                    //id_parag_dest=idParagOrigin
+                    //id_choice=id_choice
+                    request.setAttribute("action", "set_parag_dest");
+                }
+
+                
+                request.setAttribute("id_parag_orig", idParag);
                 request.setAttribute("action", "add_choice");
+                
                 request.getRequestDispatcher("choice_controller").forward(request, response);
+                
             } else if(action.equals("delete_paragraph")) {
                 actionDeleteParagraph(request, response, paragraphDAO);
                 //request.getRequestDispatcher("TODO goes to which page").forward(request, response);

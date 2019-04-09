@@ -169,4 +169,15 @@ public class ChoiceController extends HttpServlet {
         int idChoice = Integer.parseInt(request.getParameter("id_choice"));
         choiceDAO.deleteChoice(idChoice);
     }
+    
+    
+    /**
+     * Updates destiny paragraph of a choice.
+     */
+    protected void actionSetParagDest(HttpServletRequest request, HttpServletResponse response, 
+            ChoiceDAO choiceDAO) throws ServletException, IOException {
+        
+        int idChoice = Integer.parseInt(request.getParameter("id_choice"));
+        choiceDAO.deleteChoice(idChoice);
+    }
 }

@@ -45,10 +45,10 @@
 <div class="container">
     <h1><%=request.getParameter("title")%>
     </h1>
-    <form action="paragraph_controller" method="post" class="custom-validation" novalidate>
+    <form action="create_book_controller" method="post" class="custom-validation" novalidate>
         <%
-            String isNew = request.getParameter("isNew");
-            if ("true".equals(isNew)) {
+            String isNewBook = request.getParameter("is_new_book");
+            if ("true".equals(isNewBook)) {
         %>
         <input type="hidden" name="title" value="<%=request.getParameter("title")%>">
         <input type="hidden" name="open_write" value="<%=request.getParameter("open_write")%>">
@@ -56,7 +56,7 @@
         <%
         } else {
         %>
-        <input type="hidden" name="id_choice" value="<%=request.getParameter("id_choice")%>">
+        <input type="hidden" name="id_choice_orig" value="<%=request.getParameter("id_choice_orig")%>">
         <%
             }
         %>
@@ -100,7 +100,7 @@
         <div class="row justify-content-center">
             <button type="submit" class="btn btn-danger">Ajouter</button>
         </div>
-        <input type="hidden" name="action" value="add_paragraph" />
+        <input type="hidden" name="action" value="create_book" />
     </form>
 </div>
 </body>

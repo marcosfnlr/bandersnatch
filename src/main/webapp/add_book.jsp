@@ -47,8 +47,8 @@
 </nav>
 <div class="container">
     <h1>Nouvelle Histoire</h1>
-    <form action="book_controller" method="post" class="custom-validation" novalidate>
-        <input type="hidden" name="isNew" value="true">
+    <form action="add_parag.jsp" class="custom-validation" novalidate>
+        <input type="hidden" name="is_new_book" value="true">
         <div class="form-row">
             <div class="col-12 col-lg-8 mb-3">
                 <label for="title">Nom de l'histoire:</label>
@@ -75,7 +75,6 @@
         <div class="row justify-content-center">
             <button id="create" type="submit" class="btn btn-danger">Créer</button>
         </div>
-        <input type="hidden" name="action" value="add_book" />
     </form>
 </div>
 </body>
