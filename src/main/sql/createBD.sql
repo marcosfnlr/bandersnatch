@@ -74,9 +74,3 @@ CREATE TABLE Invitation(
     FOREIGN KEY (fk_account) REFERENCES Account(id_account),
     FOREIGN KEY (fk_book) REFERENCES Book(id_book)
 );
-
-SELECT * FROM Account;
-SELECT * FROM Book;
-SELECT * FROM Paragraph;
-SELECT * FROM Choice;
-

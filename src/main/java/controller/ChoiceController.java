@@ -63,7 +63,7 @@ public class ChoiceController extends AbstractController {
         
         //needs to know from which book the paragraphs are from
         int idParagOrig = Integer.parseInt(request.getParameter("id_parag_orig"));
-        List<Choice> choices = choiceDAO.listParagraphChoices(idParagOrig);
+        List<Choice> choices = choiceDAO.listParagOrigChoices(idParagOrig);
         request.setAttribute("choices", choices);
     }
     

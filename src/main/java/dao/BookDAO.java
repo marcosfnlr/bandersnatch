@@ -50,6 +50,64 @@ public class BookDAO extends AbstractDAO {
     }
     
     /**
+     * Returns list of all books from table Book for which the user is an author.
+     */
+    public List<Book> listAuthorBooks(String author) {
+        List<Book> list = new ArrayList<>();
+        AccountDAO accountDAO = new AccountDAO(dataSource);
+        String query = "SELECT * FROM Book WHERE id_book IN "
+                + "(SELECT DISTINCT fk_book FROM Paragraph WHERE fk_account=?)";
+        
+        try(
+            Connection conn = getConn();
+            PreparedStatement ps = conn.prepareStatement(query);
+            ) {
+            ps.setString(1, author);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                Account account = accountDAO.getAccount(rs.getString("fk_account"));
+                Book book = new Book(rs.getInt("id_book"), rs.getString("title"), rs.getBoolean("open_write"), 
+                    rs.getBoolean("published"), account);
+                list.add(book);
+            }
+            
+        } catch (SQLException e) {
+            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        return list;
+    }
+    
+    /**
+     * Returns list of all books from table Book for which the user has an invitation.
+     */
+    public List<Book> listInvitationBooks(String author) {
+        List<Book> list = new ArrayList<>();
+        AccountDAO accountDAO = new AccountDAO(dataSource);
+        String query = "SELECT * FROM Book WHERE id_book IN "
+                + "(SELECT DISTINCT fk_book FROM Invitation WHERE fk_account=?)";
+        
+        try(
+            Connection conn = getConn();
+            PreparedStatement ps = conn.prepareStatement(query);
+            ) {
+            ps.setString(1, author);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                Account account = accountDAO.getAccount(rs.getString("fk_account"));
+                Book book = new Book(rs.getInt("id_book"), rs.getString("title"), rs.getBoolean("open_write"), 
+                    rs.getBoolean("published"), account);
+                list.add(book);
+            }
+            
+        } catch (SQLException e) {
+            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        return list;
+    }
+    
+    /**
      * Adds book on table Book and returns its generated id.
      */
     public int addBook(String title, boolean openToWrite, boolean published, String creator) {
@@ -131,5 +189,26 @@ public class BookDAO extends AbstractDAO {
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
         }
+    }
+    
+    /**
+     * Checks if book with id_book identifier from table Book has at least one conclusion.
+     */
+    public boolean checkConclusion(int idBook) {
+
+        String query = "SELECT COUNT (id_paragraph) AS conclusions FROM Paragraph WHERE conclusion=1 AND fk_book=?";
+
+        try (Connection conn = getConn()) {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, idBook);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null && rs.next()) {
+                if(rs.getInt("count") > 0) return true;
+            }
+        } catch (SQLException e) {
+            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+
+        return false;
     }
 }

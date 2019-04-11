@@ -55,6 +55,69 @@ public class ParagraphDAO extends AbstractDAO {
     }
     
     /**
+     * Returns list of conclusion paragraphs from a book.
+     * TODO : where to verify account
+     */
+    public List<Paragraph> listConclusions(int idBook) {
+        List<Paragraph> list = new ArrayList<Paragraph>();
+        BookDAO bookDAO = new BookDAO(dataSource);
+        AccountDAO accountDAO = new AccountDAO(dataSource);
+        String query = "SELECT * FROM Paragraph WHERE fk_book=? AND conclusion=1";
+                
+        try(
+            Connection conn = getConn();
+            PreparedStatement ps = conn.prepareStatement(query);
+            ) {
+            ps.setInt(1, idBook);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                Book book = bookDAO.getBook(rs.getInt("fk_book"));
+                Account account = accountDAO.getAccount(rs.getString("fk_account"));
+                Paragraph p = new Paragraph(rs.getInt("id_paragraph"), rs.getString("text"), rs.getBoolean("beginning"), 
+                        rs.getBoolean("conclusion"), book, account);
+                list.add(p);
+            }
+            
+        } catch (SQLException e) {
+            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        return list;
+    }
+    
+    /**
+     * Gets first paragraph of a book from table Paragraph.
+     */
+    public Paragraph getBeginning(int idBook) {
+        int idParagraph;
+        String text;
+        boolean beginning, conclusion;
+        Book book;
+        Account author;
+        BookDAO bookDAO = new BookDAO(dataSource);
+        AccountDAO accountDAO = new AccountDAO(dataSource);
+
+        try(
+            Connection conn = getConn();
+            Statement st = conn.createStatement();
+            ) {
+            ResultSet rs = st.executeQuery("SELECT * FROM Paragraph WHERE beginning=1 AND fk_book=" + idBook);
+            rs.next();
+            idParagraph = rs.getInt("id_paragraph");
+            text = rs.getString("text");
+            beginning = rs.getBoolean("beginning");
+            conclusion = rs.getBoolean("conclusion");
+            book = bookDAO.getBook(idBook);
+            author = accountDAO.getAccount(rs.getString("fk_account"));
+            
+        } catch (SQLException e) {
+            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        return new Paragraph(idParagraph, text, beginning, conclusion, book, author);
+    }
+    
+    /**
      * Adds paragraph on table Paragraph and returns its id.
      */
     public int addParagraph(String text, boolean beginning, boolean conclusion, int book, String author) {
@@ -92,7 +155,6 @@ public class ParagraphDAO extends AbstractDAO {
         Account author;
         BookDAO bookDAO = new BookDAO(dataSource);
         AccountDAO accountDAO = new AccountDAO(dataSource);
-
 
         try(
             Connection conn = getConn();

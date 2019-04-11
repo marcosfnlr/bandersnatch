@@ -23,9 +23,9 @@ public class ChoiceDAO extends AbstractDAO {
     }
     
     /**
-     * Returns list of choices that exist in a given paragraph.
+     * Returns list of all choices that exist in a given paragraph.
      */
-    public List<Choice> listParagraphChoices(int idParagOrig) {
+    public List<Choice> listParagOrigChoices(int idParagOrig) {
         List<Choice> list = new ArrayList<>();
         ParagraphDAO paragraphDAO = new ParagraphDAO(dataSource);
         String query = "SELECT * FROM Choice WHERE fk_parag_orig=?";
@@ -35,6 +35,37 @@ public class ChoiceDAO extends AbstractDAO {
             PreparedStatement ps = conn.prepareStatement(query);
             ) {
             ps.setInt(1, idParagOrig);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                Paragraph paragOrigin = paragraphDAO.getParagraph(rs.getInt("fk_parag_orig"));
+                Paragraph paragDest = paragraphDAO.getParagraph(rs.getInt("fk_parag_dest"));
+                Paragraph paragCond = paragraphDAO.getParagraph(rs.getInt("fk_parag_cond"));
+                Choice c = new Choice(rs.getInt("id_choice"), rs.getString("text"), rs.getBoolean("locked"), 
+                        rs.getBoolean("only_choice"), rs.getBoolean("cond_should_pass"), 
+                        paragOrigin, paragDest, paragCond);
+                list.add(c);
+            }
+            
+        } catch (SQLException e) {
+            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        return list;
+    }
+    
+    /**
+     * Returns list of choices that have a given paragraph as destination.
+     */
+    public List<Choice> listParagDestChoices(int idParagDest) {
+        List<Choice> list = new ArrayList<>();
+        ParagraphDAO paragraphDAO = new ParagraphDAO(dataSource);
+        String query = "SELECT * FROM Choice WHERE fk_parag_dest=?";
+        
+        try(
+            Connection conn = getConn();
+            PreparedStatement ps = conn.prepareStatement(query);
+            ) {
+            ps.setInt(1, idParagDest);
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 Paragraph paragOrigin = paragraphDAO.getParagraph(rs.getInt("fk_parag_orig"));
