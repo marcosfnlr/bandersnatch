@@ -54,6 +54,38 @@ public class ChoiceDAO extends AbstractDAO {
     }
     
     /**
+     * Returns list of all choices that exist in a given book.
+     */
+    public List<Choice> listBookChoices(int idBook) {
+        List<Choice> list = new ArrayList<>();
+        ParagraphDAO paragraphDAO = new ParagraphDAO(dataSource);
+        String query = "SELECT * FROM Choice WHERE fk_parag_orig IN "
+                + "(SELECT DISTINCT id_paragraph FROM Paragraph WHERE fk_book=?) ";
+        
+        try(
+            Connection conn = getConn();
+            PreparedStatement ps = conn.prepareStatement(query);
+            ) {
+            ps.setInt(1, idBook);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                Paragraph paragOrigin = paragraphDAO.getParagraph(rs.getInt("fk_parag_orig"));
+                Paragraph paragDest = paragraphDAO.getParagraph(rs.getInt("fk_parag_dest"));
+                Paragraph paragCond = paragraphDAO.getParagraph(rs.getInt("fk_parag_cond"));
+                Choice c = new Choice(rs.getInt("id_choice"), rs.getString("text"), rs.getBoolean("locked"), 
+                        rs.getBoolean("only_choice"), rs.getBoolean("cond_should_pass"), 
+                        paragOrigin, paragDest, paragCond);
+                list.add(c);
+            }
+            
+        } catch (SQLException e) {
+            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        return list;
+    }
+    
+    /**
      * Adds choice on table Choice and returns its id.
      */
     public int addChoice(String text, boolean locked, boolean onlyChoice, boolean condShouldPass,
