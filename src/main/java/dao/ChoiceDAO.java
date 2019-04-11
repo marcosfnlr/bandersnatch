@@ -149,13 +149,13 @@ public class ChoiceDAO extends AbstractDAO {
     /**
      * Change Choice to locked or unlocked based on the boolean parameter.
      */
-    public void setLocked(Choice choice, boolean isLocked) {
+    public void setLocked(int idChoice, boolean isLocked) {
         try (
                 Connection conn = getConn();
                 PreparedStatement ps = conn.prepareStatement("UPDATE Choice SET locked=? WHERE id_choice=?");
         ) {
             ps.setBoolean(1, isLocked);
-            ps.setInt(2, choice.getIdChoice());
+            ps.setInt(2, idChoice);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
