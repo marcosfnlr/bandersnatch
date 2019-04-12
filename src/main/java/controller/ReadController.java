@@ -90,8 +90,8 @@ public class ReadController extends AbstractController{
             paragraph = paragraphDAO.getBeginning(idBook);
         }
         else {
-            int previousParagraph = Integer.parseInt(request.getParameter("previous_paragraph"));
-            paragraph = paragraphDAO.getParagraph(previousParagraph);
+            Choice choice = choiceDAO.getChoice(Integer.parseInt(request.getParameter("chosen_choice")));
+            paragraph = choice.getParagDest();
         }
         
         buildBook(idBook, paragraphDAO, choiceDAO);
