@@ -16,6 +16,7 @@ SELECT * FROM Choice;
 
 INSERT INTO Account (id_account, password, last_name, first_name) VALUES ('a','a','a','a');
 INSERT INTO Account (id_account, password, last_name, first_name) VALUES ('b','b','b','b');
+INSERT INTO Account (id_account, password, last_name, first_name) VALUES ('c','c','c','c');
 
 INSERT INTO Book (title, open_write, published, fk_account) VALUES ('h1',1,0,'a');
 INSERT INTO Book (title, open_write, published, fk_account) VALUES ('h2',1,0,'b');
@@ -32,6 +33,7 @@ INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES 
 INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p3h3',0,0,3,'a');
 INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p4h3',0,1,3,'a');
 INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p5h3',0,1,3,'b');
+INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p6h3',0,0,3,'c');
 
 INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p1h4',1,0,4,'b');
 
@@ -49,3 +51,5 @@ SELECT * FROM Book WHERE id_book IN (SELECT DISTINCT fk_book FROM Invitation WHE
 SELECT * FROM Choice WHERE fk_parag_orig IN (SELECT id_paragraph FROM Paragraph WHERE fk_book=3);
 
 SELECT COUNT (id_paragraph) AS conclusions FROM Paragraph WHERE conclusion=1 AND fk_book=3;
+
+SELECT * FROM Account WHERE id_account IN (SELECT DISTINCT fk_account FROM Paragraph WHERE fk_book=3);

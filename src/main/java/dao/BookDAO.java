@@ -50,6 +50,33 @@ public class BookDAO extends AbstractDAO {
     }
     
     /**
+     * Returns list of all accounts from table Account that are authors of a given book.
+     */
+    public List<Account> listBookAuthors(int idBook) {
+        List<Account> list = new ArrayList<>();
+        String query = "SELECT * FROM Account WHERE id_account IN "
+                + "(SELECT DISTINCT fk_account FROM Paragraph WHERE fk_book=?)";
+        
+        try(
+            Connection conn = getConn();
+            PreparedStatement ps = conn.prepareStatement(query);
+            ) {
+            ps.setInt(1, idBook);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                Account account = new Account(rs.getString("id_account"), rs.getString("password"), 
+                        rs.getString("last_name"), rs.getString("first_name"));
+                list.add(account);
+            }
+            
+        } catch (SQLException e) {
+            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        return list;
+    }
+    
+    /**
      * Returns list of all books from table Book for which the user is an author.
      */
     public List<Book> listAuthorBooks(String author) {
