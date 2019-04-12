@@ -74,7 +74,7 @@ public class AccountController extends AbstractController {
                     //String message = "Vous êtes logged-in";
                     //request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(message, TypeFeedback.SUCCESS)));
                     request.getSession().setAttribute("id_account", request.getParameter("id_account"));
-                    request.getRequestDispatcher("/account_main_page.jsp").forward(request, response);
+                    request.getRequestDispatcher("/home.jsp").forward(request, response);
                 } else { // incorrect login
                     String errorMessage = "Mauvaise combinaison utilisateur et mot de passe";
                     request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));

@@ -50,7 +50,7 @@
         <div class="col-12 col-lg-4 align-self-center">
             <h1>Bienvenu!</h1>
             <p>Tu n'est pas un membre encore? <a href="register.jsp">Deviens ici</a>!</p>
-            <p>Tu peux aussi <a href="guest_main_page.jsp">se connecter comme visiteur</a> <i
+            <p>Tu peux aussi <a href="home.jsp">se connecter comme visiteur</a> <i
                     class="far fa-laugh-wink"></i></p>
         </div>
         <div class="col-12 col-lg-4">

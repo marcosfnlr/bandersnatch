@@ -28,7 +28,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand" href="#">BSnatch</a>
+    <a class="navbar-brand" href="home.jsp">BSnatch</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -65,7 +65,7 @@
         <input type="hidden" name="id_book" value="${id_book}">
         <div class="form-row">
             <div class="col-12 mb-2">
-                <label for="parag_text">Texte du paragraphe:</label>
+                <label for="text">Texte du paragraphe:</label>
                 <textarea class="form-control" id="text" name="parag_text" rows="3" required></textarea>
                 <div class="invalid-tooltip">
                     Donne-moi une vie.
