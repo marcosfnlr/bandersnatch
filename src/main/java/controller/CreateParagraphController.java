@@ -45,11 +45,11 @@ public class CreateParagraphController extends AbstractController {
             switch(action) {
                 case "create_book":
                     idBook = addBook(request, response, bookDAO);
-                    createParagraphWithChoices(request, response, idBook, true, paragraphDAO, choiceDAO);
+                    createParagraphWithChoices(request, response, idBook, paragraphDAO, choiceDAO);
                     break;
                 case "add_paragraph":
                     idBook = Integer.parseInt(String.valueOf(request.getParameter("id_book")));
-                    createParagraphWithChoices(request, response, idBook, false, paragraphDAO, choiceDAO);
+                    createParagraphWithChoices(request, response, idBook, paragraphDAO, choiceDAO);
                     break;
                 default:
                     invalidParameters(request, response);
@@ -69,10 +69,9 @@ public class CreateParagraphController extends AbstractController {
         
         String title = request.getParameter("title");
         boolean openToWrite = Boolean.parseBoolean(request.getParameter("open_write"));
-        boolean published = false; // TODO : make initial data base value as false
         String creator = (String)request.getSession().getAttribute("id_account"); 
 
-        return bookDAO.addBook(title, openToWrite, published, creator); // TODO: remove published from addBook because DEFAULT is set on database
+        return bookDAO.addBook(title, openToWrite, creator);
     }
     
     /**
@@ -81,9 +80,7 @@ public class CreateParagraphController extends AbstractController {
     private int addParagraph(HttpServletRequest request, HttpServletResponse response, int idBook, boolean isBeginning, ParagraphDAO paragraphDAO) throws ServletException, IOException {
         
         String text = request.getParameter("parag_text");
-//        boolean beginning = Boolean.parseBoolean(request.getParameter("beginning")); //TODO: isso eh setado na view dependendo se ta sendo criado pelo livro ou nao?
         boolean conclusion = Boolean.parseBoolean(request.getParameter("conclusion"));
-//        int book = Integer.parseInt(String.valueOf(request.getAttribute("id_book")));
         String author = (String)request.getSession().getAttribute("id_account");
         
         return paragraphDAO.addParagraph(text, isBeginning, conclusion, idBook, author);
@@ -94,24 +91,21 @@ public class CreateParagraphController extends AbstractController {
      */
     private int addChoice(HttpServletRequest request, HttpServletResponse response, String choiceText, int idParagOrig, ChoiceDAO choiceDAO) throws ServletException, IOException {
 
-//        String text = String.valueOf(request.getAttribute("choice_text"));
         boolean onlyChoice = false;//TODO for now is always false Boolean.parseBoolean(request.getParameter("only_choice"));
         boolean condShouldPass = false;//TODO for now is always false Boolean.parseBoolean(request.getParameter("cond_should_pass"));
-//        int paragOrigin = Integer.parseInt(String.valueOf(request.getAttribute("id_parag_orig")));
-        int paragDest = 1;//Integer.parseInt(request.getParameter("id_parag_dest")); //TODO default is null
         int paragCond = 1;//Integer.parseInt(request.getParameter("id_parag_cond"));
         
-        return choiceDAO.addChoice(choiceText, false, onlyChoice, condShouldPass, idParagOrig, paragDest, paragCond);
+        return choiceDAO.addChoice(choiceText, onlyChoice, condShouldPass, idParagOrig, paragCond);
     }
 
     // TODO change parameters. Will have a validation before
-    private void createParagraphWithChoices(HttpServletRequest request, HttpServletResponse response, int idBook, boolean isBeginning, ParagraphDAO paragraphDAO, ChoiceDAO choiceDAO) throws ServletException, IOException {
+    private void createParagraphWithChoices(HttpServletRequest request, HttpServletResponse response, int idBook, ParagraphDAO paragraphDAO, ChoiceDAO choiceDAO) throws ServletException, IOException {
+
+        boolean isBeginning = Boolean.parseBoolean(request.getParameter("beginning"));
         int idParag = addParagraph(request, response, idBook, isBeginning, paragraphDAO);
-        //                request.setAttribute("id_parag_orig", idParag);
 
         String choiceText[] = request.getParameterValues("choices_text");
         for(int i = 0; i < choiceText.length; i++) {
-            //                    request.setAttribute("choice_text", choiceText[i]);
             int idChoice = addChoice(request, response, choiceText[i], idParag, choiceDAO);
         }
 

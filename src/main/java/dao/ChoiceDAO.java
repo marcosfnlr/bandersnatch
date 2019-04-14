@@ -119,10 +119,10 @@ public class ChoiceDAO extends AbstractDAO {
     /**
      * Adds choice on table Choice and returns its id.
      */
-    public int addChoice(String text, boolean locked, boolean onlyChoice, boolean condShouldPass,
-            int paragOrigin, int paragDest, int paragCond) {
-        String query = "INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig, "
-                + "fk_parag_dest, fk_parag_cond) VALUES (?,?,?,?,?,?,?)";
+    public int addChoice(String text, boolean onlyChoice, boolean condShouldPass,
+            int paragOrigin, int paragCond) {
+        String query = "INSERT INTO Choice (text, only_choice, cond_should_pass, fk_parag_orig, "
+                + "fk_parag_cond) VALUES (?,?,?,?,?)";
         int idChoice = 0;
         String returnCols[] = {"id_choice"};
         try(
@@ -130,12 +130,10 @@ public class ChoiceDAO extends AbstractDAO {
             PreparedStatement ps = conn.prepareStatement(query, returnCols);
             ) {
             ps.setString(1, text);
-            ps.setBoolean(2, locked);
-            ps.setBoolean(3, onlyChoice);
-            ps.setBoolean(4, condShouldPass);
-            ps.setInt(5, paragOrigin);
-            ps.setInt(6, paragDest);
-            ps.setInt(7, paragCond);
+            ps.setBoolean(2, onlyChoice);
+            ps.setBoolean(3, condShouldPass);
+            ps.setInt(4, paragOrigin);
+            ps.setInt(5, paragCond);
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next())

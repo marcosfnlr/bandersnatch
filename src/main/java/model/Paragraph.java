@@ -11,15 +11,23 @@ package model;
  */
 public class Paragraph {
     
-    private final int idParagraph;
-    private final String text;
-    private final boolean beginning;
-    private final boolean conclusion;
-    private final Book book;
-    private final Account author;
+    private int idParagraph;
+    private String text;
+    private boolean beginning;
+    private boolean conclusion;
+    private Book book;
+    private Account author;
 
     public Paragraph(int idParagraph, String text, boolean beginning, boolean conclusion, Book book, Account author) {
         this.idParagraph = idParagraph;
+        this.text = text;
+        this.beginning = beginning;
+        this.conclusion = conclusion;
+        this.book = book;
+        this.author = author;
+    }
+
+    public Paragraph(String text, boolean beginning, boolean conclusion, Book book, Account author) {
         this.text = text;
         this.beginning = beginning;
         this.conclusion = conclusion;

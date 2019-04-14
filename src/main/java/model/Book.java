@@ -11,14 +11,21 @@ package model;
  */
 public class Book {
     
-    private final int idBook;
-    private final String title;
-    private final boolean openToWrite;
-    private final boolean published;
-    private final Account creator;
+    private int idBook;
+    private String title;
+    private boolean openToWrite;
+    private boolean published;
+    private Account creator;
 
     public Book(int idBook, String title, boolean openToWrite, boolean published, Account creator) {
         this.idBook = idBook;
+        this.title = title;
+        this.openToWrite = openToWrite;
+        this.published = published;
+        this.creator = creator;
+    }
+
+    public Book(String title, boolean openToWrite, boolean published, Account creator) {
         this.title = title;
         this.openToWrite = openToWrite;
         this.published = published;

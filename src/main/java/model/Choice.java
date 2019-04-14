@@ -10,17 +10,27 @@ package model;
  * @author raphaelcja
  */
 public class Choice {
-    private final int idChoice;
-    private final String text;
-    private final boolean locked;
-    private final boolean onlyChoice;
-    private final boolean condShouldPass;
-    private final Paragraph paragOrigin;
-    private final Paragraph paragDest;
-    private final Paragraph paragCond;
+    private int idChoice;
+    private String text;
+    private boolean locked;
+    private boolean onlyChoice;
+    private boolean condShouldPass;
+    private Paragraph paragOrigin;
+    private Paragraph paragDest;
+    private Paragraph paragCond;
 
     public Choice(int idChoice, String text, boolean locked, boolean onlyChoice, boolean condShouldPass, Paragraph paragOrigin, Paragraph paragDest, Paragraph paragCond) {
         this.idChoice = idChoice;
+        this.text = text;
+        this.locked = locked;
+        this.onlyChoice = onlyChoice;
+        this.condShouldPass = condShouldPass;
+        this.paragOrigin = paragOrigin;
+        this.paragDest = paragDest;
+        this.paragCond = paragCond;
+    }
+
+    public Choice(String text, boolean locked, boolean onlyChoice, boolean condShouldPass, Paragraph paragOrigin, Paragraph paragDest, Paragraph paragCond) {
         this.text = text;
         this.locked = locked;
         this.onlyChoice = onlyChoice;

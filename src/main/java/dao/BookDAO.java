@@ -18,7 +18,7 @@ import model.Account;
  * @author raphaelcja
  */
 public class BookDAO extends AbstractDAO {
-    
+
     public BookDAO(DataSource ds) {
         super(ds);
     }
@@ -133,12 +133,68 @@ public class BookDAO extends AbstractDAO {
         
         return list;
     }
+
+    /**
+     * Returns list of Users invited to write on a given Book.
+     */
+    public List<Account> listUsersInvited(int idBook) {
+        AccountDAO accountDAO = new AccountDAO(dataSource);
+        List<Account> userList = new ArrayList<>();
+
+        String query = "SELECT fk_account FROM Invitation WHERE fk_book=?";
+
+        try(
+                Connection conn = getConn();
+                PreparedStatement ps = conn.prepareStatement(query);
+        ) {
+            ps.setInt(1, idBook);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                Account account = accountDAO.getAccount(rs.getString("fk_account"));
+                userList.add(account);
+            }
+
+        } catch (SQLException e) {
+            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+
+        return userList;
+    }
+
+    /**
+     * Returns list of Users not invited to write on a given Book.
+     */
+    public List<Account> listUsersNotInvited(int idBook) {
+        AccountDAO accountDAO = new AccountDAO(dataSource);
+        List<Account> userList = new ArrayList<>();
+
+        String query = "SELECT id_account FROM Account " +
+                "MINUS " +
+                "SELECT fk_account AS id_account FROM Invitation WHERE fk_book = ?";
+
+        try(
+                Connection conn = getConn();
+                PreparedStatement ps = conn.prepareStatement(query);
+        ) {
+            ps.setInt(1, idBook);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                Account account = accountDAO.getAccount(rs.getString("id_account"));
+                userList.add(account);
+            }
+
+        } catch (SQLException e) {
+            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+
+        return userList;
+    }
     
     /**
      * Adds book on table Book and returns its generated id.
      */
-    public int addBook(String title, boolean openToWrite, boolean published, String creator) {
-        String query = "INSERT INTO Book (title, open_write, published, fk_account) VALUES (?,?,?,?)";
+    public int addBook(String title, boolean openToWrite, String creator) {
+        String query = "INSERT INTO Book (title, open_write, fk_account) VALUES (?,?,?)";
         int idBook = 0;
         String returnCols[] = {"id_book"};
         try(
@@ -147,8 +203,7 @@ public class BookDAO extends AbstractDAO {
             ) {
             ps.setString(1, title);
             ps.setBoolean(2, openToWrite);
-            ps.setBoolean(3, published);
-            ps.setString(4, creator);
+            ps.setString(3, creator);
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next())
