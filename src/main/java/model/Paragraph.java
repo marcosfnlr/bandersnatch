@@ -5,6 +5,8 @@
  */
 package model;
 
+import java.util.List;
+
 /**
  *
  * @author raphaelcja
@@ -17,6 +19,8 @@ public class Paragraph {
     private boolean conclusion;
     private Book book;
     private Account author;
+    private String finalText;
+    private List<Choice> finalChoices;
 
     public Paragraph(int idParagraph, String text, boolean beginning, boolean conclusion, Book book, Account author) {
         this.idParagraph = idParagraph;
@@ -58,6 +62,26 @@ public class Paragraph {
     public Account getAuthor() {
         return author;
     }
+    
+    // methods to help in the view
+
+    public String getFinalText() {
+        return finalText;
+    }
+
+    public List<Choice> getFinalChoices() {
+        return finalChoices;
+    }
+
+    public void setFinalText(String finalText) {
+        this.finalText = finalText;
+    }
+
+    public void setFinalChoices(List<Choice> finalChoices) {
+        this.finalChoices = finalChoices;
+    }
+    
+    
 
     @Override
     public String toString() {

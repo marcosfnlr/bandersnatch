@@ -54,6 +54,9 @@ public class Book {
     public Account getCreator() {
         return creator;
     }
+    
+    
+    // methods to help in the view
 
     public boolean isFinished() {
         return finished;
