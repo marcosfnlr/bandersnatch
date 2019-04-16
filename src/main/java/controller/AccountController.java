@@ -7,6 +7,8 @@ package controller;
 
 import dao.DAOException;
 import dao.AccountDAO;
+import dao.BookDAO;
+import dao.HistoryDAO;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +20,8 @@ import javax.sql.DataSource;
 import model.FeedbackMessage;
 import model.TypeFeedback;
 import model.Account;
+import model.Book;
+import model.History;
 
 /**
  *
@@ -38,6 +42,8 @@ public class AccountController extends AbstractController {
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
             } else if (action.equals("logout_account")){
                 actionLogoutAccount(request, response);
+            } else if (action.equals("view_profile")){
+                actionViewProfile(request, response);
             } else {
                 invalidParameters(request, response);
             }
@@ -58,6 +64,28 @@ public class AccountController extends AbstractController {
     }
     
     /**
+     * Gets info about the account.
+     */
+    private void actionViewProfile (HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        BookDAO bookDAO = new BookDAO(ds);
+        HistoryDAO historyDAO = new HistoryDAO(ds);
+        
+        Account account = (Account) request.getAttribute("logged_account");
+        
+        List<Book> invitedBooks = bookDAO.listInvitationBooks(account.getIdAccount());
+        List<Book> authorBooks = bookDAO.listAuthorBooks(account.getIdAccount());
+        List<History> accountHistories = historyDAO.listUserHistory(account.getIdAccount());
+        
+        request.setAttribute("invited_books", invitedBooks);
+        request.setAttribute("author_books", authorBooks);
+        request.setAttribute("account_histories", accountHistories);
+        
+        request.getRequestDispatcher("/profile.jsp").forward(request, response);
+        
+    }
+    
+    /**
      * POST : controls actions of addAccount, checkAccount.
      */
     @Override
@@ -71,9 +99,10 @@ public class AccountController extends AbstractController {
             }
             else if (action.equals("check_account")) {
                 if(actionCheckAccount(request, response, accountDAO)) { // correct login
-                    //String message = "Vous êtes logged-in";
-                    //request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(message, TypeFeedback.SUCCESS)));
-                    request.getSession().setAttribute("id_account", request.getParameter("id_account"));
+                    String idAccount = request.getParameter("id_account");
+                    Account account = accountDAO.getAccount(idAccount);
+                    request.getSession().setAttribute("logged_account", account);
+                    
                     request.getRequestDispatcher("/home.jsp").forward(request, response);
                 } else { // incorrect login
                     String errorMessage = "Mauvaise combinaison utilisateur et mot de passe";

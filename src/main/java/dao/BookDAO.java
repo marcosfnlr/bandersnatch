@@ -108,7 +108,7 @@ public class BookDAO extends AbstractDAO {
     /**
      * Returns list of all books from table Book for which the user has an invitation.
      */
-    public List<Book> listInvitationBooks(String author) {
+    public List<Book> listInvitationBooks(String login) {
         List<Book> list = new ArrayList<>();
         AccountDAO accountDAO = new AccountDAO(dataSource);
         String query = "SELECT * FROM Book WHERE id_book IN "
@@ -118,7 +118,7 @@ public class BookDAO extends AbstractDAO {
             Connection conn = getConn();
             PreparedStatement ps = conn.prepareStatement(query);
             ) {
-            ps.setString(1, author);
+            ps.setString(1, login);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 Account account = accountDAO.getAccount(rs.getString("fk_account"));
