@@ -69,7 +69,8 @@ public class CreateParagraphController extends AbstractController {
         
         String title = request.getParameter("title");
         boolean openToWrite = Boolean.parseBoolean(request.getParameter("open_write"));
-        String creator = (String)request.getSession().getAttribute("id_account"); 
+        Account account = (Account)request.getSession().getAttribute("logged_account");
+        String creator = account.getIdAccount(); 
 
         return bookDAO.addBook(title, openToWrite, creator);
     }
@@ -81,7 +82,8 @@ public class CreateParagraphController extends AbstractController {
         
         String text = request.getParameter("parag_text");
         boolean conclusion = Boolean.parseBoolean(request.getParameter("conclusion"));
-        String author = (String)request.getSession().getAttribute("id_account");
+        Account account = (Account)request.getSession().getAttribute("logged_account");
+        String author = account.getIdAccount();
         
         return paragraphDAO.addParagraph(text, isBeginning, conclusion, idBook, author);
     }
