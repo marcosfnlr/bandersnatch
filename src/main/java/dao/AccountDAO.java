@@ -68,11 +68,12 @@ public class AccountDAO extends AbstractDAO {
      */
     public Account getAccount(String idAccount) {
         String password, lastName, firstName;
-        try(
-            Connection conn = getConn();
-            Statement st = conn.createStatement();
-            ) {
-            ResultSet rs = st.executeQuery("SELECT * FROM Account WHERE id_account=" + idAccount);
+        String query = "SELECT * FROM Account WHERE id_account=?";
+        
+        try(Connection conn = getConn()) {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, idAccount);
+            ResultSet rs = ps.executeQuery();
             rs.next();
             password = rs.getString("password");
             lastName = rs.getString("last_name");

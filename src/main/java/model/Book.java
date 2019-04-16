@@ -38,17 +38,6 @@ public class Book {
         return idBook;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getLabelTitle() {
-        if (getTitle().length() > 15) {
-            return getTitle().substring(0, 12) + "...";
-        }
-        return getTitle();
-    }
-
     public boolean isOpenToWrite() {
         return openToWrite;
     }
@@ -86,6 +75,17 @@ public class Book {
 
     public void setCanUserRead(boolean canUserRead) {
         this.canUserRead = canUserRead;
+    }
+    
+    public String getTitle() {
+        return title;
+    }
+
+    public String getLabelTitle() {
+        if (getTitle().length() > 15) {
+            return getTitle().substring(0, 12) + "...";
+        }
+        return getTitle();
     }
     
     
