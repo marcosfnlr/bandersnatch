@@ -135,7 +135,7 @@
         for (History h : userHistories) {
     %>
     <div class="col-12 col-lg-3 mt-3">
-        <a href="history_controller?action=read_book&id=<%=h.get%>" class="btn w-100 text-left"><i
+        <a href="history_controller?action=read_book&id=TODO" class="btn w-100 text-left"><i
                 class="fas fa-book"></i> <%=h.getBook().getLabelTitle()%>
         </a>
     </div>
