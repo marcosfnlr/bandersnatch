@@ -6,11 +6,10 @@
 package model;
 
 /**
- *
  * @author raphaelcja
  */
 public class Book {
-    
+
     private int idBook;
     private String title;
     private boolean openToWrite;
@@ -41,6 +40,13 @@ public class Book {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getLabelTitle() {
+        if (getTitle().length() > 15) {
+            return getTitle().substring(0, 12) + "...";
+        }
+        return getTitle();
     }
 
     public boolean isOpenToWrite() {
@@ -88,8 +94,8 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book{" + "idBook=" + idBook + ", title=" + title + ", openToWrite=" + openToWrite + ", published=" + published + ", creator=" + creator +'}';
+        return "Book{" + "idBook=" + idBook + ", title=" + title + ", openToWrite=" + openToWrite + ", published=" + published + ", creator=" + creator + '}';
     }
-    
-    
+
+
 }

@@ -93,7 +93,6 @@
         <div class="row justify-content-center mt-">
             <button type="submit" class="btn btn-danger">Créer</button>
         </div>
-        <input type="hidden" name="action" value="check_account"/>
     </form>
     <div class="form-row justify-content-center">
         <div class="col-12 col-lg-8 mt-3">

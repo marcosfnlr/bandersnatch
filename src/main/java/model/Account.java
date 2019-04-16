@@ -6,11 +6,10 @@
 package model;
 
 /**
- *
  * @author raphaelcja
  */
 public class Account {
-    
+
     private final String idAccount;
     private final String password;
     private final String lastName;
@@ -39,11 +38,14 @@ public class Account {
         return firstName;
     }
 
+    public String getNameLabel() {
+        return getFirstName() + " " + getLastName();
+    }
+
     @Override
     public String toString() {
         return "Account{" + "idAccount=" + idAccount + ", lastName=" + lastName + ", firstName=" + firstName + '}';
     }
-    
-    
-    
+
+
 }

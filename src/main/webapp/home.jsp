@@ -29,16 +29,14 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
+        <div class="navbar-nav mr-auto">
             <a class="nav-item nav-link" href="read_list.jsp"><i class="fas fa-book-reader"></i> Lire</a>
             <a class="nav-item nav-link" href="write_list.jsp"><i class="fas fa-pencil-alt"></i> Écrire</a>
         </div>
-    </div>
-    <div class="navbar-nav" id="navbarUser">
-        <a class="nav-item nav-link active mr-2" href="profile.jsp"><i class="fas fa-user"></i> Profil</a>
-        <form class="form-inline" action="account_controller">
-            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Log out</button>
-        </form>
+        <div class="navbar-nav" id="navbarUser">
+            <a class="nav-item nav-link mr-2" href="account_controller?action=view_profile"><i class="fas fa-user"></i> Profil</a>
+            <a class="btn btn-outline-light my-2 my-sm-0" href="account_controller?action=logout_account">Log out</a>
+        </div>
     </div>
 </nav>
 <div class="container">

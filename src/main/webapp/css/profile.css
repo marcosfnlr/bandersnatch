@@ -1,0 +1,16 @@
+#user img {
+    height: 180px;
+}
+
+#user h1 {
+    font-style: italic;
+}
+
+hr {
+    margin: 0 0 2px 0;
+}
+
+.block-title i {
+    line-height: 33px;
+    margin-right: 5px;
+}
