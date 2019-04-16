@@ -5,6 +5,7 @@
  */
 package controller;
 
+import dao.AccountDAO;
 import dao.DAOException;
 import dao.BookDAO;
 import java.io.*;
@@ -15,6 +16,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import javax.sql.DataSource;
+import model.Account;
 import model.FeedbackMessage;
 import model.TypeFeedback;
 import model.Book;
@@ -64,16 +66,50 @@ public class BookController extends AbstractController{
      * Gets all information of a book given its identifier idBook. 
      */
     private void actionGetBook(HttpServletRequest request, HttpServletResponse response, 
-            BookDAO bookDAO) throws ServletException, IOException {
-        int idBook = Integer.parseInt(request.getParameter("idBook"));
-        String view = request.getParameter("view");
-        // TODO : review here ; need to show authors when show book
-        if (view.equals("show_book") || view.equals("delete_book")) {
-            Book book = bookDAO.getBook(idBook);
-            request.setAttribute("book", book);
-            request.getRequestDispatcher("WEB-INF/" + view + ".jsp").forward(request, response);
+            BookDAO bookDAO) throws ServletException, IOException {  
+        
+        int idBook = Integer.parseInt(request.getParameter("id_book"));
+        Book book = bookDAO.getBook(idBook);
+        Account account = (Account) request.getSession().getAttribute("logged_account");
+        
+        book.setFinished(bookDAO.checkConclusion(idBook));
+        book.setCanUserRead(checkReadAccess(book, account, bookDAO));
+        book.setCanUserWrite(checkWriteAccess(book, account, bookDAO));
+                
+        request.setAttribute("book", book);
+        
+        request.getRequestDispatcher("/book.jsp").forward(request, response);
+
+    }
+    
+    /**
+     * Checks if account has access to write book.
+     */
+    public boolean checkWriteAccess(Book book, Account account, BookDAO bookDAO) { 
+        // if in invitation mode, only invited accounts have access
+        if(!book.isOpenToWrite()) {
+            List<Account> invitations = bookDAO.listUsersInvited(book.getIdBook());
+            return invitations.contains(account);
         }
-        else invalidParameters(request, response);
+        // if in open mode, every user have access
+        return account!=null;
+    }
+    
+    /**
+     * Checks if account has access to read book.
+     */
+    public boolean checkReadAccess(Book book, Account account, BookDAO bookDAO) {
+        // if published everyone (user and non-user) has access
+        if(book.isPublished()) {
+            return true;
+        }  
+        //if not published and in invitation mode, only invited accounts have access
+        if(!book.isOpenToWrite()) {
+            List<Account> invitations = bookDAO.listUsersInvited(book.getIdBook());
+            return invitations.contains(account);
+        }
+        // if not published and in open mode, every user have access
+        return account!=null;
     }
     
     /**
@@ -112,7 +148,7 @@ public class BookController extends AbstractController{
     private void actionDeleteBook(HttpServletRequest request, HttpServletResponse response, 
             BookDAO bookDAO) throws ServletException, IOException {
         
-        int idBook = Integer.parseInt(request.getParameter("idBook"));
+        int idBook = Integer.parseInt(request.getParameter("id_book"));
         bookDAO.deleteBook(idBook);
     }
     
@@ -124,7 +160,7 @@ public class BookController extends AbstractController{
             BookDAO bookDAO) throws ServletException, IOException {
         
         //TODO : check if account is creator and check if exists at least one conclusion
-        int idBook = Integer.parseInt(request.getParameter("idBook"));
+        int idBook = Integer.parseInt(request.getParameter("id_book"));
         boolean published = Boolean.parseBoolean(request.getParameter("published"));
         bookDAO.publishBook(idBook, published);
     }

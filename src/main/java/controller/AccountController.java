@@ -71,7 +71,7 @@ public class AccountController extends AbstractController {
         BookDAO bookDAO = new BookDAO(ds);
         HistoryDAO historyDAO = new HistoryDAO(ds);
         
-        Account account = (Account) request.getAttribute("logged_account");
+        Account account = (Account) request.getSession().getAttribute("logged_account");
         
         List<Book> invitedBooks = bookDAO.listInvitationBooks(account.getIdAccount());
         List<Book> authorBooks = bookDAO.listAuthorBooks(account.getIdAccount());

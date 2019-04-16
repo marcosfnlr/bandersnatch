@@ -16,6 +16,9 @@ public class Book {
     private boolean openToWrite;
     private boolean published;
     private Account creator;
+    private boolean finished;
+    private boolean canUserWrite;
+    private boolean canUserRead;
 
     public Book(int idBook, String title, boolean openToWrite, boolean published, Account creator) {
         this.idBook = idBook;
@@ -51,6 +54,34 @@ public class Book {
     public Account getCreator() {
         return creator;
     }
+
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
+
+    public boolean isCanUserWrite() {
+        return canUserWrite;
+    }
+
+    public boolean isCanUserRead() {
+        return canUserRead;
+    }
+
+    public void setCanUserWrite(boolean canUserWrite) {
+        this.canUserWrite = canUserWrite;
+    }
+
+    public void setCanUserRead(boolean canUserRead) {
+        this.canUserRead = canUserRead;
+    }
+    
+    
+    
+    
 
     @Override
     public String toString() {
