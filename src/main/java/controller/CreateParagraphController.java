@@ -59,7 +59,7 @@ public class CreateParagraphController extends AbstractController {
             erreurBD(request, response, e);
         }
         
-        request.getRequestDispatcher("/account_main_page.jsp").forward(request, response);
+        request.getRequestDispatcher("/home.jsp").forward(request, response);
     }
 
     /**
