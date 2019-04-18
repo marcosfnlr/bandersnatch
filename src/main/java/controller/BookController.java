@@ -68,7 +68,7 @@ public class BookController extends AbstractController{
     private void actionGetBook(HttpServletRequest request, HttpServletResponse response, 
             BookDAO bookDAO) throws ServletException, IOException {  
         
-        int idBook = Integer.parseInt(request.getParameter("id_book"));
+        int idBook = Integer.parseInt(request.getParameter("id"));
         Book book = bookDAO.getBook(idBook);
         Account account = (Account) request.getSession().getAttribute("logged_account");
         

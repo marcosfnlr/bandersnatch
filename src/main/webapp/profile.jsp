@@ -65,7 +65,7 @@
     </div>
     <div class="row mt-4">
         <div class="col-12 clearfix">
-            <h3 class="float-left"><i class="fas fa-chevron-right"></i> Mes histoires</h3>
+            <h3 class="float-left"><i class="fas fa-angle-right"></i> Mes histoires</h3>
             <a href="add_book.jsp" class="btn btn-danger float-right"><i class="fas fa-plus"></i> Nouvelle histoire</a>
         </div>
     </div>
@@ -92,8 +92,7 @@
     </div>
     <div class="row mt-4">
         <div class="col-12">
-            <i class="fas fa-chevron-right align-self-center"></i>
-            <h3 class="d-inline">Mes contributions</h3>
+            <h3><i class="fas fa-angle-right"></i> Mes contributions</h3>
         </div>
     </div>
     <hr>
@@ -117,10 +116,9 @@
             }
         %>
     </div>
-    <div class="row mt-4 block-title">
+    <div class="row mt-4">
         <div class="col-12">
-            <i class="fas fa-chevron-right float-left"></i>
-            <h3 class="float-left"> Mes historiques</h3>
+            <h3><i class="fas fa-angle-right"></i> Mes historiques</h3>
         </div>
     </div>
     <hr>
