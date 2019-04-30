@@ -1,3 +1,6 @@
+<%@ page import="model.Paragraph" %>
+<%@ page import="model.History" %>
+<%@ page import="model.Choice" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -27,6 +30,10 @@
     <title>Nouveau Paragraphe</title>
 </head>
 <body>
+<%
+    Paragraph paragraph = (Paragraph) request.getAttribute("paragraph");
+    //History history = (History) session.getAttribute("history");
+%>
 <nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="home.jsp">BSnatch</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -43,34 +50,30 @@
     </div>
 </nav>
 <div class="container">
-    <h1>Title
+    <h1>
+        <%=paragraph.getBook().getTitle()%>
     </h1>
     <a>Choix 1</a> > <a>Choix 2</a> > <a>Choix 3</a>
     <hr>
     <div class="row">
-        <div class="col-12">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-            been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap
-            into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
-            release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing
-            software like Aldus PageMaker including versions of Lorem Ipsum
+        <div class="col-12">
+            <%= paragraph.getFinalText() %>
         </div>
     </div>
-    <div class="row">
-        <a href="#" class="btn btn-light">
-            <div class="col-auto"><i class="fas fa-arrow-right"></i> Choix 1</div>
-        </a>
+    <%
+        for (Choice c : paragraph.getFinalChoices()) {
+    %>
+    <div class="row mt-3">
+        <div class="col-12">
+            <a href="read_controller?action=next_paragraph?id_book=<%=paragraph.getBook().getIdBook()%>&chosen_choice=<%=c.getIdChoice()%>"
+               class="btn btn-light w-100 text-left">
+                <i class="fas fa-arrow-right"></i> <%=c.getText()%>
+            </a>
+        </div>
     </div>
-    <div class="row">
-        <a href="#" class="btn btn-light">
-            <div class="col-12"><i class="fas fa-arrow-right"></i> Choix 2</div>
-        </a>
-    </div>
-    <div class="row">
-        <a href="#" class="btn btn-light">
-            <div class="col-12"><i class="fas fa-arrow-right"></i> Choix 3</div>
-        </a>
-    </div>
+    <%
+        }
+    %>
 </div>
 </body>
 </html>

@@ -65,8 +65,8 @@
                     if (book.isCanUserRead()) {
                 %>
                 <div class="col-4 text-center">
-                    <a href="book_controller?action=get_book&id=<%=book.getIdBook()%>"
-                       class="btn btn-danger w-100 text-center"><i
+                    <a href="read_controller?action=start_reading&id_book=<%=book.getIdBook()%>"
+                       class="btn btn-danger w-100"><i
                             class="fas fa-book-reader"></i> Lire
                     </a>
                 </div>
