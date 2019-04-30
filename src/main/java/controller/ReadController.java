@@ -110,7 +110,7 @@ public class ReadController extends AbstractController{
         paragraph.setFinalChoices(choices);
         request.setAttribute("paragraph", paragraph);
         
-        request.getRequestDispatcher("/read_book.jsp").forward(request, response);        
+        request.getRequestDispatcher("/read_parag.jsp").forward(request, response);        
     }
     
     /**
