@@ -285,7 +285,7 @@ public class BookDAO extends AbstractDAO {
             ps.setInt(1, idBook);
             ResultSet rs = ps.executeQuery();
             if (rs != null && rs.next()) {
-                if(rs.getInt("count") > 0) return true;
+                if(rs.getInt("conclusions") > 0) return true;
             }
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);

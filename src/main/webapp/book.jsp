@@ -48,13 +48,42 @@
     <div class="row mt-3 justify-content-center">
         <div class="col-12 col-lg-4 text-center text-lg-right"><i class="fas fa-book fa-10x"></i></div>
         <div class="col-12 col-lg-4 align-self-center">
-            <div class="col-12">
-                <h1>
-                    <%=book.getTitle()%>
-                </h1>
+            <div class="row">
+                <div class="col-12">
+                    <h1>
+                        <%=book.getTitle()%>
+                    </h1>
+                </div>
             </div>
-            <div class="col-12">
-                <%=book.getCreator().getNameLabel()%>
+            <div class="row">
+                <div class="col-12">
+                    <%=book.getCreator().getNameLabel()%>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <%
+                    if (book.isCanUserRead()) {
+                %>
+                <div class="col-4 text-center">
+                    <a href="book_controller?action=get_book&id=<%=book.getIdBook()%>"
+                       class="btn btn-danger w-100 text-center"><i
+                            class="fas fa-book-reader"></i> Lire
+                    </a>
+                </div>
+                <%
+                    }
+                %>
+                <%
+                    if (book.isCanUserWrite()) {
+                %>
+                <div class="col-4">
+                    <a href="book_controller?action=get_book&id=<%=book.getIdBook()%>"
+                       class="btn btn-danger w-100 text-center"><i
+                            class="fas fa-pencil-alt"></i> Écrire</a>
+                </div>
+                <%
+                    }
+                %>
             </div>
         </div>
     </div>
