@@ -96,12 +96,15 @@ public class ParagraphDAO extends AbstractDAO {
         Account author;
         BookDAO bookDAO = new BookDAO(dataSource);
         AccountDAO accountDAO = new AccountDAO(dataSource);
-
+        
+        String query = "SELECT * FROM Paragraph WHERE beginning=1 AND fk_book=?";
+        
         try(
             Connection conn = getConn();
-            Statement st = conn.createStatement();
+            PreparedStatement ps = conn.prepareStatement(query);
             ) {
-            ResultSet rs = st.executeQuery("SELECT * FROM Paragraph WHERE beginning=1 AND fk_book=" + idBook);
+            ps.setInt(1, idBook);
+            ResultSet rs = ps.executeQuery();
             rs.next();
             idParagraph = rs.getInt("id_paragraph");
             text = rs.getString("text");
