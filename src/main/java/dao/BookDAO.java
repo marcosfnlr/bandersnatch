@@ -219,24 +219,29 @@ public class BookDAO extends AbstractDAO {
      * Gets book with id_book identifier from table Book.
      */
     public Book getBook(int idBook) {
-        String title;
+        String title, account;
         boolean openToWrite, published;
         Account creator;
-        AccountDAO accountDAO = new AccountDAO(dataSource);        
+        AccountDAO accountDAO = new AccountDAO(dataSource); 
+        
+        String query = "SELECT * FROM Book WHERE id_book=?";
         
         try(
             Connection conn = getConn();
-            Statement st = conn.createStatement();
+            PreparedStatement ps = conn.prepareStatement(query);
             ) {
-            ResultSet rs = st.executeQuery("SELECT * FROM Book WHERE id_book=" + idBook);
+            ps.setInt(1, idBook);
+            ResultSet rs = ps.executeQuery();
             rs.next();
             title = rs.getString("title");
             openToWrite = rs.getBoolean("open_write");
             published = rs.getBoolean("published");
-            creator =  accountDAO.getAccount(rs.getString("fk_account"));
+            account = rs.getString("fk_account");
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
         }
+        
+        creator =  accountDAO.getAccount(account);
         
         return new Book(idBook, title, openToWrite, published, creator);
     }

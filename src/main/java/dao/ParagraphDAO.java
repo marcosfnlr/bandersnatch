@@ -110,12 +110,13 @@ public class ParagraphDAO extends AbstractDAO {
             text = rs.getString("text");
             beginning = rs.getBoolean("beginning");
             conclusion = rs.getBoolean("conclusion");
-            book = bookDAO.getBook(idBook);
             author = accountDAO.getAccount(rs.getString("fk_account"));
             
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
         }
+        
+        book = bookDAO.getBook(idBook);
         
         return new Paragraph(idParagraph, text, beginning, conclusion, book, author);
     }
