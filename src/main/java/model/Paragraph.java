@@ -20,6 +20,7 @@ public class Paragraph {
     private Book book;
     private Account author;
     private String finalText;
+    private List<Choice> choices;
     private List<Choice> finalChoices;
 
     public Paragraph(int idParagraph, String text, boolean beginning, boolean conclusion, Book book, Account author) {
@@ -79,12 +80,20 @@ public class Paragraph {
         return finalText;
     }
 
-    public List<Choice> getFinalChoices() {
-        return finalChoices;
-    }
-
     public void setFinalText(String finalText) {
         this.finalText = finalText;
+    }
+
+    public List<Choice> getChoices() {
+        return choices;
+    }
+
+    public void setChoices(List<Choice> choices) {
+        this.choices = choices;
+    }
+
+    public List<Choice> getFinalChoices() {
+        return finalChoices;
     }
 
     public void setFinalChoices(List<Choice> finalChoices) {

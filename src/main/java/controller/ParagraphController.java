@@ -134,8 +134,11 @@ public class ParagraphController extends AbstractController {
     private void modifyParagraph(HttpServletRequest request, HttpServletResponse response,
             ParagraphDAO paragraphDAO) throws ServletException, IOException {
         
-        int idParagraph = Integer.parseInt(request.getParameter("id_paragraph"));
-        String text = request.getParameter("text");
-        paragraphDAO.modifyParagraph(idParagraph, text);
+        int idParagraph = Integer.parseInt(request.getParameter("id"));
+
+        Paragraph paragraph = paragraphDAO.getParagraph(idParagraph);
+        request.setAttribute("paragraph", paragraph);
+
+        request.getRequestDispatcher("modify_parag.jsp").forward(request, response);
     }
 }

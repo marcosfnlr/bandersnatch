@@ -119,12 +119,13 @@ public class ParagraphDAO extends AbstractDAO {
      */
     public Paragraph getBeginning(int idBook) {
         boolean beginning, conclusion;
-        int idParagraph;
+        int idParagraph = -1;
         String text, account = null;
         Paragraph paragraph = null;
 
         BookDAO bookDAO = new BookDAO(dataSource);
         AccountDAO accountDAO = new AccountDAO(dataSource);
+        ChoiceDAO choiceDAO = new ChoiceDAO(dataSource);
 
         String query = "SELECT * FROM Paragraph WHERE beginning=1 AND fk_book=?";
 
@@ -152,6 +153,7 @@ public class ParagraphDAO extends AbstractDAO {
         if (paragraph != null) {
             paragraph.setBook(bookDAO.getBook(idBook));
             paragraph.setAuthor(accountDAO.getAccount(account));
+            paragraph.setChoices(choiceDAO.listParagOrigChoices(idParagraph));
         }
 
         return paragraph;
@@ -201,6 +203,7 @@ public class ParagraphDAO extends AbstractDAO {
 
         BookDAO bookDAO = new BookDAO(dataSource);
         AccountDAO accountDAO = new AccountDAO(dataSource);
+        ChoiceDAO choiceDAO = new ChoiceDAO(dataSource);
 
         String query = "SELECT * FROM Paragraph WHERE id_paragraph=?";
 
@@ -228,6 +231,7 @@ public class ParagraphDAO extends AbstractDAO {
         if (paragraph != null) {
             paragraph.setBook(bookDAO.getBook(idBook));
             paragraph.setAuthor(accountDAO.getAccount(account));
+            paragraph.setChoices(choiceDAO.listParagOrigChoices(idParagraph));
         }
 
         return paragraph;
