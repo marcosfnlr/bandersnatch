@@ -29,30 +29,32 @@ public class HistoryDAO extends AbstractDAO {
         Calendar calendar = Calendar.getInstance();
         Timestamp currentTimestamp = new java.sql.Timestamp(calendar.getTime().getTime());
 
-        try(
+        try (
                 Connection conn = getConn();
-                PreparedStatement ps = conn.prepareStatement(query);
+                PreparedStatement ps = conn.prepareStatement(query)
         ) {
             ps.setString(1, idAccount);
             ps.setInt(2, idBook);
             ps.setInt(3, idChoice);
             ps.setTimestamp(4, currentTimestamp);
             int count = ps.executeUpdate();
-            if(count < 1) {
+
+            if (count < 1) {
                 throw new DAOException("Erreur dans la creation de l'historique du utilisateur");
             }
+
         } catch (SQLException e) {
-            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
         }
     }
 
     /**
      * Deletes history with specific id_account, id_book and id_choice from table History.
      */
-    public void deleteHistory(String idAccount, int idBook,int idChoice) {
+    public void deleteHistory(String idAccount, int idBook, int idChoice) {
         String query = "DELETE FROM History WHERE fk_account=? AND fk_book=? AND fk_choice=?";
 
-        try(
+        try (
                 Connection conn = getConn();
                 PreparedStatement ps = conn.prepareStatement(query);
         ) {
@@ -61,7 +63,7 @@ public class HistoryDAO extends AbstractDAO {
             ps.setInt(3, idChoice);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
         }
     }
 
@@ -73,13 +75,13 @@ public class HistoryDAO extends AbstractDAO {
 
         String query = "SELECT * FROM History WHERE fk_account=?";
 
-        try(
+        try (
                 Connection conn = getConn();
-                PreparedStatement ps = conn.prepareStatement(query);
+                PreparedStatement ps = conn.prepareStatement(query)
         ) {
             ps.setString(1, idAccount);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 Account account = accountDAO.getAccount(idAccount);
                 Book book = bookDAO.getBook(rs.getInt("fk_book"));
                 Choice choice = choiceDAO.getChoice(rs.getInt("fk_choice"));
@@ -88,7 +90,7 @@ public class HistoryDAO extends AbstractDAO {
             }
 
         } catch (SQLException e) {
-            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
         }
 
         return list;
@@ -102,13 +104,14 @@ public class HistoryDAO extends AbstractDAO {
 
         String query = "SELECT * FROM History WHERE fk_book=?";
 
-        try(
+        try (
                 Connection conn = getConn();
-                PreparedStatement ps = conn.prepareStatement(query);
+                PreparedStatement ps = conn.prepareStatement(query)
         ) {
             ps.setInt(1, idBook);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
+
+            while (rs.next()) {
                 Account account = accountDAO.getAccount(rs.getString("fk_account"));
                 Book book = bookDAO.getBook(idBook);
                 Choice choice = choiceDAO.getChoice(rs.getInt("fk_choice"));
@@ -117,7 +120,7 @@ public class HistoryDAO extends AbstractDAO {
             }
 
         } catch (SQLException e) {
-            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
         }
 
         return list;
@@ -131,13 +134,14 @@ public class HistoryDAO extends AbstractDAO {
 
         String query = "SELECT * FROM History WHERE fk_choice=?";
 
-        try(
+        try (
                 Connection conn = getConn();
-                PreparedStatement ps = conn.prepareStatement(query);
+                PreparedStatement ps = conn.prepareStatement(query)
         ) {
             ps.setInt(1, idChoice);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
+
+            while (rs.next()) {
                 Account account = accountDAO.getAccount(rs.getString("fk_account"));
                 Book book = bookDAO.getBook(rs.getInt("fk_book"));
                 Choice choice = choiceDAO.getChoice(idChoice);
@@ -146,7 +150,7 @@ public class HistoryDAO extends AbstractDAO {
             }
 
         } catch (SQLException e) {
-            throw new DAOException ("Erreur BD " + e.getMessage(), e);
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
         }
 
         return list;

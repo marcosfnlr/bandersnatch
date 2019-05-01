@@ -10,13 +10,12 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 /**
- *
  * @author raphaelcja
  */
 public abstract class AbstractDAO {
-    
+
     protected final DataSource dataSource;
-    
+
     protected AbstractDAO(DataSource ds) {
         this.dataSource = ds;
     }
