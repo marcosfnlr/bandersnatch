@@ -83,6 +83,10 @@ public class Choice {
         this.paragCond = paragCond;
     }
 
+    public boolean isDestWriten() {
+        return paragDest != null;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;

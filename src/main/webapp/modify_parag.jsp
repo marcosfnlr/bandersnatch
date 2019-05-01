@@ -106,14 +106,27 @@
                         <%=c.getText()%>
                     </div>
                     <div class="col-4 align-self-center text-right">
+                        <%
+                            if (c.isLocked()) {
+                        %>
+                        <button type="button" class="btn btn-secondary btn-lg" disabled>
+                            <i class="fas fa-lock"></i>
+                        </button>
+                        <%
+                        } else {
+                        %>
                         <a class="btn btn-light"
                            href="paragraph_controller?action=write_paragraph&title=<%=paragraph.getBook().getTitle()%>&id_book=<%=paragraph.getBook().getIdBook()%>&id_choice_orig=<%=c.getIdChoice()%>&beginning=false&id_book=<%=paragraph.getBook().getIdBook()%>">
                             <i class="fas fa-tag"></i></a>
+
                         <a class="btn btn-light" href="#"><i class="fas fa-link"></i></a>
                         <button type="button" class="btn btn-light" data-toggle="collapse"
                                 data-target=".multi-collapse-<%=c.getIdChoice()%>" aria-expanded="false"
                                 aria-controls="edit-choice-<%=c.getIdChoice()%> choice-<%=c.getIdChoice()%>"><i
                                 class="fas fa-edit"></i></button>
+                        <%
+                            }
+                        %>
                     </div>
                 </div>
             </div>
