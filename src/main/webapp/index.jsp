@@ -48,9 +48,9 @@
     %>
     <div class="row justify-content-center mt-5">
         <div class="col-12 col-lg-4 align-self-center">
-            <h1>Bienvenu!</h1>
-            <p>Tu n'est pas un membre encore? <a href="register.jsp">Deviens ici</a>!</p>
-            <p>Tu peux aussi <a href="home.jsp">se connecter comme visiteur</a> <i
+            <h1>Bienvenue!</h1>
+            <p>Tu n'es pas encore membre? <a href="register.jsp">Deviens ici</a>!</p>
+            <p>Tu peux aussi <a href="home.jsp">te connecter comme visiteur</a> <i
                     class="far fa-laugh-wink"></i></p>
         </div>
         <div class="col-12 col-lg-4">

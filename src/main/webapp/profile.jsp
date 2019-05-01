@@ -118,7 +118,7 @@
     </div>
     <div class="row mt-4">
         <div class="col-12">
-            <h3><i class="fas fa-angle-right"></i> Mes historiques</h3>
+            <h3><i class="fas fa-angle-right"></i> Mon historique</h3>
         </div>
     </div>
     <hr>

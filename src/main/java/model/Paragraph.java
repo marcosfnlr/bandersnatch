@@ -74,6 +74,13 @@ public class Paragraph {
 
     // methods to help in the view
 
+    public String getLabelText() {
+        if (getText().length() > 15) {
+            return getText().substring(0, 12) + "...";
+        }
+        return getText();
+    }
+
     public String getFinalText() {
         return finalText;
     }

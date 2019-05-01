@@ -77,7 +77,7 @@
                     if (book.isCanUserWrite()) {
                 %>
                 <div class="col-4">
-                    <a href="book_controller?action=get_book&id=<%=book.getIdBook()%>"
+                    <a href="book_controller?action=write_book&id=<%=book.getIdBook()%>"
                        class="btn btn-danger w-100 text-center"><i
                             class="fas fa-pencil-alt"></i> Écrire</a>
                 </div>
