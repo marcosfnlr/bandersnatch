@@ -7,9 +7,9 @@ public class History {
     private final Account account;
     private final Book book;
     private final Choice choice;
-    private Timestamp  dateCreated;
+    private Timestamp dateCreated;
 
-    public History(Account account, Book book, Choice choice, Timestamp  dateCreated) {
+    public History(Account account, Book book, Choice choice, Timestamp dateCreated) {
         this.account = account;
         this.book = book;
         this.choice = choice;
@@ -34,6 +34,6 @@ public class History {
 
     @Override
     public String toString() {
-        return "History{" + "account=" + account + ", book=" + book + ", choice=" + choice + ", dateCreated=" + dateCreated +'}';
+        return "History{" + "account=" + account + ", book=" + book + ", choice=" + choice + ", dateCreated=" + dateCreated + '}';
     }
 }

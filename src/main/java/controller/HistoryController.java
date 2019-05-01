@@ -24,7 +24,7 @@ public class HistoryController extends AbstractController {
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response, String action)
             throws IOException, ServletException {
         try {
-            switch(action) {
+            switch (action) {
                 case "list_user_history":
                     actionListUserHistory(request, response);
                     break;
@@ -44,7 +44,7 @@ public class HistoryController extends AbstractController {
             throws IOException, ServletException {
 
         try {
-            switch(action) {
+            switch (action) {
                 case "add_history":
                     actionAddHistory(request, response);
                     break;

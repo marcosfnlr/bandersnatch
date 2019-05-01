@@ -166,7 +166,7 @@ public class ParagraphDAO extends AbstractDAO {
 
         Paragraph paragraph = getBeginning(idBook);
 
-        if(paragraph != null) {
+        if (paragraph != null) {
             paragraph.setChoices(choiceDAO.listParagOrigChoices(paragraph.getIdParagraph()));
         }
 

@@ -6,7 +6,6 @@
 package model;
 
 /**
- *
  * @author raphaelcja
  */
 public class Choice {
@@ -108,17 +107,12 @@ public class Choice {
         }
         return true;
     }
-    
-    
+
 
     @Override
     public String toString() {
-        return "Choice{" + "idChoice=" + idChoice + ", text=" + text + ", locked=" + locked + ", onlyChoice=" + onlyChoice + ", condShouldPass=" + condShouldPass  + ", paragOrigin=" + paragOrigin + ", paragDest=" + paragDest + ", paragCond=" + paragCond + '}';
+        return "Choice{" + "idChoice=" + idChoice + ", text=" + text + ", locked=" + locked + ", onlyChoice=" + onlyChoice + ", condShouldPass=" + condShouldPass + ", paragOrigin=" + paragOrigin + ", paragDest=" + paragDest + ", paragCond=" + paragCond + '}';
     }
-    
-    
 
-    
-    
-    
+
 }

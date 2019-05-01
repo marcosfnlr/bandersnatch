@@ -8,11 +8,10 @@ package model;
 import java.util.List;
 
 /**
- *
  * @author raphaelcja
  */
 public class Paragraph {
-    
+
     private int idParagraph;
     private String text;
     private boolean beginning;
@@ -47,7 +46,7 @@ public class Paragraph {
     public String getText() {
         return text;
     }
-    
+
     public boolean isBeginning() {
         return beginning;
     }
@@ -71,9 +70,8 @@ public class Paragraph {
     public void setAuthor(Account author) {
         this.author = author;
     }
-    
-    
-    
+
+
     // methods to help in the view
 
     public String getFinalText() {
@@ -124,16 +122,14 @@ public class Paragraph {
         }
         return true;
     }
-    
-    
-    
+
 
     @Override
     public String toString() {
-        return "Paragraph{" + "idParagraph=" + idParagraph + ", text=" + text + 
-                ", beginning=" + beginning + ", conclusion=" + conclusion + 
+        return "Paragraph{" + "idParagraph=" + idParagraph + ", text=" + text +
+                ", beginning=" + beginning + ", conclusion=" + conclusion +
                 ", book=" + book + ", author=" + author + '}';
     }
-    
-    
+
+
 }

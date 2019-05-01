@@ -23,7 +23,7 @@ public abstract class AbstractController extends HttpServlet {
     protected void invalidParameters(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String errorMessage = "Paramètres invalides";
-        request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));
+        request.setAttribute("feedbackMessages", Arrays.asList(new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
@@ -31,7 +31,7 @@ public abstract class AbstractController extends HttpServlet {
             throws ServletException, IOException {
         e.printStackTrace();
         String errorMessage = "Une erreur d’accès à la base de données vient de se produire : " + e.getMessage();
-        request.setAttribute("feedbackMessages", Arrays.asList( new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));
+        request.setAttribute("feedbackMessages", Arrays.asList(new FeedbackMessage(errorMessage, TypeFeedback.DANGER)));
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 

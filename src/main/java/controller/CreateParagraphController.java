@@ -9,6 +9,7 @@ import dao.DAOException;
 import dao.BookDAO;
 import dao.ParagraphDAO;
 import dao.ChoiceDAO;
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +22,6 @@ import javax.sql.DataSource;
 import model.*;
 
 /**
- *
  * @author raphaelcja
  */
 @WebServlet(name = "CreateParagraphController", urlPatterns = {"/create_paragraph_controller"})
@@ -31,7 +31,7 @@ public class CreateParagraphController extends AbstractController {
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         // TODO entender pq nao da certo deixar os DAO como "globais"
@@ -42,7 +42,7 @@ public class CreateParagraphController extends AbstractController {
         try {
             int idBook;
 
-            switch(action) {
+            switch (action) {
                 case "create_book":
                     idBook = addBook(request, response, bookDAO);
                     createParagraphWithChoices(request, response, idBook, paragraphDAO, choiceDAO);
@@ -58,7 +58,7 @@ public class CreateParagraphController extends AbstractController {
         } catch (DAOException e) {
             erreurBD(request, response, e);
         }
-        
+
         request.getRequestDispatcher("/home.jsp").forward(request, response);
     }
 
@@ -66,28 +66,28 @@ public class CreateParagraphController extends AbstractController {
      * Adds a book and returns its generated id.
      */
     private int addBook(HttpServletRequest request, HttpServletResponse response, BookDAO bookDAO) throws ServletException, IOException {
-        
+
         String title = request.getParameter("title");
         boolean openToWrite = Boolean.parseBoolean(request.getParameter("open_write"));
-        Account account = (Account)request.getSession().getAttribute("logged_account");
-        String creator = account.getIdAccount(); 
+        Account account = (Account) request.getSession().getAttribute("logged_account");
+        String creator = account.getIdAccount();
 
         return bookDAO.addBook(title, openToWrite, creator);
     }
-    
+
     /**
      * Adds a paragraph to a book and returns its id.
      */
     private int addParagraph(HttpServletRequest request, HttpServletResponse response, int idBook, boolean isBeginning, ParagraphDAO paragraphDAO) throws ServletException, IOException {
-        
+
         String text = request.getParameter("parag_text");
         boolean conclusion = Boolean.parseBoolean(request.getParameter("conclusion"));
-        Account account = (Account)request.getSession().getAttribute("logged_account");
+        Account account = (Account) request.getSession().getAttribute("logged_account");
         String author = account.getIdAccount();
-        
+
         return paragraphDAO.addParagraph(text, isBeginning, conclusion, idBook, author);
     }
-    
+
     /**
      * Adds a choice to a paragraph and returns its id.
      */
@@ -96,7 +96,7 @@ public class CreateParagraphController extends AbstractController {
         boolean onlyChoice = false;//TODO for now is always false Boolean.parseBoolean(request.getParameter("only_choice"));
         boolean condShouldPass = false;//TODO for now is always false Boolean.parseBoolean(request.getParameter("cond_should_pass"));
         int paragCond = 1;//Integer.parseInt(request.getParameter("id_parag_cond"));
-        
+
         return choiceDAO.addChoice(choiceText, onlyChoice, condShouldPass, idParagOrig, paragCond);
     }
 
@@ -107,12 +107,12 @@ public class CreateParagraphController extends AbstractController {
         int idParag = addParagraph(request, response, idBook, isBeginning, paragraphDAO);
 
         String choiceText[] = request.getParameterValues("choices_text");
-        for(int i = 0; i < choiceText.length; i++) {
+        for (int i = 0; i < choiceText.length; i++) {
             int idChoice = addChoice(request, response, choiceText[i], idParag, choiceDAO);
         }
 
         // Paragraph 'came' from a choice.
-        if(!isBeginning) {
+        if (!isBeginning) {
             int idChoiceOrig = Integer.parseInt(String.valueOf(request.getParameter("id_choice_orig"))); // TODO: set this on view before sending form
             choiceDAO.setParagDest(idChoiceOrig, idParag);
             choiceDAO.setLocked(idChoiceOrig, false);

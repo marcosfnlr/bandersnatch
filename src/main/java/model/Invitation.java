@@ -19,6 +19,6 @@ public class Invitation {
 
     @Override
     public String toString() {
-        return "Invitation{" + "account=" + account + ", book=" + book +'}';
+        return "Invitation{" + "account=" + account + ", book=" + book + '}';
     }
 }

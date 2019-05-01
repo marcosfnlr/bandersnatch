@@ -53,10 +53,8 @@ public class Book {
     public void setCreator(Account creator) {
         this.creator = creator;
     }
-    
-    
-    
-    
+
+
     // methods to help in the view
 
     public boolean isFinished() {
@@ -82,7 +80,7 @@ public class Book {
     public void setCanUserRead(boolean canUserRead) {
         this.canUserRead = canUserRead;
     }
-    
+
     public String getTitle() {
         return title;
     }
@@ -93,10 +91,7 @@ public class Book {
         }
         return getTitle();
     }
-    
-    
-    
-    
+
 
     @Override
     public String toString() {

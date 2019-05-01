@@ -23,7 +23,7 @@ public class InvitationController extends AbstractController {
         BookDAO bookDAO = new BookDAO(ds);
 
         try {
-            switch(action) {
+            switch (action) {
                 case "invite_users":
                     inviteUsers(request, response, bookDAO);
                     break;
@@ -44,7 +44,7 @@ public class InvitationController extends AbstractController {
     private void inviteUsers(HttpServletRequest request, HttpServletResponse response, BookDAO bookDAO) throws ServletException, IOException {
 
         // TODO: Idealmente teriamos que fazer essa vlidacao sempre antes de fazer as coisas... Sugestoes?
-        if(request.getParameter("id_book") == null) {
+        if (request.getParameter("id_book") == null) {
             invalidParameters(request, response);
             return;
         }
@@ -61,7 +61,7 @@ public class InvitationController extends AbstractController {
     private void editUsersInvited(HttpServletRequest request, HttpServletResponse response, BookDAO bookDAO) throws ServletException, IOException {
 
         // TODO: Idealmente teriamos que fazer essa vlidacao sempre antes de fazer as coisas... Sugestoes?
-        if(request.getParameter("id_book") == null) {
+        if (request.getParameter("id_book") == null) {
             invalidParameters(request, response);
             return;
         }
@@ -82,7 +82,7 @@ public class InvitationController extends AbstractController {
         InvitationDAO invitationDAO = new InvitationDAO(ds);
 
         try {
-            switch(action) {
+            switch (action) {
                 case "add_invitation_list":
                     addInvitationList(request, response, invitationDAO);
                     break;
@@ -105,7 +105,7 @@ public class InvitationController extends AbstractController {
         int idBook = Integer.parseInt(request.getParameter("id_book"));
         String idAccounts[] = request.getParameterValues("id_accounts");
 
-        for(int i = 0; i < idAccounts.length; i++) {
+        for (int i = 0; i < idAccounts.length; i++) {
             invitationDAO.addInvitation(idAccounts[i], idBook);
         }
     }
@@ -118,7 +118,7 @@ public class InvitationController extends AbstractController {
         int idBook = Integer.parseInt(request.getParameter("id_book"));
         String idAccounts[] = request.getParameterValues("id_account");
 
-        for(int i = 0; i < idAccounts.length; i++) {
+        for (int i = 0; i < idAccounts.length; i++) {
             invitationDAO.deleteInvitation(idAccounts[i], idBook);
         }
     }
