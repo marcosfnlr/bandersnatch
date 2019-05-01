@@ -3,3 +3,28 @@
     transition: none;
     display: none;
 }
+
+.link-p {
+    display: block;
+    text-decoration: none !important;
+    height: 30px;
+    line-height: 30px;
+}
+
+.link-p {
+    display: block;
+    text-decoration: none !important;
+    height: 30px;
+    line-height: 30px;
+    color: black;
+    padding: 0 15px;
+}
+
+.link-p:hover {
+    background-color: lightgray;
+    color: black;
+}
+
+#list-parag{
+    padding: 0;
+}

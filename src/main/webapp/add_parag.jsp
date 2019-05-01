@@ -59,10 +59,12 @@
         %>
         <input type="hidden" name="id_choice_orig" value="<%=request.getParameter("id_choice_orig")%>">
         <input type="hidden" name="action" value="add_paragraph" />
+        <input type="hidden" name="beginning" value="false">
+        <input type="hidden" name="id_book" value="<%=request.getParameter("id_book")%>">
         <%
             }
         %>
-        <input type="hidden" name="id_book" value="${id_book}">
+
         <div class="form-row">
             <div class="col-12 mb-2">
                 <label for="text">Texte du paragraphe:</label>

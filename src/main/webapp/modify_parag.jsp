@@ -51,14 +51,14 @@
     </div>
 </nav>
 <div class="container">
-    <div class="row">
-        <div class="col-10">
+    <div class="row bg-light">
+        <div class="col-12 col-lg-10 bg-white">
             <h1>
                 <%=paragraph.getBook().getTitle()%>
             </h1>
             <hr>
-            <div class="row multi-collapse-parag collapse show" id="parag">
-                <div class="col-12">
+            <div class="row multi-collapse-parag collapse show justify-content-center" id="parag">
+                <div class="col-12 mb-3 text-center">
                     <%=paragraph.getText() %>
                 </div>
                 <button type="button" class="btn btn-danger" data-toggle="collapse"
@@ -74,7 +74,8 @@
                 <form action="update_parag" method="post" class="custom-validation" novalidate>
                     <div class="form-row">
                         <div class="col-12 mb-2">
-                            <textarea class="form-control" name="text" rows="3" required><%=paragraph.getText()%></textarea>
+                            <textarea class="form-control" name="text" rows="3"
+                                      required><%=paragraph.getText()%></textarea>
                             <div class="invalid-tooltip">
                                 Donne-moi une vie.
                             </div>
@@ -99,19 +100,21 @@
             <%
                 for (Choice c : paragraph.getChoices()) {
             %>
-            <div class="row multi-collapse-<%=c.getIdChoice()%> collapse show mt-3" id="choice-<%=c.getIdChoice()%>">
-                <div class="col-8">
-                    <i class="fas fa-arrow-right"></i> <%=c.getText()%>
-                </div>
-                <div class="col-4">
-                    <a class="btn btn-light"
-                       href="paragraph_controller?action=write_paragraph?id_choice_orig=<%=c.getIdChoice()%>&beginning=false&id_book=<%=paragraph.getBook().getIdBook()%>">
-                        <i class="fas fa-tag"></i></a>
-                    <a class="btn btn-light" href="#"><i class="fas fa-link"></i></a>
-                    <button type="button" class="btn btn-light" data-toggle="collapse"
-                            data-target=".multi-collapse-<%=c.getIdChoice()%>" aria-expanded="false"
-                            aria-controls="edit-choice-<%=c.getIdChoice()%> choice-<%=c.getIdChoice()%>"><i
-                            class="fas fa-edit"></i></button>
+            <div class="card multi-collapse-<%=c.getIdChoice()%> collapse show mt-3" id="choice-<%=c.getIdChoice()%>">
+                <div class="row card-body">
+                    <div class="col-8">
+                        <%=c.getText()%>
+                    </div>
+                    <div class="col-4 align-self-center text-right">
+                        <a class="btn btn-light"
+                           href="paragraph_controller?action=write_paragraph&title=<%=paragraph.getBook().getTitle()%>&id_book=<%=paragraph.getBook().getIdBook()%>&id_choice_orig=<%=c.getIdChoice()%>&beginning=false&id_book=<%=paragraph.getBook().getIdBook()%>">
+                            <i class="fas fa-tag"></i></a>
+                        <a class="btn btn-light" href="#"><i class="fas fa-link"></i></a>
+                        <button type="button" class="btn btn-light" data-toggle="collapse"
+                                data-target=".multi-collapse-<%=c.getIdChoice()%>" aria-expanded="false"
+                                aria-controls="edit-choice-<%=c.getIdChoice()%> choice-<%=c.getIdChoice()%>"><i
+                                class="fas fa-edit"></i></button>
+                    </div>
                 </div>
             </div>
             <%
@@ -141,17 +144,15 @@
                 </form>
             </div>
             <%
-                }
-            %>
-            <%
+                    }
                 }
             %>
         </div>
-        <div class="col-2 h-100 bg-light">
+        <div class="col-12 col-lg-2" id="list-parag">
             <%
                 for (Paragraph p : paragraphs) {
             %>
-            <a class="d-block w-100" href="paragraph_controller?action=modify_paragraph&id=<%=p.getIdParagraph()%>">
+            <a class="link-p mt-2" href="paragraph_controller?action=modify_paragraph&id=<%=p.getIdParagraph()%>">
                 <%=p.getLabelText()%>
             </a>
             <%

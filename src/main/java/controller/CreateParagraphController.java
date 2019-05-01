@@ -48,7 +48,7 @@ public class CreateParagraphController extends AbstractController {
                     createParagraphWithChoices(request, response, idBook, paragraphDAO, choiceDAO);
                     break;
                 case "add_paragraph":
-                    idBook = Integer.parseInt(String.valueOf(request.getParameter("id_book")));
+                    idBook = Integer.parseInt(request.getParameter("id_book"));
                     createParagraphWithChoices(request, response, idBook, paragraphDAO, choiceDAO);
                     break;
                 default:
