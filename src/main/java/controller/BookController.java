@@ -16,10 +16,9 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import javax.sql.DataSource;
-import model.Account;
-import model.FeedbackMessage;
-import model.TypeFeedback;
-import model.Book;
+
+import dao.ParagraphDAO;
+import model.*;
 
 /**
  *
@@ -34,29 +33,45 @@ public class BookController extends AbstractController{
     @Override
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         BookDAO bookDAO = new BookDAO(ds);
+        ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
 
         try {
-            if (action == null) {
-                //TODO : where to redirect here?
-                //request.getRequestDispatcher("/index.jsp").forward(request, response);
-            } else if (action.equals("list_published_books")){
-                actionListPublishedBooks(request, response, bookDAO);
-            } else if (action.equals("get_book")){
-                actionGetBook(request, response, bookDAO);
-            } else {
-                invalidParameters(request, response);
+            switch(action) {
+                case "write_book":
+                    writeBook(request, response, paragraphDAO);
+                case "list_published_books":
+                    listPublishedBooks(request, response, bookDAO);
+                case "get_book":
+                    getBook(request, response, bookDAO);
+                default:
+                    invalidParameters(request, response);
             }
         } catch (DAOException e) {
             erreurBD(request, response, e);
         }
     }
-   
+
+    /**
+     * Go to page of writing/editing book.
+     */
+    private void writeBook(HttpServletRequest request, HttpServletResponse response, ParagraphDAO paragraphDAO) throws ServletException, IOException {
+
+        int idBook = Integer.parseInt(request.getParameter("id"));
+        List<Paragraph> paragraphs = paragraphDAO.listParagraphs(idBook);
+
+        request.getSession().setAttribute("paragraphs", paragraphs);
+
+        Paragraph paragraph = paragraphDAO.getBeginning(idBook);
+        request.setAttribute("paragraph", paragraph);
+
+        request.getRequestDispatcher("modify_parag.jsp").forward(request, response);
+    }
+
     /**
      * Lists all published books. 
      */
-    private void actionListPublishedBooks(HttpServletRequest request, HttpServletResponse response, 
+    private void listPublishedBooks(HttpServletRequest request, HttpServletResponse response,
             BookDAO bookDAO) throws ServletException, IOException {
-        
         List<Book> publishedBooks = bookDAO.listPublishedBooks();
         request.setAttribute("published_books", publishedBooks);
         //request.getRequestDispatcher("TODO INSERT PAGE").forward(request, response);
@@ -65,7 +80,7 @@ public class BookController extends AbstractController{
     /**
      * Gets all information of a book given its identifier idBook. 
      */
-    private void actionGetBook(HttpServletRequest request, HttpServletResponse response, 
+    private void getBook(HttpServletRequest request, HttpServletResponse response,
             BookDAO bookDAO) throws ServletException, IOException {  
         
         int idBook = Integer.parseInt(request.getParameter("id"));
@@ -118,22 +133,18 @@ public class BookController extends AbstractController{
     @Override
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         BookDAO bookDAO = new BookDAO(ds);
-        
-        if (action == null) {
-            invalidParameters(request, response);
-            return;
-        }
-                
+
         try {
-            if(action.equals("delete_book")) {
-                actionDeleteBook(request, response, bookDAO);
-                //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
-            } else if(action.equals("publish_book")) {
-                actionPublishBook(request, response, bookDAO);
-                //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
-            } else {
-                invalidParameters(request, response);
-                return;
+            switch(action) {
+                case "delete_book":
+                    deleteBook(request, response, bookDAO);
+                    //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
+                case "publish_book":
+                    publishBook(request, response, bookDAO);
+                    //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
+                default:
+                    invalidParameters(request, response);
+                    return;
             }
         } catch (DAOException e) {
             erreurBD(request, response, e);
@@ -145,7 +156,7 @@ public class BookController extends AbstractController{
      * It's called when first paragraph of book is deleted. How to do it best ?
      * Constraints of first paragraph deletion are in paragraph controller
      */
-    private void actionDeleteBook(HttpServletRequest request, HttpServletResponse response, 
+    private void deleteBook(HttpServletRequest request, HttpServletResponse response,
             BookDAO bookDAO) throws ServletException, IOException {
         
         int idBook = Integer.parseInt(request.getParameter("id_book"));
@@ -156,7 +167,7 @@ public class BookController extends AbstractController{
     /**
      * Modifies a book's publication status to published or unpublished.
      */
-    private void actionPublishBook(HttpServletRequest request, HttpServletResponse response, 
+    private void publishBook(HttpServletRequest request, HttpServletResponse response,
             BookDAO bookDAO) throws ServletException, IOException {
         
         //TODO : check if account is creator and check if exists at least one conclusion
