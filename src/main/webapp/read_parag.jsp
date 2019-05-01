@@ -65,7 +65,7 @@
     %>
     <div class="row mt-3">
         <div class="col-12">
-            <a href="read_controller?action=next_paragraph?id_book=<%=paragraph.getBook().getIdBook()%>&chosen_choice=<%=c.getIdChoice()%>"
+            <a href="read_controller?action=next_paragraph&id_book=<%=paragraph.getBook().getIdBook()%>&chosen_choice=<%=c.getIdChoice()%>"
                class="btn btn-light w-100 text-left">
                 <i class="fas fa-arrow-right"></i> <%=c.getText()%>
             </a>
