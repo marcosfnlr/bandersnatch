@@ -274,7 +274,7 @@ public class ChoiceDAO extends AbstractDAO {
      */
     public void setParagDest(int idChoice, int idParagDest) {
 
-        String query = "UPDATE Choice SET id_parag_dest=? WHERE id_choice=?";
+        String query = "UPDATE Choice SET fk_parag_dest=? WHERE id_choice=?";
 
         try (
                 Connection conn = getConn();
