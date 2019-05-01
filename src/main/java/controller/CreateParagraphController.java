@@ -78,14 +78,13 @@ public class CreateParagraphController extends AbstractController {
     /**
      * Adds a paragraph to a book and returns its id.
      */
-    private int addParagraph(HttpServletRequest request, HttpServletResponse response, int idBook, boolean isBeginning, ParagraphDAO paragraphDAO) throws ServletException, IOException {
+    private int addParagraph(HttpServletRequest request, HttpServletResponse response, int idBook, boolean isBeginning, boolean isConclusion, ParagraphDAO paragraphDAO) throws ServletException, IOException {
 
         String text = request.getParameter("parag_text");
-        boolean conclusion = Boolean.parseBoolean(request.getParameter("conclusion"));
         Account account = (Account) request.getSession().getAttribute("logged_account");
         String author = account.getIdAccount();
 
-        return paragraphDAO.addParagraph(text, isBeginning, conclusion, idBook, author);
+        return paragraphDAO.addParagraph(text, isBeginning, isConclusion, idBook, author);
     }
 
     /**
@@ -104,11 +103,21 @@ public class CreateParagraphController extends AbstractController {
     private void createParagraphWithChoices(HttpServletRequest request, HttpServletResponse response, int idBook, ParagraphDAO paragraphDAO, ChoiceDAO choiceDAO) throws ServletException, IOException {
 
         boolean isBeginning = Boolean.parseBoolean(request.getParameter("beginning"));
-        int idParag = addParagraph(request, response, idBook, isBeginning, paragraphDAO);
 
-        String choiceText[] = request.getParameterValues("choices_text");
-        for (int i = 0; i < choiceText.length; i++) {
-            int idChoice = addChoice(request, response, choiceText[i], idParag, choiceDAO);
+        boolean isConclusion = false;
+
+        // Checkbox return different than null if selected
+        if (request.getParameter("conclusion") != null) {
+            isConclusion = true;
+        }
+
+        int idParag = addParagraph(request, response, idBook, isBeginning, isConclusion, paragraphDAO);
+
+        if(!isConclusion) {
+            String choiceText[] = request.getParameterValues("choices_text");
+            for (int i = 0; i < choiceText.length; i++) {
+                int idChoice = addChoice(request, response, choiceText[i], idParag, choiceDAO);
+            }
         }
 
         // Paragraph 'came' from a choice.
