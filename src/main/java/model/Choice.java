@@ -72,6 +72,20 @@ public class Choice {
         return paragCond;
     }
 
+    public void setParagOrigin(Paragraph paragOrigin) {
+        this.paragOrigin = paragOrigin;
+    }
+
+    public void setParagDest(Paragraph paragDest) {
+        this.paragDest = paragDest;
+    }
+
+    public void setParagCond(Paragraph paragCond) {
+        this.paragCond = paragCond;
+    }
+    
+    
+
     @Override
     public String toString() {
         return "Choice{" + "idChoice=" + idChoice + ", text=" + text + ", locked=" + locked + ", onlyChoice=" + onlyChoice + ", condShouldPass=" + condShouldPass  + ", paragOrigin=" + paragOrigin + ", paragDest=" + paragDest + ", paragCond=" + paragCond + '}';

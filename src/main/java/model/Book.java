@@ -49,6 +49,12 @@ public class Book {
     public Account getCreator() {
         return creator;
     }
+
+    public void setCreator(Account creator) {
+        this.creator = creator;
+    }
+    
+    
     
     
     // methods to help in the view

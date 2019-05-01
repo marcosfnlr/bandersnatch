@@ -27,6 +27,9 @@ public class ChoiceDAO extends AbstractDAO {
      */
     public List<Choice> listParagOrigChoices(int idParagOrig) {
         List<Choice> list = new ArrayList<>();
+        List<Integer> origins = new ArrayList<Integer>();
+        List<Integer> dests = new ArrayList<Integer>();
+        List<Integer> conds = new ArrayList<Integer>();
         ParagraphDAO paragraphDAO = new ParagraphDAO(dataSource);
         String query = "SELECT * FROM Choice WHERE fk_parag_orig=?";
         
@@ -37,17 +40,29 @@ public class ChoiceDAO extends AbstractDAO {
             ps.setInt(1, idParagOrig);
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                Paragraph paragOrigin = paragraphDAO.getParagraph(rs.getInt("fk_parag_orig"));
-                Paragraph paragDest = paragraphDAO.getParagraph(rs.getInt("fk_parag_dest"));
-                Paragraph paragCond = paragraphDAO.getParagraph(rs.getInt("fk_parag_cond"));
+                origins.add(rs.getInt("fk_parag_orig"));
+                dests.add(rs.getInt("fk_parag_dest"));
+                conds.add(rs.getInt("fk_parag_cond"));
+                //Paragraph paragOrigin = paragraphDAO.getParagraph(rs.getInt("fk_parag_orig"));
+                //Paragraph paragDest = paragraphDAO.getParagraph(rs.getInt("fk_parag_dest"));
+                //Paragraph paragCond = paragraphDAO.getParagraph(rs.getInt("fk_parag_cond"));
                 Choice c = new Choice(rs.getInt("id_choice"), rs.getString("text"), rs.getBoolean("locked"), 
                         rs.getBoolean("only_choice"), rs.getBoolean("cond_should_pass"), 
-                        paragOrigin, paragDest, paragCond);
+                        null, null, null);
                 list.add(c);
             }
             
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        for (int i = 0; i < list.size(); i++) {
+            Paragraph paragOrigin = paragraphDAO.getParagraph(origins.get(i));
+            Paragraph paragDest = paragraphDAO.getParagraph(dests.get(i));
+            Paragraph paragCond = paragraphDAO.getParagraph(conds.get(i));
+            list.get(i).setParagOrigin(paragOrigin);
+            list.get(i).setParagDest(paragDest);
+            list.get(i).setParagCond(paragCond);
         }
         
         return list;
@@ -58,6 +73,9 @@ public class ChoiceDAO extends AbstractDAO {
      */
     public List<Choice> listParagDestChoices(int idParagDest) {
         List<Choice> list = new ArrayList<>();
+        List<Integer> origins = new ArrayList<Integer>();
+        List<Integer> dests = new ArrayList<Integer>();
+        List<Integer> conds = new ArrayList<Integer>();
         ParagraphDAO paragraphDAO = new ParagraphDAO(dataSource);
         String query = "SELECT * FROM Choice WHERE fk_parag_dest=?";
         
@@ -68,17 +86,29 @@ public class ChoiceDAO extends AbstractDAO {
             ps.setInt(1, idParagDest);
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                Paragraph paragOrigin = paragraphDAO.getParagraph(rs.getInt("fk_parag_orig"));
-                Paragraph paragDest = paragraphDAO.getParagraph(rs.getInt("fk_parag_dest"));
-                Paragraph paragCond = paragraphDAO.getParagraph(rs.getInt("fk_parag_cond"));
+                origins.add(rs.getInt("fk_parag_orig"));
+                dests.add(rs.getInt("fk_parag_dest"));
+                conds.add(rs.getInt("fk_parag_cond"));
+                //Paragraph paragOrigin = paragraphDAO.getParagraph(rs.getInt("fk_parag_orig"));
+                //Paragraph paragDest = paragraphDAO.getParagraph(rs.getInt("fk_parag_dest"));
+                //Paragraph paragCond = paragraphDAO.getParagraph(rs.getInt("fk_parag_cond"));
                 Choice c = new Choice(rs.getInt("id_choice"), rs.getString("text"), rs.getBoolean("locked"), 
                         rs.getBoolean("only_choice"), rs.getBoolean("cond_should_pass"), 
-                        paragOrigin, paragDest, paragCond);
+                        null, null, null);
                 list.add(c);
             }
             
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        for (int i = 0; i < list.size(); i++) {
+            Paragraph paragOrigin = paragraphDAO.getParagraph(origins.get(i));
+            Paragraph paragDest = paragraphDAO.getParagraph(dests.get(i));
+            Paragraph paragCond = paragraphDAO.getParagraph(conds.get(i));
+            list.get(i).setParagOrigin(paragOrigin);
+            list.get(i).setParagDest(paragDest);
+            list.get(i).setParagCond(paragCond);
         }
         
         return list;
@@ -89,6 +119,9 @@ public class ChoiceDAO extends AbstractDAO {
      */
     public List<Choice> listBookChoices(int idBook) {
         List<Choice> list = new ArrayList<>();
+        List<Integer> origins = new ArrayList<Integer>();
+        List<Integer> dests = new ArrayList<Integer>();
+        List<Integer> conds = new ArrayList<Integer>();
         ParagraphDAO paragraphDAO = new ParagraphDAO(dataSource);
         String query = "SELECT * FROM Choice WHERE fk_parag_orig IN "
                 + "(SELECT DISTINCT id_paragraph FROM Paragraph WHERE fk_book=?) ";
@@ -100,17 +133,29 @@ public class ChoiceDAO extends AbstractDAO {
             ps.setInt(1, idBook);
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                Paragraph paragOrigin = paragraphDAO.getParagraph(rs.getInt("fk_parag_orig"));
-                Paragraph paragDest = paragraphDAO.getParagraph(rs.getInt("fk_parag_dest"));
-                Paragraph paragCond = paragraphDAO.getParagraph(rs.getInt("fk_parag_cond"));
+                origins.add(rs.getInt("fk_parag_orig"));
+                dests.add(rs.getInt("fk_parag_dest"));
+                conds.add(rs.getInt("fk_parag_cond"));
+                //Paragraph paragOrigin = paragraphDAO.getParagraph(rs.getInt("fk_parag_orig"));
+                //Paragraph paragDest = paragraphDAO.getParagraph(rs.getInt("fk_parag_dest"));
+                //Paragraph paragCond = paragraphDAO.getParagraph(rs.getInt("fk_parag_cond"));
                 Choice c = new Choice(rs.getInt("id_choice"), rs.getString("text"), rs.getBoolean("locked"), 
                         rs.getBoolean("only_choice"), rs.getBoolean("cond_should_pass"), 
-                        paragOrigin, paragDest, paragCond);
+                        null, null, null);
                 list.add(c);
             }
             
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        for (int i = 0; i < list.size(); i++) {
+            Paragraph paragOrigin = paragraphDAO.getParagraph(origins.get(i));
+            Paragraph paragDest = paragraphDAO.getParagraph(dests.get(i));
+            Paragraph paragCond = paragraphDAO.getParagraph(conds.get(i));
+            list.get(i).setParagOrigin(paragOrigin);
+            list.get(i).setParagDest(paragDest);
+            list.get(i).setParagCond(paragCond);
         }
         
         return list;
@@ -150,6 +195,7 @@ public class ChoiceDAO extends AbstractDAO {
      */
     public Choice getChoice(int idChoice) {
         String text;
+        int origin, dest, cond;
         boolean locked, onlyChoice, condShouldPass;
         Paragraph paragOrigin, paragDest, paragCond;
         ParagraphDAO paragraphDAO = new ParagraphDAO(dataSource);
@@ -164,13 +210,16 @@ public class ChoiceDAO extends AbstractDAO {
             locked = rs.getBoolean("locked");
             onlyChoice = rs.getBoolean("only_choice");
             condShouldPass = rs.getBoolean("cond_should_pass");
-            paragOrigin = paragraphDAO.getParagraph(rs.getInt("fk_parag_orig"));
-            paragDest = paragraphDAO.getParagraph(rs.getInt("fk_parag_dest"));
-            paragCond = paragraphDAO.getParagraph(rs.getInt("fk_parag_cond"));
-            
+            origin = rs.getInt("fk_parag_orig");
+            dest = rs.getInt("fk_parag_dest");
+            cond = rs.getInt("fk_parag_cond");
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
         }
+        
+        paragOrigin = paragraphDAO.getParagraph(origin);
+        paragDest = paragraphDAO.getParagraph(dest);
+        paragCond = paragraphDAO.getParagraph(cond);
         
         return new Choice(idChoice, text, locked, onlyChoice, condShouldPass, paragOrigin, paragDest, paragCond);
     }

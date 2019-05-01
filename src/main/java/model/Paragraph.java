@@ -62,6 +62,16 @@ public class Paragraph {
     public Account getAuthor() {
         return author;
     }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public void setAuthor(Account author) {
+        this.author = author;
+    }
+    
+    
     
     // methods to help in the view
 
@@ -80,6 +90,32 @@ public class Paragraph {
     public void setFinalChoices(List<Choice> finalChoices) {
         this.finalChoices = finalChoices;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + this.idParagraph;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Paragraph other = (Paragraph) obj;
+        if (this.idParagraph != other.idParagraph) {
+            return false;
+        }
+        return true;
+    }
+    
     
     
 

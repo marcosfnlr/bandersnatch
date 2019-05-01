@@ -28,6 +28,7 @@ public class BookDAO extends AbstractDAO {
      */
     public List<Book> listPublishedBooks() {
         List<Book> list = new ArrayList<>();
+        List<String> accounts = new ArrayList<>();
         AccountDAO accountDAO = new AccountDAO(dataSource);
         
         try(
@@ -36,14 +37,19 @@ public class BookDAO extends AbstractDAO {
             ) {
             ResultSet rs = st.executeQuery("SELECT * FROM Book WHERE published=1");
             while (rs.next()){
-                Account account = accountDAO.getAccount(rs.getString("fk_account"));
+                accounts.add(rs.getString("fk_account"));
                 Book book = new Book(rs.getInt("id_book"), rs.getString("title"), rs.getBoolean("open_write"), 
-                    rs.getBoolean("published"), account);
+                    rs.getBoolean("published"), null);
                 list.add(book);
             }
             
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        for (int i = 0; i < list.size(); i++) {
+            Account account = accountDAO.getAccount(accounts.get(i));
+            list.get(i).setCreator(account);
         }
         
         return list;
@@ -81,6 +87,7 @@ public class BookDAO extends AbstractDAO {
      */
     public List<Book> listAuthorBooks(String author) {
         List<Book> list = new ArrayList<>();
+        List<String> accounts = new ArrayList<>();
         AccountDAO accountDAO = new AccountDAO(dataSource);
         String query = "SELECT * FROM Book WHERE id_book IN "
                 + "(SELECT DISTINCT fk_book FROM Paragraph WHERE fk_account=?)";
@@ -92,14 +99,20 @@ public class BookDAO extends AbstractDAO {
             ps.setString(1, author);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
-                Account account = accountDAO.getAccount(rs.getString("fk_account"));
+                accounts.add(rs.getString("fk_account"));
+                //Account account = accountDAO.getAccount(rs.getString("fk_account"));
                 Book book = new Book(rs.getInt("id_book"), rs.getString("title"), rs.getBoolean("open_write"), 
-                    rs.getBoolean("published"), account);
+                    rs.getBoolean("published"), null);
                 list.add(book);
             }
             
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        for (int i = 0; i < list.size(); i++) {
+            Account account = accountDAO.getAccount(accounts.get(i));
+            list.get(i).setCreator(account);
         }
         
         return list;
@@ -110,6 +123,7 @@ public class BookDAO extends AbstractDAO {
      */
     public List<Book> listInvitationBooks(String login) {
         List<Book> list = new ArrayList<>();
+        List<String> accounts = new ArrayList<>();
         AccountDAO accountDAO = new AccountDAO(dataSource);
         String query = "SELECT * FROM Book WHERE id_book IN "
                 + "(SELECT DISTINCT fk_book FROM Invitation WHERE fk_account=?)";
@@ -121,14 +135,20 @@ public class BookDAO extends AbstractDAO {
             ps.setString(1, login);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
-                Account account = accountDAO.getAccount(rs.getString("fk_account"));
+                accounts.add(rs.getString("fk_account"));
+                //Account account = accountDAO.getAccount(rs.getString("fk_account"));
                 Book book = new Book(rs.getInt("id_book"), rs.getString("title"), rs.getBoolean("open_write"), 
-                    rs.getBoolean("published"), account);
+                    rs.getBoolean("published"), null);
                 list.add(book);
             }
             
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        for (int i = 0; i < list.size(); i++) {
+            Account account = accountDAO.getAccount(accounts.get(i));
+            list.get(i).setCreator(account);
         }
         
         return list;
@@ -140,6 +160,7 @@ public class BookDAO extends AbstractDAO {
     public List<Account> listUsersInvited(int idBook) {
         AccountDAO accountDAO = new AccountDAO(dataSource);
         List<Account> userList = new ArrayList<>();
+        List<String> accounts = new ArrayList<>();
 
         String query = "SELECT fk_account FROM Invitation WHERE fk_book=?";
 
@@ -150,12 +171,18 @@ public class BookDAO extends AbstractDAO {
             ps.setInt(1, idBook);
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                Account account = accountDAO.getAccount(rs.getString("fk_account"));
-                userList.add(account);
+                accounts.add(rs.getString("fk_account"));
+                //Account account = accountDAO.getAccount(rs.getString("fk_account"));
+                //userList.add(account);
             }
 
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        for (int i = 0; i < userList.size(); i++) {
+            Account account = accountDAO.getAccount(accounts.get(i));
+            userList.add(account);
         }
 
         return userList;
@@ -167,6 +194,7 @@ public class BookDAO extends AbstractDAO {
     public List<Account> listUsersNotInvited(int idBook) {
         AccountDAO accountDAO = new AccountDAO(dataSource);
         List<Account> userList = new ArrayList<>();
+        List<String> accounts = new ArrayList<>();
 
         String query = "SELECT id_account FROM Account " +
                 "MINUS " +
@@ -179,12 +207,16 @@ public class BookDAO extends AbstractDAO {
             ps.setInt(1, idBook);
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                Account account = accountDAO.getAccount(rs.getString("id_account"));
-                userList.add(account);
+                accounts.add(rs.getString("fk_account"));
             }
 
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        for (int i = 0; i < userList.size(); i++) {
+            Account account = accountDAO.getAccount(accounts.get(i));
+            userList.add(account);
         }
 
         return userList;

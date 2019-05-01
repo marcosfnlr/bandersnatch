@@ -29,6 +29,9 @@ public class ParagraphDAO extends AbstractDAO {
      */
     public List<Paragraph> listParagraphs(int idBook) {
         List<Paragraph> list = new ArrayList<Paragraph>();
+        List<Integer> fk_books = new ArrayList<Integer>();
+        List<String> fk_accounts = new ArrayList<String>();
+        
         BookDAO bookDAO = new BookDAO(dataSource);
         AccountDAO accountDAO = new AccountDAO(dataSource);
         String query = "SELECT * FROM Paragraph WHERE fk_book=?";
@@ -40,15 +43,24 @@ public class ParagraphDAO extends AbstractDAO {
             ps.setInt(1, idBook);
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                Book book = bookDAO.getBook(rs.getInt("fk_book"));
-                Account account = accountDAO.getAccount(rs.getString("fk_account"));
+                fk_books.add(rs.getInt("fk_book"));
+                fk_accounts.add(rs.getString("fk_account"));
+                //Book book = bookDAO.getBook(rs.getInt("fk_book"));
+                //Account account = accountDAO.getAccount(rs.getString("fk_account"));
                 Paragraph p = new Paragraph(rs.getInt("id_paragraph"), rs.getString("text"), rs.getBoolean("beginning"), 
-                        rs.getBoolean("conclusion"), book, account);
+                        rs.getBoolean("conclusion"), null, null);
                 list.add(p);
             }
             
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        for (int i = 0; i < list.size(); i++) {
+            Book book = bookDAO.getBook(fk_books.get(i));
+            Account account = accountDAO.getAccount(fk_accounts.get(i));
+            list.get(i).setBook(book);
+            list.get(i).setAuthor(account);
         }
         
         return list;
@@ -60,6 +72,8 @@ public class ParagraphDAO extends AbstractDAO {
      */
     public List<Paragraph> listConclusions(int idBook) {
         List<Paragraph> list = new ArrayList<Paragraph>();
+        List<Integer> fk_books = new ArrayList<Integer>();
+        List<String> fk_accounts = new ArrayList<String>();
         BookDAO bookDAO = new BookDAO(dataSource);
         AccountDAO accountDAO = new AccountDAO(dataSource);
         String query = "SELECT * FROM Paragraph WHERE fk_book=? AND conclusion=1";
@@ -71,15 +85,24 @@ public class ParagraphDAO extends AbstractDAO {
             ps.setInt(1, idBook);
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                Book book = bookDAO.getBook(rs.getInt("fk_book"));
-                Account account = accountDAO.getAccount(rs.getString("fk_account"));
+                fk_books.add(rs.getInt("fk_book"));
+                fk_accounts.add(rs.getString("fk_account"));
+                //Book book = bookDAO.getBook(rs.getInt("fk_book"));
+                //Account account = accountDAO.getAccount(rs.getString("fk_account"));
                 Paragraph p = new Paragraph(rs.getInt("id_paragraph"), rs.getString("text"), rs.getBoolean("beginning"), 
-                        rs.getBoolean("conclusion"), book, account);
+                        rs.getBoolean("conclusion"), null, null);
                 list.add(p);
             }
             
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
+        }
+        
+        for (int i = 0; i < list.size(); i++) {
+            Book book = bookDAO.getBook(fk_books.get(i));
+            Account account = accountDAO.getAccount(fk_accounts.get(i));
+            list.get(i).setBook(book);
+            list.get(i).setAuthor(account);
         }
         
         return list;
@@ -90,7 +113,7 @@ public class ParagraphDAO extends AbstractDAO {
      */
     public Paragraph getBeginning(int idBook) {
         int idParagraph;
-        String text;
+        String text, account;
         boolean beginning, conclusion;
         Book book;
         Account author;
@@ -110,13 +133,14 @@ public class ParagraphDAO extends AbstractDAO {
             text = rs.getString("text");
             beginning = rs.getBoolean("beginning");
             conclusion = rs.getBoolean("conclusion");
-            author = accountDAO.getAccount(rs.getString("fk_account"));
+            account = rs.getString("fk_account");
             
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
         }
         
         book = bookDAO.getBook(idBook);
+        author = accountDAO.getAccount(account);
         
         return new Paragraph(idParagraph, text, beginning, conclusion, book, author);
     }
@@ -153,28 +177,35 @@ public class ParagraphDAO extends AbstractDAO {
      * TODO : if used to edit text, where to check account ?
      */
     public Paragraph getParagraph(int idParagraph) {
-        String text;
+        String text, account;
         boolean beginning, conclusion;
+        int idBook;
         Book book;
         Account author;
         BookDAO bookDAO = new BookDAO(dataSource);
         AccountDAO accountDAO = new AccountDAO(dataSource);
+        
+        String query = "SELECT * FROM Paragraph WHERE id_paragraph=?";
 
         try(
             Connection conn = getConn();
-            Statement st = conn.createStatement();
+            PreparedStatement ps = conn.prepareStatement(query);
             ) {
-            ResultSet rs = st.executeQuery("SELECT * FROM Paragraph WHERE id_paragraph=" + idParagraph);
+            ps.setInt(1, idParagraph);
+            ResultSet rs = ps.executeQuery();
             rs.next();
             text = rs.getString("text");
             beginning = rs.getBoolean("beginning");
             conclusion = rs.getBoolean("conclusion");
-            book = bookDAO.getBook(rs.getInt("fk_book"));
-            author = accountDAO.getAccount(rs.getString("fk_account"));
+            idBook = rs.getInt("fk_book");
+            account = rs.getString("fk_account");
             
         } catch (SQLException e) {
             throw new DAOException ("Erreur BD " + e.getMessage(), e);
         }
+        
+        book = bookDAO.getBook(idBook);
+        author = accountDAO.getAccount(account);
         
         return new Paragraph(idParagraph, text, beginning, conclusion, book, author);
     }

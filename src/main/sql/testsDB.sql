@@ -28,20 +28,21 @@ INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES 
 INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p1h2',1,0,2,'b');
 INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p2h2',0,0,2,'a');
 
-INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p1h3',1,0,3,'b');
-INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p2h3',0,0,3,'a');
-INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p3h3',0,0,3,'a');
-INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p4h3',0,1,3,'a');
-INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p5h3',0,1,3,'b');
-INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p6h3',0,0,3,'c');
+INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p1h3',1,0,3,'b'); --4
+INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p2h3',0,0,3,'a'); --5
+INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p3h3',0,0,3,'a'); --6
+INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p4h3',0,1,3,'a'); --7
+INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p5h3',0,0,3,'b'); --8
 
 INSERT INTO Paragraph (text, beginning, conclusion, fk_book, fk_account) VALUES ('p1h4',1,0,4,'b');
 
 /*text, locked, only_choice, cond_should_pass, fk_parag_orig, fk_parag_dest, fk_parag_cond*/
-INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig) VALUES ('c1p1h3',0,0,0,4);
+INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig, fk_parag_dest) VALUES ('c1p1h3',0,0,0,4,5);
 INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig) VALUES ('c2p1h3',0,0,0,4);
-INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig) VALUES ('c1p2h3',0,0,0,5);
-INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig) VALUES ('c1p3h3',0,0,0,6);
+INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig, fk_parag_dest) VALUES ('c1p2h3',0,0,0,5,6);
+INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig, fk_parag_dest) VALUES ('c2p2h3',0,0,0,5,6);
+INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig, fk_parag_dest) VALUES ('c1p3h3',0,0,0,6,7);
+INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig, fk_parag_dest) VALUES ('c2p3h3',0,0,0,6,8);
 
 INSERT INTO Invitation (fk_account, fk_book) VALUES ('a',4);
 
