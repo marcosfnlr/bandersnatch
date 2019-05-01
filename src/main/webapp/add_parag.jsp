@@ -95,7 +95,7 @@
             <div class="col-12 mb-3">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" name="unique" id="isUnique">
-                    <label class="form-check-label" for="isConclusion">Choix unique.</label>
+                    <label class="form-check-label" for="isUnique">Choix unique.</label>
                 </div>
             </div>
         </div>
