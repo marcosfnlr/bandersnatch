@@ -96,7 +96,7 @@ public class ReadController extends AbstractController{
         
         buildBook(idBook, paragraphDAO, choiceDAO);
         List<Choice> choices = dictionary.get(paragraph);
-        
+                
         finalText = paragraph.getText();
         
         while(choices.size() == 1) { //if more than one choice or no choice (conclusion) it leaves loop

@@ -83,6 +83,31 @@ public class Choice {
     public void setParagCond(Paragraph paragCond) {
         this.paragCond = paragCond;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 23 * hash + this.idChoice;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Choice other = (Choice) obj;
+        if (this.idChoice != other.idChoice) {
+            return false;
+        }
+        return true;
+    }
     
     
 
