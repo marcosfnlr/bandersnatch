@@ -28,9 +28,9 @@ public class ParagraphDAO extends AbstractDAO {
      * TODO : where to verify account
      */
     public List<Paragraph> listParagraphs(int idBook) {
-        List<Paragraph> list = new ArrayList<Paragraph>();
-        List<Integer> fk_books = new ArrayList<Integer>();
-        List<String> fk_accounts = new ArrayList<String>();
+        List<Paragraph> list = new ArrayList<>();
+        List<Integer> fk_books = new ArrayList<>();
+        List<String> fk_accounts = new ArrayList<>();
 
         BookDAO bookDAO = new BookDAO(dataSource);
         AccountDAO accountDAO = new AccountDAO(dataSource);
@@ -153,7 +153,21 @@ public class ParagraphDAO extends AbstractDAO {
         if (paragraph != null) {
             paragraph.setBook(bookDAO.getBook(idBook));
             paragraph.setAuthor(accountDAO.getAccount(account));
-            paragraph.setChoices(choiceDAO.listParagOrigChoices(idParagraph));
+        }
+
+        return paragraph;
+    }
+
+    /**
+     * Gets first paragraph of a book from table Paragraph.
+     */
+    public Paragraph getBeginningWithChoices(int idBook) {
+        ChoiceDAO choiceDAO = new ChoiceDAO(dataSource);
+
+        Paragraph paragraph = getBeginning(idBook);
+
+        if(paragraph != null) {
+            paragraph.setChoices(choiceDAO.listParagOrigChoices(paragraph.getIdParagraph()));
         }
 
         return paragraph;
@@ -191,10 +205,6 @@ public class ParagraphDAO extends AbstractDAO {
         return idParagraph;
     }
 
-    /**
-     * Gets paragraph with id_paragraph identifier from table Paragraph.
-     * TODO : if used to edit text, where to check account ?
-     */
     public Paragraph getParagraph(int idParagraph) {
         boolean beginning, conclusion;
         String text, account = null;
@@ -203,7 +213,6 @@ public class ParagraphDAO extends AbstractDAO {
 
         BookDAO bookDAO = new BookDAO(dataSource);
         AccountDAO accountDAO = new AccountDAO(dataSource);
-        ChoiceDAO choiceDAO = new ChoiceDAO(dataSource);
 
         String query = "SELECT * FROM Paragraph WHERE id_paragraph=?";
 
@@ -231,6 +240,20 @@ public class ParagraphDAO extends AbstractDAO {
         if (paragraph != null) {
             paragraph.setBook(bookDAO.getBook(idBook));
             paragraph.setAuthor(accountDAO.getAccount(account));
+        }
+
+        return paragraph;
+    }
+
+    /**
+     * Gets paragraph with id_paragraph identifier and its choices.
+     */
+    public Paragraph getParagraphWithChoices(int idParagraph) {
+        ChoiceDAO choiceDAO = new ChoiceDAO(dataSource);
+
+        Paragraph paragraph = getParagraph(idParagraph);
+
+        if (paragraph != null) {
             paragraph.setChoices(choiceDAO.listParagOrigChoices(idParagraph));
         }
 

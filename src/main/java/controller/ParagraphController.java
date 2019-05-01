@@ -136,7 +136,7 @@ public class ParagraphController extends AbstractController {
         
         int idParagraph = Integer.parseInt(request.getParameter("id"));
 
-        Paragraph paragraph = paragraphDAO.getParagraph(idParagraph);
+        Paragraph paragraph = paragraphDAO.getParagraphWithChoices(idParagraph);
         request.setAttribute("paragraph", paragraph);
 
         request.getRequestDispatcher("modify_parag.jsp").forward(request, response);

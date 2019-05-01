@@ -61,7 +61,7 @@ public class BookController extends AbstractController{
 
         request.getSession().setAttribute("paragraphs", paragraphs);
 
-        Paragraph paragraph = paragraphDAO.getBeginning(idBook);
+        Paragraph paragraph = paragraphDAO.getBeginningWithChoices(idBook);
         request.setAttribute("paragraph", paragraph);
 
         request.getRequestDispatcher("modify_parag.jsp").forward(request, response);
