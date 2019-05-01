@@ -5,6 +5,7 @@
  */
 package controller;
 
+import dao.ChoiceDAO;
 import dao.DAOException;
 import dao.ParagraphDAO;
 import java.io.*;
@@ -34,17 +35,18 @@ public class ParagraphController extends AbstractController {
     @Override
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
+        ChoiceDAO choiceDAO = new ChoiceDAO(ds);
         
         try {
-            if (action == null) {
-                //TODO : where to redirect here?
-                //request.getRequestDispatcher("/index.jsp").forward(request, response);
-            } else if (action.equals("list_paragraphs")){
-                actionListParagraphs(request, response, paragraphDAO);
-            } else if (action.equals("get_paragraph")){
-                actionGetParagraph(request, response, paragraphDAO);
-            } else {
-                invalidParameters(request, response);
+            switch(action) {
+                case "write_paragraph":
+                    writeParagraph(request, response, choiceDAO);
+                case "list_paragraphs":
+                    listParagraphs(request, response, paragraphDAO);
+                case "get_paragraph":
+                    getParagraph(request, response, paragraphDAO);
+                default:
+                    invalidParameters(request, response);
             }
         } catch (DAOException e) {
             erreurBD(request, response, e);
@@ -52,14 +54,25 @@ public class ParagraphController extends AbstractController {
     }
 
     /**
+     * Write paragraph from a given choice.
+     */
+    private void writeParagraph(HttpServletRequest request, HttpServletResponse response,
+                                ChoiceDAO choiceDAO) throws ServletException, IOException {
+
+        int idChoiceOrig = Integer.parseInt(String.valueOf(request.getParameter("id_choice_orig")));
+        choiceDAO.setLocked(idChoiceOrig, true);
+        request.getRequestDispatcher("/add_parag.jsp").forward(request, response);
+    }
+
+    /**
      * Lists all paragraphs from a book. 
      * TODO : when to use ?
      */
-    private void actionListParagraphs(HttpServletRequest request, HttpServletResponse response, 
+    private void listParagraphs(HttpServletRequest request, HttpServletResponse response,
             ParagraphDAO paragraphDAO) throws ServletException, IOException {
         
         //needs to know from which book the paragraphs are from
-        int idBook = Integer.parseInt(request.getParameter("id_book"));
+        int idBook = Integer.parseInt(String.valueOf(request.getParameter("id_book")));
         List<Paragraph> paragraphs = paragraphDAO.listParagraphs(idBook);
         request.setAttribute("paragraphs", paragraphs);
     }
@@ -67,7 +80,7 @@ public class ParagraphController extends AbstractController {
     /**
      * Gets all information of a paragraph given its identifier id_paragraph. 
      */
-    private void actionGetParagraph(HttpServletRequest request, HttpServletResponse response, 
+    private void getParagraph(HttpServletRequest request, HttpServletResponse response,
             ParagraphDAO paragraphDAO) throws ServletException, IOException {
         
         int idParagraph = Integer.parseInt(request.getParameter("id_paragraph"));
@@ -91,10 +104,10 @@ public class ParagraphController extends AbstractController {
         
         try {
             if(action.equals("delete_paragraph")) {
-                actionDeleteParagraph(request, response, paragraphDAO);
+                deleteParagraph(request, response, paragraphDAO);
                 //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
             } else if(action.equals("modify_paragraph")) {
-                actionModifyParagraph(request, response, paragraphDAO);
+                modifyParagraph(request, response, paragraphDAO);
                 //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
             } else {
                 invalidParameters(request, response);
@@ -108,7 +121,7 @@ public class ParagraphController extends AbstractController {
     /**
      * Deletes a paragraph of a book.
      */
-    private void actionDeleteParagraph(HttpServletRequest request, HttpServletResponse response, 
+    private void deleteParagraph(HttpServletRequest request, HttpServletResponse response,
             ParagraphDAO paragraphDAO) throws ServletException, IOException {
         
         int idParagraph = Integer.parseInt(request.getParameter("id_paragraph"));
@@ -118,7 +131,7 @@ public class ParagraphController extends AbstractController {
     /**
      * Modifies the text of a paragraph.
      */
-    private void actionModifyParagraph(HttpServletRequest request, HttpServletResponse response, 
+    private void modifyParagraph(HttpServletRequest request, HttpServletResponse response,
             ParagraphDAO paragraphDAO) throws ServletException, IOException {
         
         int idParagraph = Integer.parseInt(request.getParameter("id_paragraph"));

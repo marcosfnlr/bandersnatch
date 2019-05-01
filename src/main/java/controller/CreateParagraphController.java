@@ -115,6 +115,7 @@ public class CreateParagraphController extends AbstractController {
         if(!isBeginning) {
             int idChoiceOrig = Integer.parseInt(String.valueOf(request.getParameter("id_choice_orig"))); // TODO: set this on view before sending form
             choiceDAO.setParagDest(idChoiceOrig, idParag);
+            choiceDAO.setLocked(idChoiceOrig, false);
         }
     }
 }
