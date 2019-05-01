@@ -92,7 +92,12 @@ public class CreateParagraphController extends AbstractController {
      */
     private int addChoice(HttpServletRequest request, HttpServletResponse response, String choiceText, int idParagOrig, ChoiceDAO choiceDAO) throws ServletException, IOException {
 
-        boolean onlyChoice = false;//TODO for now is always false Boolean.parseBoolean(request.getParameter("only_choice"));
+        boolean onlyChoice = false;
+
+        if (request.getParameter("unique") != null) {
+            onlyChoice = true;
+        }
+
         boolean condShouldPass = false;//TODO for now is always false Boolean.parseBoolean(request.getParameter("cond_should_pass"));
         int paragCond = 1;//Integer.parseInt(request.getParameter("id_parag_cond"));
 
