@@ -91,6 +91,14 @@
             </div>
 
         </div>
+        <div class="form-row">
+            <div class="col-12 mb-3">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="unique" id="isUnique">
+                    <label class="form-check-label" for="isConclusion">Choix unique.</label>
+                </div>
+            </div>
+        </div>
         <div id="choices">
             <div class="form-row align-items-center" id="choix1">
                 <div class="col-11 mb-3">
