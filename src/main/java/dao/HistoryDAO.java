@@ -21,13 +21,13 @@ public class HistoryDAO extends AbstractDAO {
     /**
      * Adds history on table History.
      */
-    public void addHistory(String idAccount, int idBook, int idChoice) {
+    public void addHistory(String idAccount, int idBook, int idChoice, Timestamp creationDate) {
         String query = "INSERT INTO History (fk_account, fk_book, fk_choice, creation_date) "
                 + "VALUES (?,?,?,?)";
 
         /* Getting current time. Check after if there's better approach */
-        Calendar calendar = Calendar.getInstance();
-        Timestamp currentTimestamp = new java.sql.Timestamp(calendar.getTime().getTime());
+//        Calendar calendar = Calendar.getInstance();
+//        Timestamp currentTimestamp = new java.sql.Timestamp(calendar.getTime().getTime());
 
         try (
                 Connection conn = getConn();
@@ -36,7 +36,7 @@ public class HistoryDAO extends AbstractDAO {
             ps.setString(1, idAccount);
             ps.setInt(2, idBook);
             ps.setInt(3, idChoice);
-            ps.setTimestamp(4, currentTimestamp);
+            ps.setTimestamp(4, creationDate);
             int count = ps.executeUpdate();
 
             if (count < 1) {
@@ -68,7 +68,7 @@ public class HistoryDAO extends AbstractDAO {
     }
 
     /**
-     * Returns list of History that exists for a given User.
+     * Returns list of History that exists for a given User in a given book or null if it's empty.
      */
     public List<History> listUserHistory(String idAccount) {
         List<History> list = new ArrayList<>();
@@ -97,23 +97,24 @@ public class HistoryDAO extends AbstractDAO {
     }
 
     /**
-     * Returns list of History that exists for a given Book.
+     * Returns list of History that exists for a given User in a given book or null if it's empty.
      */
-    public List<History> listBookHistory(int idBook) {
+    public List<History> listUserHistoryFromBook(String idAccount, int idBook) {
         List<History> list = new ArrayList<>();
 
-        String query = "SELECT * FROM History WHERE fk_book=?";
+        String query = "SELECT * FROM History WHERE fk_account=? AND fk_book=?" +
+                "ORDER BY creation_date ASC";
 
         try (
                 Connection conn = getConn();
                 PreparedStatement ps = conn.prepareStatement(query)
         ) {
-            ps.setInt(1, idBook);
+            ps.setString(1, idAccount);
+            ps.setInt(2, idBook);
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
-                Account account = accountDAO.getAccount(rs.getString("fk_account"));
-                Book book = bookDAO.getBook(idBook);
+                Account account = accountDAO.getAccount(idAccount);
+                Book book = bookDAO.getBook(rs.getInt("fk_book"));
                 Choice choice = choiceDAO.getChoice(rs.getInt("fk_choice"));
                 History h = new History(account, book, choice, rs.getTimestamp("creation_date"));
                 list.add(h);

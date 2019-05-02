@@ -45,8 +45,8 @@ public class HistoryController extends AbstractController {
 
         try {
             switch (action) {
-                case "add_history":
-                    actionAddHistory(request, response);
+                case "save_history":
+                    saveHistory(request, response);
                     break;
                 case "delete_history":
                     actionDeleteHistory(request, response);
@@ -67,19 +67,21 @@ public class HistoryController extends AbstractController {
     private void actionListUserHistory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String idAccount = request.getParameter("id_account");
-        List<History> histories = historyDAO.listUserHistory(idAccount);
+        int idBook = Integer.parseInt(request.getParameter("id_book"));
+        List<History> histories = historyDAO.listUserHistoryFromBook(idAccount, idBook);
         request.setAttribute("histories", histories); // TODO: Check what is this.
     }
 
     /**
      * Adds a history from a choice made by an user.
      */
-    private void actionAddHistory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void saveHistory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String idAccount = request.getParameter("id_account");
-        int idBook = Integer.parseInt(request.getParameter("id_book"));
-        int idChoice = Integer.parseInt(request.getParameter("id_choice"));
-        historyDAO.addHistory(idAccount, idBook, idChoice);
+        List<History> histories = (List<History>) request.getSession().getAttribute("histories");
+
+        for(History h : histories) {
+            historyDAO.addHistory(h.getAccount().getIdAccount(), h.getBook().getIdBook(), h.getChoice().getIdChoice(), h.getDateCreated());
+        }
     }
 
     /**

@@ -5,29 +5,18 @@
  */
 package controller;
 
-import dao.BookDAO;
-import dao.ChoiceDAO;
-import dao.DAOException;
-import dao.ParagraphDAO;
+import dao.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.util.*;
 import javax.annotation.Resource;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import javax.sql.DataSource;
 
-import model.Account;
-import model.Book;
-import model.Choice;
-import model.FeedbackMessage;
-import model.Paragraph;
-import model.TypeFeedback;
+import model.*;
 
 /**
  * @author raphaelcja
@@ -48,7 +37,7 @@ public class ReadController extends AbstractController {
                 //TODO : where to redirect here?
             } else if (action.equals("read_book")) {
                 postCover(request, response);
-            } else if (action.equals("start_reading") || action.equals("next_paragraph")) {
+            } else if (action.equals("start_reading") || action.equals("next_paragraph") || action.equals("previous_paragraph")) {
                 postParagraph(request, response, action);
             } else {
                 invalidParameters(request, response);
@@ -83,21 +72,57 @@ public class ReadController extends AbstractController {
         ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
         ChoiceDAO choiceDAO = new ChoiceDAO(ds);
         BookDAO bookDAO = new BookDAO(ds);
+        HistoryDAO historyDAO = new HistoryDAO(ds);
 
         String finalText;
         Paragraph paragraph;
         int idBook = Integer.parseInt(request.getParameter("id_book"));
+        Account account = (Account) request.getSession().getAttribute("logged_account");
+
+        List<History> histories;
 
         if (action.equals("start_reading")) {
-            if(!bookDAO.getBook(idBook).isFinished()) {
+            if(!bookDAO.checkConclusion(idBook)) {
                 //TODO : book not complete message
                 request.getRequestDispatcher("/home.jsp").forward(request, response);
             }
-            paragraph = paragraphDAO.getBeginning(idBook);
+
+            histories = historyDAO.listUserHistoryFromBook(account.getIdAccount(), idBook);
+
+            if(histories.size() > 0) {
+                // Recover last paragraph selected if history already existed
+                paragraph = histories.get(histories.size() - 1).getChoice().getParagDest();
+            } else {
+                paragraph = paragraphDAO.getBeginning(idBook);
+            }
         } else {
+            histories = (List<History>) request.getSession().getAttribute("histories");
+
             Choice choice = choiceDAO.getChoice(Integer.parseInt(request.getParameter("chosen_choice")));
             paragraph = choice.getParagDest();
+
+            if(action.equals("previous_paragraph")) {
+                int indexHistory = Integer.parseInt(request.getParameter("index_current_choice"));
+                request.getSession().setAttribute("index_current_choice", indexHistory);
+
+            } else if(action.equals("next_paragraph")) {
+                // Recover index of current choice on history and deletes choices made after.
+                int indexHistory = (int) request.getSession().getAttribute("index_current_choice");
+
+                for(int i = indexHistory+1; i < histories.size(); i++) {
+                    histories.remove(i);
+                }
+
+                /* Getting current time. Check after if there's better approach */
+                Calendar calendar = Calendar.getInstance();
+                Timestamp currentTimestamp = new java.sql.Timestamp(calendar.getTime().getTime());
+
+                histories.add(new History(account, paragraph.getBook(), choice, currentTimestamp));
+                request.getSession().setAttribute("index_current_choice", indexHistory+1);
+            }
         }
+
+        request.getSession().setAttribute("histories", histories);
 
         buildBook(idBook, paragraphDAO, choiceDAO);
         List<Choice> choices = dictionary.get(paragraph);
