@@ -17,7 +17,7 @@
 INSERT INTO Account (id_account, password, last_name, first_name) VALUES ('a','a','Amarante','Raphael');
 INSERT INTO Account (id_account, password, last_name, first_name) VALUES ('b','b','Oliveira','Marcio');
 INSERT INTO Account (id_account, password, last_name, first_name) VALUES ('c','c','Nunes','Marcos');
-INSERT INTO Account (id_account, password, last_name, first_name) VALUES ('d','d','Meyer','Tibaut');
+INSERT INTO Account (id_account, password, last_name, first_name) VALUES ('d','d','Meyer','Thibault');
 
 
 --first book : idBook->1 ; idParag->1 to 6 ; idChoice->1 to 10
