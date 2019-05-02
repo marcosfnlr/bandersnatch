@@ -95,6 +95,8 @@ public class ReadController extends AbstractController {
             } else {
                 paragraph = paragraphDAO.getBeginning(idBook);
             }
+
+            request.getSession().setAttribute("index_current_choice", 0);
         } else {
             histories = (List<History>) request.getSession().getAttribute("histories");
 

@@ -62,7 +62,7 @@
         int i = 0;
         for (History h : histories) {
     %>
-    <a href="read_controller?action=previous_paragraph&index_current_choice=<%=i++%>">
+    <a href="read_controller?action=previous_paragraph&chosen_choice=<%=h.getChoice().getIdChoice()%>&id_book=<%=paragraph.getBook().getIdBook()%>&index_current_choice=<%=i++%>">
         <%=h.getChoice().getLabelText()%>
     </a> >
     <%
