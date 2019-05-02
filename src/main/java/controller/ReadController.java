@@ -165,6 +165,18 @@ public class ReadController extends AbstractController {
             finalParagraphs.add(conclusion);
             recurtionParagChoice(beginning, conclusion, choiceDAO);
         }
+        
+        // treats looping back to beginning
+        List<Choice> loopBeginChoices = choiceDAO.listParagDestChoices(beginning.getIdParagraph());
+        for(Choice choice : loopBeginChoices) {
+            if (!finalChoices.contains(choice)) {
+                finalChoices.add(choice);
+                if (!finalParagraphs.contains(choice.getParagOrigin()))
+                    finalParagraphs.add(choice.getParagOrigin());
+                recurtionParagChoice(beginning, choice.getParagOrigin(), choiceDAO);
+            }
+        }
+        
         createDictionary(choiceDAO);
 
     }
