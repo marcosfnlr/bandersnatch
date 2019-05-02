@@ -62,6 +62,15 @@ public class BookController extends AbstractController {
         request.getSession().setAttribute("paragraphs", paragraphs);
 
         Paragraph paragraph = paragraphDAO.getBeginningWithChoices(idBook);
+        Account account = (Account) request.getSession().getAttribute("logged_account");
+
+        if (account != null && account.equals(paragraph.getAuthor())) {
+            paragraph.setEditable(true);
+        }
+        if (!paragraph.isConclusion() && !paragraph.getChoices().isEmpty() && !paragraph.getChoices().get(0).isOnlyChoice()) {
+            paragraph.setChoiceAddable(true);
+        }
+
         request.setAttribute("paragraph", paragraph);
 
         request.getRequestDispatcher("modify_parag.jsp").forward(request, response);
@@ -76,12 +85,12 @@ public class BookController extends AbstractController {
         request.setAttribute("books", publishedBooks);
         request.getRequestDispatcher("read_list.jsp").forward(request, response);
     }
-    
+
     /**
      * Lists all open to write books.
      */
     private void listOpenBooks(HttpServletRequest request, HttpServletResponse response,
-                                    BookDAO bookDAO) throws ServletException, IOException {
+                               BookDAO bookDAO) throws ServletException, IOException {
         List<Book> openBooks = bookDAO.listOpenBooks();
         request.setAttribute("books", openBooks);
         request.getRequestDispatcher("write_list.jsp").forward(request, response);

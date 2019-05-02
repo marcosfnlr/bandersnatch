@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import javax.sql.DataSource;
 
+import model.Account;
 import model.FeedbackMessage;
 import model.TypeFeedback;
 import model.Paragraph;
@@ -104,26 +105,41 @@ public class ParagraphController extends AbstractController {
         int idParagraph = Integer.parseInt(request.getParameter("id"));
 
         Paragraph paragraph = paragraphDAO.getParagraphWithChoices(idParagraph);
+        checkProperties(request, paragraph);
+
         request.setAttribute("paragraph", paragraph);
 
         request.getRequestDispatcher("modify_parag.jsp").forward(request, response);
     }
-    
+
     /**
      * Modifies the text of a paragraph.
      */
     private void editParagraphText(HttpServletRequest request, HttpServletResponse response,
-                                 ParagraphDAO paragraphDAO) throws ServletException, IOException {
+                                   ParagraphDAO paragraphDAO) throws ServletException, IOException {
 
         int idParagraph = Integer.parseInt(request.getParameter("id_paragraph"));
         String text = request.getParameter("parag_text");
-        
+
         paragraphDAO.modifyParagraphText(idParagraph, text);
 
         Paragraph paragraph = paragraphDAO.getParagraphWithChoices(idParagraph);
+
+        checkProperties(request, paragraph);
         request.setAttribute("paragraph", paragraph);
 
         request.getRequestDispatcher("modify_parag.jsp").forward(request, response);
+    }
+
+    private void checkProperties(HttpServletRequest request, Paragraph paragraph) {
+        Account account = (Account) request.getSession().getAttribute("logged_account");
+        if (!paragraph.isConclusion() && !paragraph.getChoices().isEmpty() && !paragraph.getChoices().get(0).isOnlyChoice()) {
+            paragraph.setChoiceAddable(true);
+        }
+
+        if (account != null && account.equals(paragraph.getAuthor())) {
+            paragraph.setEditable(true);
+        }
     }
 
     /**

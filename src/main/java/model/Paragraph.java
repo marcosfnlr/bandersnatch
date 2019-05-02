@@ -21,6 +21,8 @@ public class Paragraph {
     private String finalText;
     private List<Choice> choices;
     private List<Choice> finalChoices;
+    private boolean editable;
+    private boolean choiceAddable;
 
     public Paragraph(int idParagraph, String text, boolean beginning, boolean conclusion, Book book, Account author) {
         this.idParagraph = idParagraph;
@@ -71,6 +73,21 @@ public class Paragraph {
         this.author = author;
     }
 
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
+    public boolean isChoiceAddable() {
+        return choiceAddable;
+    }
+
+    public void setChoiceAddable(boolean choiceAddable) {
+        this.choiceAddable = choiceAddable;
+    }
 
     // methods to help in the view
 

@@ -25,7 +25,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/additional-methods.min.js"></script>
 
     <script src="js/common.js"></script>
-    <script src="js/add-paragraph.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/edit.css">
     <title>Nouveau Paragraphe</title>
@@ -61,27 +60,34 @@
                 <div class="col-12 mb-3 text-center">
                     <%=paragraph.getText() %>
                 </div>
+                <%
+                    if (paragraph.isEditable()) {
+                %>
                 <button type="button" class="btn btn-danger" data-toggle="collapse"
                         data-target=".multi-collapse-parag" aria-expanded="false"
                         aria-controls="edit-parag parag"><i
                         class="fas fa-edit"></i>
                 </button>
+                <%
+                    }
+                %>
             </div>
             <%
-                if (true) {
+                if (paragraph.isEditable()) {
             %>
             <div class="collapse multi-collapse-parag" id="edit-parag">
-                <form action="update_parag" method="post" class="custom-validation" novalidate>
+                <form action="paragraph_controller" method="post" class="custom-validation" novalidate>
                     <div class="form-row">
                         <div class="col-12 mb-2">
-                            <textarea class="form-control" name="text" rows="3"
+                            <textarea class="form-control" name="parag_text" rows="3"
                                       required><%=paragraph.getText()%></textarea>
                             <div class="invalid-tooltip">
                                 Donne-moi une vie.
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" value="<%=paragraph.getIdParagraph()%>" name="id">
+                    <input type="hidden" name="action" value="edit_paragraph_text">
+                    <input type="hidden" value="<%=paragraph.getIdParagraph()%>" name="id_paragraph">
                     <div class="row justify-content-center">
                         <button type="button" class="btn btn-danger" data-toggle="collapse"
                                 data-target=".multi-collapse-parag" aria-expanded="false"
@@ -150,7 +156,7 @@
                                 aria-controls="edit-choice-<%=c.getIdChoice()%> choice-<%=c.getIdChoice()%>">
                             <i class="fas fa-arrow-circle-left"></i> Annuler
                         </button>
-                        <button type="submit" class="btn btn-danger ml-2">
+                        <button type="submit" class="btn btn-danger ml-2" disabled>
                             <i class="fas fa-check-circle"></i> Confirmer
                         </button>
                     </div>
@@ -160,6 +166,47 @@
                     }
                 }
             %>
+
+            <%
+                if (paragraph.isChoiceAddable()) {
+            %>
+            <div class="row multi-collapse-choice collapse show mt-3" id="btn-choice">
+                <div class="col-12  text-center">
+                    <button type="button" class="btn btn-danger" data-toggle="collapse"
+                            data-target=".multi-collapse-choice" aria-expanded="false"
+                            aria-controls="btn-choice add-choice">
+                        <i class="fas fa-plus"></i> Ajouter choix
+                    </button>
+                </div>
+            </div>
+            <div class="collapse multi-collapse-choice mt-3" id="add-choice">
+                <form action="create_paragraph_controller" method="post" class="custom-validation" novalidate>
+                    <div class="form-row">
+                        <div class="col-12 mb-2">
+                            <textarea class="form-control" name="text" rows="2" required></textarea>
+                            <div class="invalid-tooltip">
+                                Donne-moi une vie.
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="id_parag" value="<%=paragraph.getIdParagraph()%>">
+                    <input type="hidden" name="action" value="add_choice">
+                    <div class="row justify-content-center">
+                        <button type="button" class="btn btn-danger" data-toggle="collapse"
+                                data-target=".multi-collapse-choice" aria-expanded="false"
+                                aria-controls="btn-choice add-choice">
+                            <i class="fas fa-arrow-circle-left"></i> Annuler
+                        </button>
+                        <button type="submit" class="btn btn-danger ml-2">
+                            <i class="fas fa-check-circle"></i> Confirmer
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <%
+                }
+            %>
+
         </div>
         <div class="col-12 col-lg-2" id="list-parag">
             <%
