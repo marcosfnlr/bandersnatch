@@ -20,6 +20,7 @@ public class Book {
     private boolean canUserRead;
     private boolean publishable;
     private boolean unpublishable;
+    private boolean invitable;
 
     public Book(int idBook, String title, boolean openToWrite, boolean published, Account creator) {
         this.idBook = idBook;
@@ -73,6 +74,14 @@ public class Book {
 
     public void setUnpublishable(boolean unpublishable) {
         this.unpublishable = unpublishable;
+    }
+
+    public boolean isInvitable() {
+        return invitable;
+    }
+
+    public void setInvitable(boolean invitable) {
+        this.invitable = invitable;
     }
 
     public boolean isFinished() {

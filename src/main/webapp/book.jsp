@@ -46,8 +46,8 @@
 </nav>
 <div class="container">
     <div class="row mt-3 justify-content-center">
-        <div class="col-12 col-lg-4 text-center text-lg-right"><i class="fas fa-book fa-10x"></i></div>
-        <div class="col-12 col-lg-4 align-self-center">
+        <div class="col-12 col-lg-3 text-center text-lg-right"><i class="fas fa-book fa-10x"></i></div>
+        <div class="col-12 col-lg-5 align-self-center">
             <div class="row">
                 <div class="col-12">
                     <h1>
@@ -98,6 +98,16 @@
                 <div class="col-4">
                     <a href="book_controller?action=publish_book&published=false&id_book=<%=book.getIdBook()%>"
                        class="btn btn-danger w-100 text-center"><i class="fas fa-lock"></i> Depublier</a>
+                </div>
+                <%
+                    }
+                %>
+                <%
+                    if (book.isInvitable()) {
+                %>
+                <div class="col-4">
+                    <a href="invitation_controller?action=invite_users&id_book=<%=book.getIdBook()%>"
+                       class="btn btn-danger w-100 text-center"><i class="fas fa-users"></i> Inviter</a>
                 </div>
                 <%
                     }

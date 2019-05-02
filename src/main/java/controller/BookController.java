@@ -38,7 +38,7 @@ public class BookController extends AbstractController {
                 case "list_published_books":
                     listPublishedBooks(request, response, bookDAO);
                 case "list_open_books":
-                    listPublishedBooks(request, response, bookDAO);
+                    listOpenBooks(request, response, bookDAO);
                 case "get_book":
                     getBook(request, response, bookDAO);
                 case "publish_book":
@@ -112,6 +112,10 @@ public class BookController extends AbstractController {
 
         if (!book.isPublished() && book.isFinished() && account != null && account.equals(book.getCreator())) {
             book.setPublishable(true);
+        }
+
+        if (!book.isOpenToWrite() && account != null && account.equals(book.getCreator())) {
+            book.setInvitable(true);
         }
 
         if (book.isPublished() && account != null && account.equals(book.getCreator())) {
