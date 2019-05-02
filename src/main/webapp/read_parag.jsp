@@ -57,7 +57,7 @@
     <%
         if (histories != null && !histories.isEmpty()) {
     %>
-    <a href="history_controller?action=save_history" class="btn btn-danger float-right"><i class="fas fa-save"></i></a>
+    <a href="history_controller?action=save_history" class="btn btn-danger"><i class="fas fa-save"></i></a>
     <%
         int i = 0;
         for (History h : histories) {
