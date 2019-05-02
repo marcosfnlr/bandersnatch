@@ -66,8 +66,7 @@
                 %>
                 <div class="col-4 text-center">
                     <a href="read_controller?action=start_reading&id_book=<%=book.getIdBook()%>"
-                       class="btn btn-danger w-100"><i
-                            class="fas fa-book-reader"></i> Lire
+                       class="btn btn-danger w-100"><i class="fas fa-book-reader"></i> Lire
                     </a>
                 </div>
                 <%
@@ -78,8 +77,27 @@
                 %>
                 <div class="col-4">
                     <a href="book_controller?action=write_book&id=<%=book.getIdBook()%>"
-                       class="btn btn-danger w-100 text-center"><i
-                            class="fas fa-pencil-alt"></i> Écrire</a>
+                       class="btn btn-danger w-100 text-center"><i class="fas fa-pencil-alt"></i> Écrire</a>
+                </div>
+                <%
+                    }
+                %>
+                <%
+                    if (book.isPublishable()) {
+                %>
+                <div class="col-4">
+                    <a href="book_controller?action=publish_book&published=true&id=<%=book.getIdBook()%>"
+                       class="btn btn-danger w-100 text-center"><i class="fas fa-globe-americas"></i> Publier</a>
+                </div>
+                <%
+                    }
+                %>
+                <%
+                    if (book.isUnpublishable()) {
+                %>
+                <div class="col-4">
+                    <a href="book_controller?action=publish_book&published=false&id=<%=book.getIdBook()%>"
+                       class="btn btn-danger w-100 text-center"><i class="fas fa-lock"></i> Depublier</a>
                 </div>
                 <%
                     }

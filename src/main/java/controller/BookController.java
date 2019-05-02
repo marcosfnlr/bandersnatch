@@ -5,18 +5,14 @@
  */
 package controller;
 
-import dao.AccountDAO;
 import dao.DAOException;
 import dao.BookDAO;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.List;
-import javax.annotation.Resource;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import javax.sql.DataSource;
 
 import dao.ParagraphDAO;
 import model.*;
@@ -90,6 +86,14 @@ public class BookController extends AbstractController {
         book.setFinished(bookDAO.checkConclusion(idBook));
         book.setCanUserRead(checkReadAccess(book, account, bookDAO));
         book.setCanUserWrite(checkWriteAccess(book, account, bookDAO));
+
+        if (!book.isPublished() && book.isFinished() && account != null && account.equals(book.getCreator())) {
+            book.setPublishable(true);
+        }
+
+        if (book.isPublished() && account != null && account.equals(book.getCreator())) {
+            book.setUnpublishable(true);
+        }
 
         request.setAttribute("book", book);
 

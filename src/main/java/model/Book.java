@@ -18,6 +18,8 @@ public class Book {
     private boolean finished;
     private boolean canUserWrite;
     private boolean canUserRead;
+    private boolean publishable;
+    private boolean unpublishable;
 
     public Book(int idBook, String title, boolean openToWrite, boolean published, Account creator) {
         this.idBook = idBook;
@@ -50,12 +52,28 @@ public class Book {
         return creator;
     }
 
+    public void setPublishable(boolean publishable) {
+        this.publishable = publishable;
+    }
+
     public void setCreator(Account creator) {
         this.creator = creator;
     }
 
 
     // methods to help in the view
+
+    public boolean isPublishable() {
+        return publishable;
+    }
+
+    public boolean isUnpublishable() {
+        return unpublishable;
+    }
+
+    public void setUnpublishable(boolean unpublishable) {
+        this.unpublishable = unpublishable;
+    }
 
     public boolean isFinished() {
         return finished;
