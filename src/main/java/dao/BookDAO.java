@@ -59,6 +59,43 @@ public class BookDAO extends AbstractDAO {
 
         return list;
     }
+    
+    /**
+     * Returns list of open to write books from table Book.
+     */
+    public List<Book> listOpenBooks() {
+        List<Book> list = new ArrayList<>();
+        List<String> accounts = new ArrayList<>();
+
+        AccountDAO accountDAO = new AccountDAO(dataSource);
+
+        String query = "SELECT * FROM Book WHERE open_write=?";
+
+        try (
+                Connection conn = getConn();
+                PreparedStatement ps = conn.prepareStatement(query)
+        ) {
+            ps.setInt(1, 1);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                accounts.add(rs.getString("fk_account"));
+                Book book = new Book(rs.getInt("id_book"), rs.getString("title"), rs.getBoolean("open_write"),
+                        rs.getBoolean("published"), null);
+                list.add(book);
+            }
+
+        } catch (SQLException e) {
+            throw new DAOException("Erreur BD " + e.getMessage(), e);
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            Account account = accountDAO.getAccount(accounts.get(i));
+            list.get(i).setCreator(account);
+        }
+
+        return list;
+    }
 
     /**
      * Returns list of all accounts from table Account that are authors of a given book.
