@@ -69,8 +69,8 @@ public class BookController extends AbstractController {
     private void listPublishedBooks(HttpServletRequest request, HttpServletResponse response,
                                     BookDAO bookDAO) throws ServletException, IOException {
         List<Book> publishedBooks = bookDAO.listPublishedBooks();
-        request.setAttribute("published_books", publishedBooks);
-        //request.getRequestDispatcher("TODO INSERT PAGE").forward(request, response);
+        request.setAttribute("books", publishedBooks);
+        request.getRequestDispatcher("read_list.jsp").forward(request, response);
     }
 
     /**

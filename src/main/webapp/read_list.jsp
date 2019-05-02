@@ -1,3 +1,7 @@
+<%@ page import="model.Account" %>
+<%@ page import="model.Book" %>
+<%@ page import="java.util.List" %>
+<%@ page import="model.History" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -19,9 +23,13 @@
             crossorigin="anonymous"></script>
     <script src="js/common.js"></script>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/profile.css">
     <title>Bandersnatch</title>
 </head>
 <body>
+<%
+    List<Book> books = (List<Book>) request.getAttribute("books");
+%>
 <nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="home.jsp"><i class="fas fa-home"></i> BSnatch</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -30,20 +38,45 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav mr-auto">
-            <a class="nav-item nav-link" href="book_controller?action=list_published_books"><i
-                    class="fas fa-book-reader"></i> Lire</a>
+            <a class="nav-item nav-link" href="read_list.jsp"><i class="fas fa-book-reader"></i> Lire</a>
             <a class="nav-item nav-link" href="write_list.jsp"><i class="fas fa-pencil-alt"></i> Écrire</a>
         </div>
         <div class="navbar-nav" id="navbarUser">
-            <a class="nav-item nav-link mr-2" href="account_controller?action=view_profile"><i class="fas fa-user"></i>
-                Profil</a>
-            <a class="btn btn-outline-light my-2 my-sm-0" href="account_controller?action=logout_account">Log out</a>
+            <a class="nav-item nav-link active mr-2" href="profile.jsp"><i class="fas fa-user"></i> Profil</a>
+            <form class="form-inline" action="account_controller">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Log out</button>
+            </form>
         </div>
     </div>
 </nav>
 <div class="container">
-    <div class="row justify-content-md-center mt-3" style="font-size: 50px">
-        <i class="fas fa-home fa-10x"></i>
+    <div class="row justify-content-md-center" id="user">
+        <div class="col-12 text-center">
+            <h1>
+                À quelle aventure es-tu prêt?
+            </h1>
+        </div>
+    </div>
+    <hr class="mt-1">
+    <div class="row">
+        <%
+            if (books.isEmpty()) {
+        %>
+        <div class="col-12 text-center">Desolé, mais il n'y a encore aucune.</div>
+        <%
+            }
+        %>
+        <%
+            for (Book b : books) {
+        %>
+        <div class="col-12 col-lg-3 mt-3">
+            <a href="book_controller?action=get_book&id=<%=b.getIdBook()%>" class="btn w-100 text-left"><i
+                    class="fas fa-book"></i> <%=b.getLabelTitle()%>
+            </a>
+        </div>
+        <%
+            }
+        %>
     </div>
 </div>
 </body>
