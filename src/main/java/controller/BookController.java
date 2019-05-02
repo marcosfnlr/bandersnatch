@@ -39,6 +39,8 @@ public class BookController extends AbstractController {
                     listPublishedBooks(request, response, bookDAO);
                 case "get_book":
                     getBook(request, response, bookDAO);
+                case "publish_book":
+                    publishBook(request, response, bookDAO);
                 default:
                     invalidParameters(request, response);
             }
@@ -142,10 +144,6 @@ public class BookController extends AbstractController {
             switch (action) {
                 case "delete_book":
                     deleteBook(request, response, bookDAO);
-                    request.getRequestDispatcher("/home.jsp").forward(request, response);
-                case "publish_book":
-                    publishBook(request, response, bookDAO);
-                    request.getRequestDispatcher("/home.jsp").forward(request, response);
                 default:
                     invalidParameters(request, response);
                     return;
@@ -165,6 +163,7 @@ public class BookController extends AbstractController {
 
         int idBook = Integer.parseInt(request.getParameter("id_book"));
         bookDAO.deleteBook(idBook);
+        request.getRequestDispatcher("/home.jsp").forward(request, response);
     }
 
 
@@ -178,6 +177,7 @@ public class BookController extends AbstractController {
         int idBook = Integer.parseInt(request.getParameter("id_book"));
         boolean published = Boolean.parseBoolean(request.getParameter("published"));
         bookDAO.publishBook(idBook, published);
+        request.getRequestDispatcher("/home.jsp").forward(request, response);
     }
 
 
