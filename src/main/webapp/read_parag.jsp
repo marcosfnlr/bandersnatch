@@ -1,6 +1,7 @@
 <%@ page import="model.Paragraph" %>
 <%@ page import="model.History" %>
 <%@ page import="model.Choice" %>
+<%@ page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -32,7 +33,7 @@
 <body>
 <%
     Paragraph paragraph = (Paragraph) request.getAttribute("paragraph");
-    //History history = (History) session.getAttribute("history");
+    List<History> histories = (List<History>) session.getAttribute("histories");
 %>
 <nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="home.jsp">BSnatch</a>
@@ -53,7 +54,23 @@
     <h1>
         <%=paragraph.getBook().getTitle()%>
     </h1>
-    <a>Choix 1</a> > <a>Choix 2</a> > <a>Choix 3</a>
+    <%
+        if (histories != null && !histories.isEmpty()) {
+    %>
+    <a href="history_controller?action=save_history" class="btn btn-danger float-right"><i class="fas fa-save"></i></a>
+    <%
+        int i = 0;
+        for (History h : histories) {
+    %>
+    <a href="read_controller?action=previous_paragraph&index_current_choice=<%=i++%>">
+        <%=h.getChoice().getLabelText()%>
+    </a> >
+    <%
+        }
+    %>
+    <%
+        }
+    %>
     <hr>
     <div class="row">
         <div class="col-12">

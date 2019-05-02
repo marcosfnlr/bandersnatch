@@ -87,6 +87,13 @@ public class Choice {
         return paragDest != null;
     }
 
+    public String getLabelText() {
+        if (text.length() > 10) {
+            return text.substring(0, 6) + "...";
+        }
+        return text;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
