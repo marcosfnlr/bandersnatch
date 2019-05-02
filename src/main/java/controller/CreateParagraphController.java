@@ -51,6 +51,13 @@ public class CreateParagraphController extends AbstractController {
                     idBook = Integer.parseInt(request.getParameter("id_book"));
                     createParagraphWithChoices(request, response, idBook, paragraphDAO, choiceDAO);
                     break;
+                case "add_choice":
+                    int idParag = Integer.parseInt(request.getParameter("id_parag"));
+                    String text = request.getParameter("text");
+                    addChoice(request, response, text, idParag, choiceDAO);
+                    request.setAttribute("paragraph", paragraphDAO.getParagraphWithChoices(idParag));
+                    request.getRequestDispatcher("/modify_parag.jsp").forward(request, response);
+                    break;
                 default:
                     invalidParameters(request, response);
                     return;
@@ -108,7 +115,7 @@ public class CreateParagraphController extends AbstractController {
     private void createParagraphWithChoices(HttpServletRequest request, HttpServletResponse response, int idBook, ParagraphDAO paragraphDAO, ChoiceDAO choiceDAO) throws ServletException, IOException {
 
         boolean isBeginning = Boolean.parseBoolean(request.getParameter("beginning"));
-
+        
         boolean isConclusion = false;
 
         // Checkbox return different than null if selected
@@ -117,7 +124,7 @@ public class CreateParagraphController extends AbstractController {
         }
 
         int idParag = addParagraph(request, response, idBook, isBeginning, isConclusion, paragraphDAO);
-
+        
         if(!isConclusion) {
             String choiceText[] = request.getParameterValues("choices_text");
             for (int i = 0; i < choiceText.length; i++) {
@@ -129,7 +136,6 @@ public class CreateParagraphController extends AbstractController {
         if (!isBeginning) {
             int idChoiceOrig = Integer.parseInt(String.valueOf(request.getParameter("id_choice_orig"))); // TODO: set this on view before sending form
             choiceDAO.setParagDest(idChoiceOrig, idParag);
-            choiceDAO.setLocked(idChoiceOrig, false);
         }
     }
 }
