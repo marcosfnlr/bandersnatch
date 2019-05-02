@@ -37,6 +37,8 @@ public class BookController extends AbstractController {
                     writeBook(request, response, paragraphDAO);
                 case "list_published_books":
                     listPublishedBooks(request, response, bookDAO);
+                case "list_open_books":
+                    listPublishedBooks(request, response, bookDAO);
                 case "get_book":
                     getBook(request, response, bookDAO);
                 case "publish_book":
@@ -73,6 +75,16 @@ public class BookController extends AbstractController {
         List<Book> publishedBooks = bookDAO.listPublishedBooks();
         request.setAttribute("books", publishedBooks);
         request.getRequestDispatcher("read_list.jsp").forward(request, response);
+    }
+    
+    /**
+     * Lists all open to write books.
+     */
+    private void listOpenBooks(HttpServletRequest request, HttpServletResponse response,
+                                    BookDAO bookDAO) throws ServletException, IOException {
+        List<Book> openBooks = bookDAO.listOpenBooks();
+        request.setAttribute("books", openBooks);
+        request.getRequestDispatcher("write_list.jsp").forward(request, response);
     }
 
     /**
