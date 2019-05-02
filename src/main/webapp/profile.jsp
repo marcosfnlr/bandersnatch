@@ -33,23 +33,40 @@
     List<Book> invitedBooks = (List<Book>) request.getAttribute("invited_books");
     List<History> userHistories = (List<History>) request.getAttribute("account_histories");
 %>
+<%
+    boolean isLogged = request.getSession().getAttribute("logged_account") != null;
+%>
 <nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand" href="home.jsp"><i class="fas fa-home"></i> BSnatch</a>
+    <a class="navbar-brand" href="<%=isLogged ? "home.jsp": "index.jsp"%>"><i class="fas fa-home"></i> BSnatch</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav mr-auto">
-            <a class="nav-item nav-link" href="read_list.jsp"><i class="fas fa-book-reader"></i> Lire</a>
-            <a class="nav-item nav-link" href="write_list.jsp"><i class="fas fa-pencil-alt"></i> Écrire</a>
+            <a class="nav-item nav-link" href="book_controller?action=list_published_books"><i
+                    class="fas fa-book-reader"></i> Lire</a>
+            <%
+                if (isLogged) {
+            %>
+            <a class="nav-item nav-link" href="book_controller?action=list_open_books">
+                <i class="fas fa-pencil-alt"></i> Écrire
+            </a>
+            <%
+                }
+            %>
         </div>
+        <%
+            if (isLogged) {
+        %>
         <div class="navbar-nav" id="navbarUser">
-            <a class="nav-item nav-link active mr-2" href="profile.jsp"><i class="fas fa-user"></i> Profil</a>
-            <form class="form-inline" action="account_controller">
-                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Log out</button>
-            </form>
+            <a class="nav-item nav-link mr-2" href="account_controller?action=view_profile"><i class="fas fa-user"></i>
+                Profil</a>
+            <a class="btn btn-outline-light my-2 my-sm-0" href="account_controller?action=logout_account">Log out</a>
         </div>
+        <%
+            }
+        %>
     </div>
 </nav>
 <div class="container pt-3">

@@ -34,19 +34,40 @@
     Paragraph paragraph = (Paragraph) request.getAttribute("paragraph");
     List<Paragraph> paragraphs = (List<Paragraph>) session.getAttribute("paragraphs");
 %>
+<%
+    boolean isLogged = request.getSession().getAttribute("logged_account") != null;
+%>
 <nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand" href="home.jsp">BSnatch</a>
+    <a class="navbar-brand" href="<%=isLogged ? "home.jsp": "index.jsp"%>"><i class="fas fa-home"></i> BSnatch</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="#">Features</a>
-            <a class="nav-item nav-link" href="#">Pricing</a>
-            <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        <div class="navbar-nav mr-auto">
+            <a class="nav-item nav-link" href="book_controller?action=list_published_books"><i
+                    class="fas fa-book-reader"></i> Lire</a>
+            <%
+                if (isLogged) {
+            %>
+            <a class="nav-item nav-link" href="book_controller?action=list_open_books">
+                <i class="fas fa-pencil-alt"></i> Écrire
+            </a>
+            <%
+                }
+            %>
         </div>
+        <%
+            if (isLogged) {
+        %>
+        <div class="navbar-nav" id="navbarUser">
+            <a class="nav-item nav-link mr-2" href="account_controller?action=view_profile"><i class="fas fa-user"></i>
+                Profil</a>
+            <a class="btn btn-outline-light my-2 my-sm-0" href="account_controller?action=logout_account">Log out</a>
+        </div>
+        <%
+            }
+        %>
     </div>
 </nav>
 <div class="container">
