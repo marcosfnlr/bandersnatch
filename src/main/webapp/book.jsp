@@ -86,7 +86,7 @@
                     if (book.isPublishable()) {
                 %>
                 <div class="col-4">
-                    <a href="book_controller?action=publish_book&published=true&id=<%=book.getIdBook()%>"
+                    <a href="book_controller?action=publish_book&published=true&id_book=<%=book.getIdBook()%>"
                        class="btn btn-danger w-100 text-center"><i class="fas fa-globe-americas"></i> Publier</a>
                 </div>
                 <%
@@ -96,7 +96,7 @@
                     if (book.isUnpublishable()) {
                 %>
                 <div class="col-4">
-                    <a href="book_controller?action=publish_book&published=false&id=<%=book.getIdBook()%>"
+                    <a href="book_controller?action=publish_book&published=false&id_book=<%=book.getIdBook()%>"
                        class="btn btn-danger w-100 text-center"><i class="fas fa-lock"></i> Depublier</a>
                 </div>
                 <%
