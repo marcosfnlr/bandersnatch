@@ -57,7 +57,7 @@
     <%
         if (histories != null && !histories.isEmpty()) {
     %>
-    <a href="history_controller?action=save_history" class="btn btn-danger"><i class="fas fa-save"></i></a>
+    <a href="history_controller?action=save_history" class="btn btn-danger float-right"><i class="fas fa-save"></i></a>
     <a href="read_controller?action=previous_paragraph&id_book=<%=paragraph.getBook().getIdBook()%>&index_current_choice=-1">
         Début
     </a> >
