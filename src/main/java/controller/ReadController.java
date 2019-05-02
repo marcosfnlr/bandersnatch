@@ -82,12 +82,17 @@ public class ReadController extends AbstractController {
 
         ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
         ChoiceDAO choiceDAO = new ChoiceDAO(ds);
+        BookDAO bookDAO = new BookDAO(ds);
 
         String finalText;
         Paragraph paragraph;
         int idBook = Integer.parseInt(request.getParameter("id_book"));
 
         if (action.equals("start_reading")) {
+            if(!bookDAO.getBook(idBook).isFinished()) {
+                //TODO : book not complete message
+                request.getRequestDispatcher("/home.jsp").forward(request, response);
+            }
             paragraph = paragraphDAO.getBeginning(idBook);
         } else {
             Choice choice = choiceDAO.getChoice(Integer.parseInt(request.getParameter("chosen_choice")));

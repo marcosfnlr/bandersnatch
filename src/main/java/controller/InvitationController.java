@@ -43,7 +43,6 @@ public class InvitationController extends AbstractController {
      */
     private void inviteUsers(HttpServletRequest request, HttpServletResponse response, BookDAO bookDAO) throws ServletException, IOException {
 
-        // TODO: Idealmente teriamos que fazer essa vlidacao sempre antes de fazer as coisas... Sugestoes?
         if (request.getParameter("id_book") == null) {
             invalidParameters(request, response);
             return;
@@ -60,7 +59,6 @@ public class InvitationController extends AbstractController {
      */
     private void editUsersInvited(HttpServletRequest request, HttpServletResponse response, BookDAO bookDAO) throws ServletException, IOException {
 
-        // TODO: Idealmente teriamos que fazer essa vlidacao sempre antes de fazer as coisas... Sugestoes?
         if (request.getParameter("id_book") == null) {
             invalidParameters(request, response);
             return;
