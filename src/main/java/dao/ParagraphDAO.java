@@ -283,7 +283,7 @@ public class ParagraphDAO extends AbstractDAO {
      * Modifies paragraph text with id_paragraph identifier from table Paragraph.
      * TODO : constraints of modification. here or controller?
      */
-    public void modifyParagraph(int idParagraph, String text) {
+    public void modifyParagraphText(int idParagraph, String text) {
 
         String query = "UPDATE Paragraph SET text=? WHERE id_paragraph=?";
 

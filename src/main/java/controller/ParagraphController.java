@@ -96,12 +96,29 @@ public class ParagraphController extends AbstractController {
     }
 
     /**
-     * Modifies the text of a paragraph.
+     * Goes paragraph edition page.
      */
     private void modifyParagraph(HttpServletRequest request, HttpServletResponse response,
                                  ParagraphDAO paragraphDAO) throws ServletException, IOException {
 
         int idParagraph = Integer.parseInt(request.getParameter("id"));
+
+        Paragraph paragraph = paragraphDAO.getParagraphWithChoices(idParagraph);
+        request.setAttribute("paragraph", paragraph);
+
+        request.getRequestDispatcher("modify_parag.jsp").forward(request, response);
+    }
+    
+    /**
+     * Modifies the text of a paragraph.
+     */
+    private void editParagraphText(HttpServletRequest request, HttpServletResponse response,
+                                 ParagraphDAO paragraphDAO) throws ServletException, IOException {
+
+        int idParagraph = Integer.parseInt(request.getParameter("id_paragraph"));
+        String text = request.getParameter("parag_text");
+        
+        paragraphDAO.modifyParagraphText(idParagraph, text);
 
         Paragraph paragraph = paragraphDAO.getParagraphWithChoices(idParagraph);
         request.setAttribute("paragraph", paragraph);
@@ -121,6 +138,8 @@ public class ParagraphController extends AbstractController {
                 case "delete_paragraph":
                     deleteParagraph(request, response, paragraphDAO);
                     //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
+                case "edit_paragraph_text":
+                    editParagraphText(request, response, paragraphDAO);
                 default:
                     invalidParameters(request, response);
                     return;
