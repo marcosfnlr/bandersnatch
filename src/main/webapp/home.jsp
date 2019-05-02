@@ -32,7 +32,7 @@
         <div class="navbar-nav mr-auto">
             <a class="nav-item nav-link" href="book_controller?action=list_published_books"><i
                     class="fas fa-book-reader"></i> Lire</a>
-            <a class="nav-item nav-link" href="write_list.jsp"><i class="fas fa-pencil-alt"></i> Écrire</a>
+            <a class="nav-item nav-link" href="book_controller?action=list_open_books"><i class="fas fa-pencil-alt"></i> Écrire</a>
         </div>
         <div class="navbar-nav" id="navbarUser">
             <a class="nav-item nav-link mr-2" href="account_controller?action=view_profile"><i class="fas fa-user"></i>

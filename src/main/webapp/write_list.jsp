@@ -53,19 +53,15 @@
     <div class="row justify-content-md-center">
         <div class="col-12 text-center">
             <h1>
-                À quelle aventure es-tu prêt?
+                Aide à créer des nouvelles aventures!
             </h1>
         </div>
     </div>
+    <div class="col-12">
+        <a href="add_book.jsp" class="btn btn-danger float-right"><i class="fas fa-plus"></i> Nouvelle histoire</a>
+    </div>
     <hr class="mt-1">
     <div class="row">
-        <%
-            if (books.isEmpty()) {
-        %>
-        <div class="col-12 text-center">Desolé, mais il n'y a encore aucune.</div>
-        <%
-            }
-        %>
         <%
             for (Book b : books) {
         %>
