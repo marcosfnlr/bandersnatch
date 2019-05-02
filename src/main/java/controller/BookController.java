@@ -138,10 +138,10 @@ public class BookController extends AbstractController {
             switch (action) {
                 case "delete_book":
                     deleteBook(request, response, bookDAO);
-                    //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
+                    request.getRequestDispatcher("/home.jsp").forward(request, response);
                 case "publish_book":
                     publishBook(request, response, bookDAO);
-                    //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
+                    request.getRequestDispatcher("/home.jsp").forward(request, response);
                 default:
                     invalidParameters(request, response);
                     return;
