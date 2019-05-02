@@ -25,6 +25,9 @@ public class HistoryController extends AbstractController {
             throws IOException, ServletException {
         try {
             switch (action) {
+                case "save_history":
+                    saveHistory(request, response);
+                    break;
                 case "list_user_history":
                     actionListUserHistory(request, response);
                     break;
@@ -45,9 +48,6 @@ public class HistoryController extends AbstractController {
 
         try {
             switch (action) {
-                case "save_history":
-                    saveHistory(request, response);
-                    break;
                 case "delete_history":
                     actionDeleteHistory(request, response);
                     break;
@@ -79,7 +79,7 @@ public class HistoryController extends AbstractController {
 
         List<History> histories = (List<History>) request.getSession().getAttribute("histories");
 
-        for(History h : histories) {
+        for (History h : histories) {
             historyDAO.addHistory(h.getAccount().getIdAccount(), h.getBook().getIdBook(), h.getChoice().getIdChoice(), h.getDateCreated());
         }
     }

@@ -82,14 +82,14 @@ public class ReadController extends AbstractController {
         List<History> histories;
 
         if (action.equals("start_reading")) {
-            if(!bookDAO.checkConclusion(idBook)) {
+            if (!bookDAO.checkConclusion(idBook)) {
                 //TODO : book not complete message
                 request.getRequestDispatcher("/home.jsp").forward(request, response);
             }
 
             histories = historyDAO.listUserHistoryFromBook(account.getIdAccount(), idBook);
 
-            if(histories.size() > 0) {
+            if (histories.size() > 0) {
                 // Recover last paragraph selected if history already existed
                 paragraph = histories.get(histories.size() - 1).getChoice().getParagDest();
             } else {
@@ -100,18 +100,25 @@ public class ReadController extends AbstractController {
         } else {
             histories = (List<History>) request.getSession().getAttribute("histories");
 
-            Choice choice = choiceDAO.getChoice(Integer.parseInt(request.getParameter("chosen_choice")));
-            paragraph = choice.getParagDest();
+            String cc = request.getParameter("chosen_choice");
+            Choice choice;
+            if (cc != null) {
+                choice = choiceDAO.getChoice(Integer.parseInt(cc));
+                paragraph = choice.getParagDest();
+            } else {
+                paragraph = paragraphDAO.getBeginning(idBook);
+                choice = null;
+            }
 
-            if(action.equals("previous_paragraph")) {
+            if (action.equals("previous_paragraph")) {
                 int indexHistory = Integer.parseInt(request.getParameter("index_current_choice"));
                 request.getSession().setAttribute("index_current_choice", indexHistory);
 
-            } else if(action.equals("next_paragraph")) {
+            } else if (action.equals("next_paragraph")) {
                 // Recover index of current choice on history and deletes choices made after.
                 int indexHistory = (int) request.getSession().getAttribute("index_current_choice");
 
-                for(int i = indexHistory+1; i < histories.size(); i++) {
+                for (int i = indexHistory + 1; i < histories.size(); i++) {
                     histories.remove(i);
                 }
 
@@ -120,7 +127,7 @@ public class ReadController extends AbstractController {
                 Timestamp currentTimestamp = new java.sql.Timestamp(calendar.getTime().getTime());
 
                 histories.add(new History(account, paragraph.getBook(), choice, currentTimestamp));
-                request.getSession().setAttribute("index_current_choice", indexHistory+1);
+                request.getSession().setAttribute("index_current_choice", indexHistory + 1);
             }
         }
 
