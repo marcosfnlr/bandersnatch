@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dao;
 
 import java.sql.*;
@@ -13,9 +8,6 @@ import javax.sql.DataSource;
 import model.Choice;
 import model.Paragraph;
 
-/**
- * @author raphaelcja
- */
 public class ChoiceDAO extends AbstractDAO {
 
     public ChoiceDAO(DataSource ds) {
@@ -89,56 +81,6 @@ public class ChoiceDAO extends AbstractDAO {
                 PreparedStatement ps = conn.prepareStatement(query)
         ) {
             ps.setInt(1, idParagDest);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                origins.add(rs.getInt("fk_parag_orig"));
-                dests.add(rs.getInt("fk_parag_dest"));
-                conds.add(rs.getInt("fk_parag_cond"));
-                //Paragraph paragOrigin = paragraphDAO.getParagraph(rs.getInt("fk_parag_orig"));
-                //Paragraph paragDest = paragraphDAO.getParagraph(rs.getInt("fk_parag_dest"));
-                //Paragraph paragCond = paragraphDAO.getParagraph(rs.getInt("fk_parag_cond"));
-                Choice c = new Choice(rs.getInt("id_choice"), rs.getString("text"), rs.getBoolean("locked"),
-                        rs.getBoolean("only_choice"), rs.getBoolean("cond_should_pass"),
-                        null, null, null);
-                list.add(c);
-            }
-
-        } catch (SQLException e) {
-            throw new DAOException("Erreur BD " + e.getMessage(), e);
-        }
-
-        for (int i = 0; i < list.size(); i++) {
-            Paragraph paragOrigin = paragraphDAO.getParagraph(origins.get(i));
-            Paragraph paragDest = paragraphDAO.getParagraph(dests.get(i));
-            Paragraph paragCond = paragraphDAO.getParagraph(conds.get(i));
-            list.get(i).setParagOrigin(paragOrigin);
-            list.get(i).setParagDest(paragDest);
-            list.get(i).setParagCond(paragCond);
-        }
-
-        return list;
-    }
-
-    /**
-     * Returns list of all choices that exist in a given book.
-     */
-    public List<Choice> listBookChoices(int idBook) {
-        List<Choice> list = new ArrayList<>();
-        List<Integer> origins = new ArrayList<>();
-        List<Integer> dests = new ArrayList<>();
-        List<Integer> conds = new ArrayList<>();
-
-        ParagraphDAO paragraphDAO = new ParagraphDAO(dataSource);
-
-        String query = "SELECT * FROM Choice WHERE fk_parag_orig IN "
-                + "(SELECT DISTINCT id_paragraph FROM Paragraph WHERE fk_book=?) ";
-
-        try (
-                Connection conn = getConn();
-                PreparedStatement ps = conn.prepareStatement(query)
-        ) {
-            ps.setInt(1, idBook);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -248,25 +190,6 @@ public class ChoiceDAO extends AbstractDAO {
         }
 
         return choice;
-    }
-
-    /**
-     * Deletes choice with id_choice identifier from table Choice.
-     * TODO : constraints of deletion. here or controller?
-     */
-    public void deleteChoice(int idChoice) {
-
-        String query = "DELETE FROM Choice WHERE id_choice=?";
-
-        try (
-                Connection conn = getConn();
-                PreparedStatement ps = conn.prepareStatement(query)
-        ) {
-            ps.setInt(1, idChoice);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new DAOException("Erreur BD " + e.getMessage(), e);
-        }
     }
 
     /**

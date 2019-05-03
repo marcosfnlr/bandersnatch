@@ -1,22 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dao;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import model.Book;
 import model.Account;
 
-/**
- * @author raphaelcja
- */
 public class BookDAO extends AbstractDAO {
 
     public BookDAO(DataSource ds) {
@@ -59,7 +50,7 @@ public class BookDAO extends AbstractDAO {
 
         return list;
     }
-    
+
     /**
      * Returns list of open to write books from table Book.
      */
@@ -406,5 +397,4 @@ public class BookDAO extends AbstractDAO {
 
         return false;
     }
-
 }

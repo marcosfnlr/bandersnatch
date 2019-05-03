@@ -33,9 +33,7 @@ public class ReadController extends AbstractController {
             throws IOException, ServletException {
 
         try {
-            if (action == null) {
-                //TODO : where to redirect here?
-            } else if (action.equals("read_book")) {
+            if (action.equals("read_book")) {
                 postCover(request, response);
             } else if (action.equals("start_reading") || action.equals("next_paragraph") || action.equals("previous_paragraph")) {
                 postParagraph(request, response, action);
@@ -45,6 +43,11 @@ public class ReadController extends AbstractController {
         } catch (DAOException e) {
             erreurBD(request, response, e);
         }
+    }
+
+    @Override
+    protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -60,7 +63,7 @@ public class ReadController extends AbstractController {
 
         request.setAttribute("title_book", book.getTitle());
         request.setAttribute("authors", authors); //TODO : get first and last name
-        request.getRequestDispatcher("/read_book.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/" + "read_book.jsp").forward(request, response);
     }
 
     /**
@@ -81,7 +84,7 @@ public class ReadController extends AbstractController {
         Boolean isLogged = account != null;
 
         // Guest user
-        if(!isLogged) {
+        if (!isLogged) {
             account = new Account("guest_user", null, null, null);
         }
 
@@ -90,17 +93,17 @@ public class ReadController extends AbstractController {
         if (action.equals("start_reading")) {
             if (!bookDAO.checkConclusion(idBook)) {
                 //TODO : book not complete message
-                request.getRequestDispatcher("/home.jsp").forward(request, response);
+                request.getRequestDispatcher("WEB-INF/" + "home.jsp").forward(request, response);
             }
 
-            if(isLogged) {
+            if (isLogged) {
                 histories = historyDAO.listUserHistoryFromBook(account.getIdAccount(), idBook);
             }
 
             if (histories.size() > 0) {
                 // Recover last paragraph selected if history already existed
                 paragraph = histories.get(histories.size() - 1).getChoice().getParagDest();
-                request.getSession().setAttribute("index_current_choice", histories.size()-1);
+                request.getSession().setAttribute("index_current_choice", histories.size() - 1);
             } else {
                 paragraph = paragraphDAO.getBeginning(idBook);
                 request.getSession().setAttribute("index_current_choice", -1);
@@ -128,8 +131,8 @@ public class ReadController extends AbstractController {
                 // Recover index of current choice on history and deletes choices made after.
                 int indexHistory = (int) request.getSession().getAttribute("index_current_choice");
 
-                while(histories.size() > indexHistory+1){
-                    histories.remove(histories.size()-1);
+                while (histories.size() > indexHistory + 1) {
+                    histories.remove(histories.size() - 1);
                 }
 
                 /* Getting current time. Check after if there's better approach */
@@ -159,7 +162,7 @@ public class ReadController extends AbstractController {
         paragraph.setFinalChoices(choices);
         request.setAttribute("paragraph", paragraph);
 
-        request.getRequestDispatcher("/read_parag.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/" + "read_parag.jsp").forward(request, response);
     }
 
     /**
@@ -175,10 +178,10 @@ public class ReadController extends AbstractController {
             finalParagraphs.add(conclusion);
             recurtionParagChoice(beginning, conclusion, choiceDAO);
         }
-        
+
         // treats looping back to beginning
         List<Choice> loopBeginChoices = choiceDAO.listParagDestChoices(beginning.getIdParagraph());
-        for(Choice choice : loopBeginChoices) {
+        for (Choice choice : loopBeginChoices) {
             if (!finalChoices.contains(choice)) {
                 finalChoices.add(choice);
                 if (!finalParagraphs.contains(choice.getParagOrigin()))
@@ -186,7 +189,7 @@ public class ReadController extends AbstractController {
                 recurtionParagChoice(beginning, choice.getParagOrigin(), choiceDAO);
             }
         }
-        
+
         createDictionary(choiceDAO);
 
     }
@@ -227,12 +230,4 @@ public class ReadController extends AbstractController {
             dictionary.put(paragraph, disclosedChoices);
         }
     }
-
-
-    @Override
-    protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-
 }

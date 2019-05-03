@@ -1,37 +1,39 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
 import dao.*;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.List;
-import javax.annotation.Resource;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import javax.sql.DataSource;
 
 import model.*;
 
-/**
- * @author raphaelcja
- */
 @WebServlet(name = "CreateParagraphController", urlPatterns = {"/create_paragraph_controller"})
 public class CreateParagraphController extends AbstractController {
 
     @Override
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ChoiceDAO choiceDAO = new ChoiceDAO(ds);
+
+        try {
+            switch (action) {
+                case "cancel_creation":
+                    cancelCreation(request, response, choiceDAO);
+                    break;
+                default:
+                    invalidParameters(request, response);
+                    return;
+            }
+        } catch (DAOException e) {
+            erreurBD(request, response, e);
+        }
+
+        request.getRequestDispatcher("WEB-INF/" + "home.jsp").forward(request, response);
     }
 
     @Override
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
-        // TODO entender pq nao da certo deixar os DAO como "globais"
         BookDAO bookDAO = new BookDAO(ds);
         ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
         ChoiceDAO choiceDAO = new ChoiceDAO(ds);
@@ -54,7 +56,7 @@ public class CreateParagraphController extends AbstractController {
                     String text = request.getParameter("text");
                     addChoice(request, response, text, idParag, choiceDAO);
                     request.setAttribute("paragraph", paragraphDAO.getParagraphWithChoices(idParag));
-                    request.getRequestDispatcher("/modify_parag.jsp").forward(request, response);
+                    request.getRequestDispatcher("WEB-INF/" + "modify_parag.jsp").forward(request, response);
                     break;
                 default:
                     invalidParameters(request, response);
@@ -64,7 +66,7 @@ public class CreateParagraphController extends AbstractController {
             erreurBD(request, response, e);
         }
 
-        request.getRequestDispatcher("/home.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/" + "home.jsp").forward(request, response);
     }
 
     /**
@@ -79,7 +81,7 @@ public class CreateParagraphController extends AbstractController {
 
         int idBook = bookDAO.addBook(title, openToWrite, creator);
 
-        if(!openToWrite) {
+        if (!openToWrite) {
             invitationDAO.addInvitation(creator, idBook);
         }
 
@@ -115,11 +117,9 @@ public class CreateParagraphController extends AbstractController {
         return choiceDAO.addChoice(choiceText, onlyChoice, condShouldPass, idParagOrig, paragCond);
     }
 
-    // TODO change parameters. Will have a validation before
     private void createParagraphWithChoices(HttpServletRequest request, HttpServletResponse response, int idBook, ParagraphDAO paragraphDAO, ChoiceDAO choiceDAO) throws ServletException, IOException {
 
         boolean isBeginning = Boolean.parseBoolean(request.getParameter("beginning"));
-        
         boolean isConclusion = false;
 
         // Checkbox return different than null if selected
@@ -128,8 +128,8 @@ public class CreateParagraphController extends AbstractController {
         }
 
         int idParag = addParagraph(request, response, idBook, isBeginning, isConclusion, paragraphDAO);
-        
-        if(!isConclusion) {
+
+        if (!isConclusion) {
             String choiceText[] = request.getParameterValues("choices_text");
             for (int i = 0; i < choiceText.length; i++) {
                 int idChoice = addChoice(request, response, choiceText[i], idParag, choiceDAO);
@@ -138,8 +138,22 @@ public class CreateParagraphController extends AbstractController {
 
         // Paragraph 'came' from a choice.
         if (!isBeginning) {
-            int idChoiceOrig = Integer.parseInt(String.valueOf(request.getParameter("id_choice_orig"))); // TODO: set this on view before sending form
+            int idChoiceOrig = Integer.parseInt(String.valueOf(request.getParameter("id_choice_orig")));
             choiceDAO.setParagDest(idChoiceOrig, idParag);
+        }
+    }
+
+    /**
+     * Adds a choice to a paragraph and returns its id.
+     */
+    private void cancelCreation(HttpServletRequest request, HttpServletResponse response, ChoiceDAO choiceDAO) throws ServletException, IOException {
+
+        boolean isBeginning = Boolean.parseBoolean(request.getParameter("beginning"));
+
+        // Paragraph 'came' from a choice.
+        if (!isBeginning) {
+            int idChoiceOrig = Integer.parseInt(request.getParameter("id_choice_orig"));
+            choiceDAO.setLocked(idChoiceOrig, false);
         }
     }
 }

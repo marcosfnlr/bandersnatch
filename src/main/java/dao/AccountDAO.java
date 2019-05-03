@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dao;
 
 import java.sql.*;
@@ -12,40 +7,10 @@ import javax.sql.DataSource;
 
 import model.Account;
 
-/**
- * @author raphaelcja
- */
 public class AccountDAO extends AbstractDAO {
 
     public AccountDAO(DataSource ds) {
         super(ds);
-    }
-
-    /**
-     * Returns list of accounts from table Account.
-     */
-    public List<Account> getListAccounts() {
-        List<Account> list = new ArrayList<>();
-
-        String query = "SELECT * FROM Account";
-
-        try (
-                Connection conn = getConn();
-                PreparedStatement ps = conn.prepareStatement(query)
-        ) {
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Account account = new Account(rs.getString("id_account"), rs.getString("password"),
-                        rs.getString("last_name"), rs.getString("first_name"));
-                list.add(account);
-            }
-
-        } catch (SQLException e) {
-            throw new DAOException("Erreur BD " + e.getMessage(), e);
-        }
-
-        return list;
     }
 
     /**
@@ -125,5 +90,4 @@ public class AccountDAO extends AbstractDAO {
 
         return false;
     }
-
 }

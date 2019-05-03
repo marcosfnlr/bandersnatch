@@ -1,13 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
-/**
- * @author raphaelcja
- */
 public class Choice {
     private int idChoice;
     private String text;
@@ -29,15 +21,6 @@ public class Choice {
         this.paragCond = paragCond;
     }
 
-    public Choice(String text, boolean locked, boolean onlyChoice, boolean condShouldPass, Paragraph paragOrigin, Paragraph paragDest, Paragraph paragCond) {
-        this.text = text;
-        this.locked = locked;
-        this.onlyChoice = onlyChoice;
-        this.condShouldPass = condShouldPass;
-        this.paragOrigin = paragOrigin;
-        this.paragDest = paragDest;
-        this.paragCond = paragCond;
-    }
 
     public int getIdChoice() {
         return idChoice;
@@ -83,9 +66,6 @@ public class Choice {
         this.paragCond = paragCond;
     }
 
-    public boolean isDestWriten() {
-        return paragDest != null;
-    }
 
     public String getLabelText() {
         if (text.length() > 10) {
@@ -118,7 +98,6 @@ public class Choice {
         }
         return true;
     }
-
 
     @Override
     public String toString() {

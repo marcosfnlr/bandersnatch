@@ -5,7 +5,6 @@ import model.*;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class HistoryDAO extends AbstractDAO {
@@ -108,36 +107,6 @@ public class HistoryDAO extends AbstractDAO {
                 Account account = accountDAO.getAccount(idAccount);
                 Book book = bookDAO.getBook(rs.getInt("fk_book"));
                 Choice choice = choiceDAO.getChoice(rs.getInt("fk_choice"));
-                History h = new History(account, book, choice, rs.getTimestamp("creation_date"));
-                list.add(h);
-            }
-
-        } catch (SQLException e) {
-            throw new DAOException("Erreur BD " + e.getMessage(), e);
-        }
-
-        return list;
-    }
-
-    /**
-     * Returns list of History that exists for a given Choice.
-     */
-    public List<History> listChoiceHistory(int idChoice) {
-        List<History> list = new ArrayList<>();
-
-        String query = "SELECT * FROM History WHERE fk_choice=?";
-
-        try (
-                Connection conn = getConn();
-                PreparedStatement ps = conn.prepareStatement(query)
-        ) {
-            ps.setInt(1, idChoice);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Account account = accountDAO.getAccount(rs.getString("fk_account"));
-                Book book = bookDAO.getBook(rs.getInt("fk_book"));
-                Choice choice = choiceDAO.getChoice(idChoice);
                 History h = new History(account, book, choice, rs.getTimestamp("creation_date"));
                 list.add(h);
             }

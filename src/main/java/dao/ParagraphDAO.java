@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dao;
 
 import java.sql.*;
@@ -14,9 +9,6 @@ import model.Account;
 import model.Book;
 import model.Paragraph;
 
-/**
- * @author raphaelcja
- */
 public class ParagraphDAO extends AbstractDAO {
 
     public ParagraphDAO(DataSource ds) {
@@ -25,7 +17,6 @@ public class ParagraphDAO extends AbstractDAO {
 
     /**
      * Returns list of paragraphs from a book.
-     * TODO : where to verify account
      */
     public List<Paragraph> listParagraphs(int idBook) {
         List<Paragraph> list = new ArrayList<>();
@@ -47,8 +38,6 @@ public class ParagraphDAO extends AbstractDAO {
             while (rs.next()) {
                 fk_books.add(rs.getInt("fk_book"));
                 fk_accounts.add(rs.getString("fk_account"));
-                //Book book = bookDAO.getBook(rs.getInt("fk_book"));
-                //Account account = accountDAO.getAccount(rs.getString("fk_account"));
                 Paragraph p = new Paragraph(rs.getInt("id_paragraph"), rs.getString("text"), rs.getBoolean("beginning"),
                         rs.getBoolean("conclusion"), null, null);
                 list.add(p);
@@ -70,7 +59,6 @@ public class ParagraphDAO extends AbstractDAO {
 
     /**
      * Returns list of conclusion paragraphs from a book.
-     * TODO : where to verify account
      */
     public List<Paragraph> listConclusions(int idBook) {
         List<Paragraph> list = new ArrayList<>();
@@ -93,8 +81,6 @@ public class ParagraphDAO extends AbstractDAO {
             while (rs.next()) {
                 fk_books.add(rs.getInt("fk_book"));
                 fk_accounts.add(rs.getString("fk_account"));
-                //Book book = bookDAO.getBook(rs.getInt("fk_book"));
-                //Account account = accountDAO.getAccount(rs.getString("fk_account"));
                 Paragraph p = new Paragraph(rs.getInt("id_paragraph"), rs.getString("text"), rs.getBoolean("beginning"),
                         rs.getBoolean("conclusion"), null, null);
                 list.add(p);
@@ -125,7 +111,6 @@ public class ParagraphDAO extends AbstractDAO {
 
         BookDAO bookDAO = new BookDAO(dataSource);
         AccountDAO accountDAO = new AccountDAO(dataSource);
-        ChoiceDAO choiceDAO = new ChoiceDAO(dataSource);
 
         String query = "SELECT * FROM Paragraph WHERE beginning=1 AND fk_book=?";
 
@@ -262,7 +247,6 @@ public class ParagraphDAO extends AbstractDAO {
 
     /**
      * Deletes paragraph with id_paragraph identifier from table Paragraph.
-     * TODO : constraints of deletion. here or controller?
      */
     public void deleteParagraph(int idParagraph) {
 
@@ -281,7 +265,6 @@ public class ParagraphDAO extends AbstractDAO {
 
     /**
      * Modifies paragraph text with id_paragraph identifier from table Paragraph.
-     * TODO : constraints of modification. here or controller?
      */
     public void modifyParagraphText(int idParagraph, String text) {
 
@@ -298,5 +281,4 @@ public class ParagraphDAO extends AbstractDAO {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
         }
     }
-
 }

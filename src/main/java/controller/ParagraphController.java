@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
 import dao.ChoiceDAO;
@@ -23,15 +18,12 @@ import model.FeedbackMessage;
 import model.TypeFeedback;
 import model.Paragraph;
 
-/**
- * @author raphaelcja
- */
 @WebServlet(name = "ParagraphController", urlPatterns = {"/paragraph_controller"})
 public class ParagraphController extends AbstractController {
 
 
     /**
-     * GET : controls actions of listParagraphs, getParagraph.
+     * GET : controls actions of Paragraph
      */
     @Override
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
@@ -42,14 +34,36 @@ public class ParagraphController extends AbstractController {
             switch (action) {
                 case "write_paragraph":
                     writeParagraph(request, response, choiceDAO);
-                case "list_paragraphs":
-                    listParagraphs(request, response, paragraphDAO);
-                case "get_paragraph":
-                    getParagraph(request, response, paragraphDAO);
+                    break;
                 case "modify_paragraph":
                     modifyParagraph(request, response, paragraphDAO);
+                    break;
                 default:
                     invalidParameters(request, response);
+            }
+        } catch (DAOException e) {
+            erreurBD(request, response, e);
+        }
+    }
+
+    /**
+     * POST : controls actions of Paragraph.
+     */
+    @Override
+    protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
+        ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
+
+        try {
+            switch (action) {
+                case "delete_paragraph":
+                    deleteParagraph(request, response, paragraphDAO);
+                    break;
+                case "edit_paragraph_text":
+                    editParagraphText(request, response, paragraphDAO);
+                    break;
+                default:
+                    invalidParameters(request, response);
+                    return;
             }
         } catch (DAOException e) {
             erreurBD(request, response, e);
@@ -64,36 +78,7 @@ public class ParagraphController extends AbstractController {
 
         int idChoiceOrig = Integer.parseInt(String.valueOf(request.getParameter("id_choice_orig")));
         choiceDAO.setLocked(idChoiceOrig, true);
-        request.getRequestDispatcher("/add_parag.jsp").forward(request, response);
-    }
-
-    /**
-     * Lists all paragraphs from a book.
-     * TODO : when to use ?
-     */
-    private void listParagraphs(HttpServletRequest request, HttpServletResponse response,
-                                ParagraphDAO paragraphDAO) throws ServletException, IOException {
-
-        //needs to know from which book the paragraphs are from
-        int idBook = Integer.parseInt(String.valueOf(request.getParameter("id_book")));
-        List<Paragraph> paragraphs = paragraphDAO.listParagraphs(idBook);
-        request.setAttribute("paragraphs", paragraphs);
-    }
-
-    /**
-     * Gets all information of a paragraph given its identifier id_paragraph.
-     */
-    private void getParagraph(HttpServletRequest request, HttpServletResponse response,
-                              ParagraphDAO paragraphDAO) throws ServletException, IOException {
-
-        int idParagraph = Integer.parseInt(request.getParameter("id_paragraph"));
-        String view = request.getParameter("view");
-        // TODO : review here ; need to show authors when show book
-        if (view.equals("show_paragraph") || view.equals("delete_paragraph") || view.equals("modify_paragraph")) {
-            Paragraph paragraph = paragraphDAO.getParagraph(idParagraph);
-            request.setAttribute("paragraph", paragraph);
-            request.getRequestDispatcher("WEB-INF/" + view + ".jsp").forward(request, response);
-        } else invalidParameters(request, response);
+        request.getRequestDispatcher("WEB-INF/" + "add_parag.jsp").forward(request, response);
     }
 
     /**
@@ -109,7 +94,7 @@ public class ParagraphController extends AbstractController {
 
         request.setAttribute("paragraph", paragraph);
 
-        request.getRequestDispatcher("modify_parag.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/" + "modify_parag.jsp").forward(request, response);
     }
 
     /**
@@ -128,7 +113,7 @@ public class ParagraphController extends AbstractController {
         checkProperties(request, paragraph);
         request.setAttribute("paragraph", paragraph);
 
-        request.getRequestDispatcher("modify_parag.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/" + "modify_parag.jsp").forward(request, response);
     }
 
     private void checkProperties(HttpServletRequest request, Paragraph paragraph) {
@@ -143,35 +128,14 @@ public class ParagraphController extends AbstractController {
     }
 
     /**
-     * POST : controls actions of addParagraph, deleteParagraph, modifyParagraph.
-     */
-    @Override
-    protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
-        ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
-
-        try {
-            switch (action) {
-                case "delete_paragraph":
-                    deleteParagraph(request, response, paragraphDAO);
-                    //request.getRequestDispatcher("TODO goes to which page").forward(request, response);
-                case "edit_paragraph_text":
-                    editParagraphText(request, response, paragraphDAO);
-                default:
-                    invalidParameters(request, response);
-                    return;
-            }
-        } catch (DAOException e) {
-            erreurBD(request, response, e);
-        }
-    }
-
-    /**
      * Deletes a paragraph of a book.
      */
     private void deleteParagraph(HttpServletRequest request, HttpServletResponse response,
                                  ParagraphDAO paragraphDAO) throws ServletException, IOException {
-
         int idParagraph = Integer.parseInt(request.getParameter("id_paragraph"));
+
         paragraphDAO.deleteParagraph(idParagraph);
     }
 }
+
+//            request.getRequestDispatcher("WEB-INF/" + "WEB-INF/" + view + ".jsp").forward(request, response);

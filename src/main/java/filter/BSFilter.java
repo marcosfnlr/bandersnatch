@@ -27,7 +27,7 @@ public class BSFilter implements Filter {
         if (httpServletRequest.getSession().getAttribute("logged_account") == null) {
             String errorMessage = "Il faut être membre pour y accéder";
             request.setAttribute("feedbackMessages", Arrays.asList(new FeedbackMessage(errorMessage, TypeFeedback.INFO)));
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/" + "index.jsp").forward(request, response);
         } else {
             chain.doFilter(request, response);
         }

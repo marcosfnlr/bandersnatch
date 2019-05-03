@@ -132,7 +132,7 @@
         </div>
         <div class="row justify-content-center">
             <%if (!"true".equals(isNewBook)) {%>
-            <a href="paragraph_controller?action=renoncer&id=<%=request.getParameter("id_choice_orig")%>"
+            <a href="create_paragraph_controller?action=cancel_creation&beginning=<%=request.getParameter("beginning")%>&id_choice_orig=<%=request.getParameter("id_choice_orig")%>"
                class="btn btn-danger mr-2">Renoncer</a>
             <%
                 }

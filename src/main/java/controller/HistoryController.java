@@ -3,8 +3,6 @@ package controller;
 import dao.DAOException;
 import dao.HistoryDAO;
 
-import model.Account;
-import model.Book;
 import model.History;
 
 import javax.servlet.ServletException;
@@ -19,7 +17,7 @@ public class HistoryController extends AbstractController {
 
 
     /**
-     * GET : controls actions of listUserHistory... TODO: Add more functionalities
+     * GET : controls actions History
      */
     @Override
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response, String action)
@@ -32,9 +30,6 @@ public class HistoryController extends AbstractController {
                 case "save_history":
                     saveHistory(request, response, historyDAO);
                     break;
-                case "list_user_history":
-                    listUserHistory(request, response, historyDAO);
-                    break;
                 default:
                     invalidParameters(request, response);
             }
@@ -42,17 +37,15 @@ public class HistoryController extends AbstractController {
             erreurBD(request, response, e);
         }
 
-        request.getRequestDispatcher("/home.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/" + "home.jsp").forward(request, response);
     }
 
     /**
-     * POST : controls actions.
+     * POST : controls actions of History.
      */
     @Override
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action)
             throws IOException, ServletException {
-
-        HistoryDAO historyDAO = new HistoryDAO(ds);
 
         try {
             switch (action) {
@@ -62,18 +55,6 @@ public class HistoryController extends AbstractController {
         } catch (DAOException e) {
             erreurBD(request, response, e);
         }
-    }
-
-
-    /**
-     * Lists all the History of an User.
-     */
-    private void listUserHistory(HttpServletRequest request, HttpServletResponse response, HistoryDAO historyDAO) throws ServletException, IOException {
-
-        String idAccount = request.getParameter("id_account");
-        int idBook = Integer.parseInt(request.getParameter("id_book"));
-        List<History> histories = historyDAO.listUserHistoryFromBook(idAccount, idBook);
-        request.setAttribute("histories", histories);
     }
 
     /**
@@ -89,7 +70,7 @@ public class HistoryController extends AbstractController {
         List<History> oldHistories = historyDAO.listUserHistoryFromBook(idAccount, idBook);
 
         // Delete old history
-        for(History history: oldHistories) {
+        for (History history : oldHistories) {
             historyDAO.deleteHistory(history);
         }
 

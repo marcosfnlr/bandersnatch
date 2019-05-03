@@ -1,13 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
-/**
- * @author raphaelcja
- */
 public class Book {
 
     private int idBook;
@@ -119,11 +111,8 @@ public class Book {
         return getTitle();
     }
 
-
     @Override
     public String toString() {
         return "Book{" + "idBook=" + idBook + ", title=" + title + ", openToWrite=" + openToWrite + ", published=" + published + ", creator=" + creator + '}';
     }
-
-
 }

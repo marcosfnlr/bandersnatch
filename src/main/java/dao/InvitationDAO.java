@@ -32,23 +32,4 @@ public class InvitationDAO extends AbstractDAO {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
         }
     }
-
-    /**
-     * Deletes invitation with specific id_account and id_book from table Invitation.
-     */
-    public void deleteInvitation(String idAccount, int idBook) {
-
-        String query = "DELETE FROM Invitation WHERE fk_account=? AND fk_book=?";
-
-        try (
-                Connection conn = getConn();
-                PreparedStatement ps = conn.prepareStatement(query)
-        ) {
-            ps.setString(1, idAccount);
-            ps.setInt(2, idBook);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new DAOException("Erreur BD " + e.getMessage(), e);
-        }
-    }
 }

@@ -1,18 +1,69 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- * Author:  raphaelcja
- * Created: 28-Mar-2019
- */
+DROP TABLE Invitation CASCADE CONSTRAINTS;
+DROP TABLE History CASCADE CONSTRAINTS;
+DROP TABLE Choice CASCADE CONSTRAINTS;
+DROP TABLE Paragraph CASCADE CONSTRAINTS;
+DROP TABLE Book CASCADE CONSTRAINTS;
+DROP TABLE Account CASCADE CONSTRAINTS;
 
+CREATE TABLE Account(
+    id_account VARCHAR2(10) PRIMARY KEY NOT NULL,
+    password VARCHAR2(100) NOT NULL,
+    last_name VARCHAR2(100) NOT NULL,
+    first_name VARCHAR2(50) NOT NULL
+);
 
---SELECT * FROM Account;
---SELECT * FROM Book;
---SELECT * FROM Paragraph;
---SELECT * FROM Choice;
+CREATE TABLE Book(
+    id_book INT GENERATED ALWAYS as IDENTITY PRIMARY KEY,
+    title VARCHAR2(100) NOT NULL,
+    open_write NUMBER(1) NOT NULL,
+    published NUMBER(1) DEFAULT 0,
+    fk_account VARCHAR2(10) NOT NULL,
+    FOREIGN KEY (fk_account) REFERENCES Account(id_account)
+);
+
+CREATE TABLE Paragraph(
+    id_paragraph INT GENERATED ALWAYS as IDENTITY PRIMARY KEY,
+    text VARCHAR2(1000) NOT NULL,
+    beginning NUMBER(1) NOT NULL,
+    conclusion NUMBER(1) NOT NULL,
+    fk_book INT NOT NULL,
+    fk_account VARCHAR2(10) NOT NULL,
+    FOREIGN KEY (fk_book) REFERENCES Book(id_book),
+    FOREIGN KEY (fk_account) REFERENCES Account(id_account)
+);
+
+CREATE TABLE Choice(
+    id_choice INT GENERATED ALWAYS as IDENTITY PRIMARY KEY,
+    text VARCHAR2(250) NOT NULL,
+    locked NUMBER(1) DEFAULT 0,
+    only_choice NUMBER(1) NOT NULL,
+    cond_should_pass NUMBER(1),
+    fk_parag_orig INT NOT NULL,
+    fk_parag_dest INT DEFAULT NULL,
+    fk_parag_cond INT DEFAULT NULL,
+    FOREIGN KEY (fk_parag_orig) REFERENCES Paragraph(id_paragraph),
+    FOREIGN KEY (fk_parag_dest) REFERENCES Paragraph(id_paragraph),
+    FOREIGN KEY (fk_parag_cond) REFERENCES Paragraph(id_paragraph)
+);
+
+CREATE TABLE History(
+    fk_account VARCHAR2(10) NOT NULL,
+    fk_book INT NOT NULL,
+    fk_choice INT NOT NULL,
+    creation_date TIMESTAMP NOT NULL,
+    PRIMARY KEY (fk_account, fk_book, fk_choice),
+    FOREIGN KEY (fk_account) REFERENCES Account(id_account),
+    FOREIGN KEY (fk_book) REFERENCES Book(id_book),
+    FOREIGN KEY (fk_choice) REFERENCES Choice(id_choice)
+);
+
+CREATE TABLE Invitation(
+    fk_account VARCHAR2(10) NOT NULL,
+    fk_book INT NOT NULL,
+    PRIMARY KEY (fk_account, fk_book),
+    FOREIGN KEY (fk_account) REFERENCES Account(id_account),
+    FOREIGN KEY (fk_book) REFERENCES Book(id_book)
+);
 
 INSERT INTO Account (id_account, password, last_name, first_name) VALUES ('a','a','Amarante','Raphael');
 INSERT INTO Account (id_account, password, last_name, first_name) VALUES ('b','b','Oliveira','Marcio');
@@ -72,11 +123,3 @@ INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig, 
 INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig, fk_parag_dest) VALUES ('this is the only choice',1,1,0,14,15);
 INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig, fk_parag_dest) VALUES ('Continue to ending.',1,0,0,15,16);
 INSERT INTO Choice (text, locked, only_choice, cond_should_pass, fk_parag_orig, fk_parag_dest) VALUES ('Go back to previous chapter.',1,0,0,15,12);
-
-
-
---SELECT * FROM Book WHERE id_book IN (SELECT DISTINCT fk_book FROM Paragraph WHERE fk_account='a');
---SELECT * FROM Book WHERE id_book IN (SELECT DISTINCT fk_book FROM Invitation WHERE fk_account='a');
---SELECT * FROM Choice WHERE fk_parag_orig IN (SELECT id_paragraph FROM Paragraph WHERE fk_book=3);
---SELECT COUNT (id_paragraph) AS conclusions FROM Paragraph WHERE conclusion=1 AND fk_book=3;
---SELECT * FROM Account WHERE id_account IN (SELECT DISTINCT fk_account FROM Paragraph WHERE fk_book=3);

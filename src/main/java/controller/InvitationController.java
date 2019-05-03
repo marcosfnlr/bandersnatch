@@ -14,7 +14,7 @@ import java.io.IOException;
 public class InvitationController extends AbstractController {
 
     /**
-     * GET : controls actions of inviteUsers, editUsersInvited. TODO: Add more functionalities
+     * GET : controls actions of Invitation
      */
     @Override
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response, String action)
@@ -27,8 +27,27 @@ public class InvitationController extends AbstractController {
                 case "invite_users":
                     inviteUsers(request, response, bookDAO);
                     break;
-                case "edit_invited_users":
-                    editUsersInvited(request, response, bookDAO);
+                default:
+                    invalidParameters(request, response);
+            }
+        } catch (DAOException e) {
+            erreurBD(request, response, e);
+        }
+    }
+
+    /**
+     * POST : controls actions of Invitation
+     */
+    @Override
+    protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action)
+            throws IOException, ServletException {
+
+        InvitationDAO invitationDAO = new InvitationDAO(ds);
+
+        try {
+            switch (action) {
+                case "add_invitation_list":
+                    addInvitationList(request, response, invitationDAO);
                     break;
                 default:
                     invalidParameters(request, response);
@@ -51,48 +70,7 @@ public class InvitationController extends AbstractController {
         int idBook = Integer.parseInt(request.getParameter("id_book"));
 
         request.setAttribute("users", bookDAO.listUsersNotInvited(idBook));
-        request.getRequestDispatcher("/invite_users.jsp").forward(request, response);
-    }
-
-    /**
-     * Gets list of users invited to a book and redirects to invitation's list edition page.
-     */
-    private void editUsersInvited(HttpServletRequest request, HttpServletResponse response, BookDAO bookDAO) throws ServletException, IOException {
-
-        if (request.getParameter("id_book") == null) {
-            invalidParameters(request, response);
-            return;
-        }
-
-        int idBook = Integer.parseInt(request.getParameter("id_book"));
-
-        request.setAttribute("users", bookDAO.listUsersInvited(idBook));
-        request.getRequestDispatcher("/edit_invited_users.jsp").forward(request, response);
-    }
-
-    /**
-     * POST : controls actions of inviteUsers, addInvitationList, editInvitationList. TODO: Add more actions.
-     */
-    @Override
-    protected void processPostRequest(HttpServletRequest request, HttpServletResponse response, String action)
-            throws IOException, ServletException {
-
-        InvitationDAO invitationDAO = new InvitationDAO(ds);
-
-        try {
-            switch (action) {
-                case "add_invitation_list":
-                    addInvitationList(request, response, invitationDAO);
-                    break;
-                case "edit_invitation_list":
-                    editInvitationList(request, response, invitationDAO);
-                    break;
-                default:
-                    invalidParameters(request, response);
-            }
-        } catch (DAOException e) {
-            erreurBD(request, response, e);
-        }
+        request.getRequestDispatcher("WEB-INF/" + "invite_users.jsp").forward(request, response);
     }
 
     /**
@@ -105,19 +83,6 @@ public class InvitationController extends AbstractController {
 
         for (int i = 0; i < idAccounts.length; i++) {
             invitationDAO.addInvitation(idAccounts[i], idBook);
-        }
-    }
-
-    /**
-     * Deletes a list of users from a book's invitation list.
-     */
-    private void editInvitationList(HttpServletRequest request, HttpServletResponse response, InvitationDAO invitationDAO) throws ServletException, IOException {
-
-        int idBook = Integer.parseInt(request.getParameter("id_book"));
-        String idAccounts[] = request.getParameterValues("id_account");
-
-        for (int i = 0; i < idAccounts.length; i++) {
-            invitationDAO.deleteInvitation(idAccounts[i], idBook);
         }
     }
 }
