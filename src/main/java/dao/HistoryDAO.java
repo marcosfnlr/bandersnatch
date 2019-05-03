@@ -21,22 +21,18 @@ public class HistoryDAO extends AbstractDAO {
     /**
      * Adds history on table History.
      */
-    public void addHistory(String idAccount, int idBook, int idChoice, Timestamp creationDate) {
+    public void addHistory(History history) {
         String query = "INSERT INTO History (fk_account, fk_book, fk_choice, creation_date) "
                 + "VALUES (?,?,?,?)";
-
-        /* Getting current time. Check after if there's better approach */
-//        Calendar calendar = Calendar.getInstance();
-//        Timestamp currentTimestamp = new java.sql.Timestamp(calendar.getTime().getTime());
 
         try (
                 Connection conn = getConn();
                 PreparedStatement ps = conn.prepareStatement(query)
         ) {
-            ps.setString(1, idAccount);
-            ps.setInt(2, idBook);
-            ps.setInt(3, idChoice);
-            ps.setTimestamp(4, creationDate);
+            ps.setString(1, history.getAccount().getIdAccount());
+            ps.setInt(2, history.getBook().getIdBook());
+            ps.setInt(3, history.getChoice().getIdChoice());
+            ps.setTimestamp(4, history.getDateCreated());
             int count = ps.executeUpdate();
 
             if (count < 1) {
@@ -49,18 +45,18 @@ public class HistoryDAO extends AbstractDAO {
     }
 
     /**
-     * Deletes history with specific id_account, id_book and id_choice from table History.
+     * Deletes history from table History.
      */
-    public void deleteHistory(String idAccount, int idBook, int idChoice) {
+    public void deleteHistory(History history) {
         String query = "DELETE FROM History WHERE fk_account=? AND fk_book=? AND fk_choice=?";
 
         try (
                 Connection conn = getConn();
                 PreparedStatement ps = conn.prepareStatement(query);
         ) {
-            ps.setString(1, idAccount);
-            ps.setInt(2, idBook);
-            ps.setInt(3, idChoice);
+            ps.setString(1, history.getAccount().getIdAccount());
+            ps.setInt(2, history.getBook().getIdBook());
+            ps.setInt(3, history.getChoice().getIdChoice());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
@@ -68,12 +64,12 @@ public class HistoryDAO extends AbstractDAO {
     }
 
     /**
-     * Returns list of History that exists for a given User in a given book or null if it's empty.
+     * Returns list of History that exists for a given User.
      */
-    public List<History> listUserHistory(String idAccount) {
-        List<History> list = new ArrayList<>();
+    public List<Book> listBooksUserHistory(String idAccount) {
+        List<Book> list = new ArrayList<>();
 
-        String query = "SELECT * FROM History WHERE fk_account=?";
+        String query = "SELECT DISTINCT fk_book FROM History WHERE fk_account=?";
 
         try (
                 Connection conn = getConn();
@@ -82,11 +78,7 @@ public class HistoryDAO extends AbstractDAO {
             ps.setString(1, idAccount);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Account account = accountDAO.getAccount(idAccount);
-                Book book = bookDAO.getBook(rs.getInt("fk_book"));
-                Choice choice = choiceDAO.getChoice(rs.getInt("fk_choice"));
-                History h = new History(account, book, choice, rs.getTimestamp("creation_date"));
-                list.add(h);
+                list.add(bookDAO.getBook(rs.getInt("fk_book")));
             }
 
         } catch (SQLException e) {
@@ -97,7 +89,7 @@ public class HistoryDAO extends AbstractDAO {
     }
 
     /**
-     * Returns list of History that exists for a given User in a given book or null if it's empty.
+     * Returns list of History that exists for a given User in a given book.
      */
     public List<History> listUserHistoryFromBook(String idAccount, int idBook) {
         List<History> list = new ArrayList<>();

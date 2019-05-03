@@ -78,8 +78,14 @@ public class ReadController extends AbstractController {
         Paragraph paragraph;
         int idBook = Integer.parseInt(request.getParameter("id_book"));
         Account account = (Account) request.getSession().getAttribute("logged_account");
+        Boolean isLogged = account != null;
 
-        List<History> histories;
+        // Guest user
+        if(!isLogged) {
+            account = new Account("guest_user", null, null, null);
+        }
+
+        List<History> histories = new ArrayList<>();
 
         if (action.equals("start_reading")) {
             if (!bookDAO.checkConclusion(idBook)) {
@@ -87,16 +93,20 @@ public class ReadController extends AbstractController {
                 request.getRequestDispatcher("/home.jsp").forward(request, response);
             }
 
-            histories = historyDAO.listUserHistoryFromBook(account.getIdAccount(), idBook);
+            if(isLogged) {
+                histories = historyDAO.listUserHistoryFromBook(account.getIdAccount(), idBook);
+            }
 
             if (histories.size() > 0) {
                 // Recover last paragraph selected if history already existed
                 paragraph = histories.get(histories.size() - 1).getChoice().getParagDest();
+                request.getSession().setAttribute("index_current_choice", histories.size()-1);
             } else {
                 paragraph = paragraphDAO.getBeginning(idBook);
+                request.getSession().setAttribute("index_current_choice", -1);
             }
 
-            request.getSession().setAttribute("index_current_choice", 0);
+
         } else {
             histories = (List<History>) request.getSession().getAttribute("histories");
 
@@ -118,8 +128,8 @@ public class ReadController extends AbstractController {
                 // Recover index of current choice on history and deletes choices made after.
                 int indexHistory = (int) request.getSession().getAttribute("index_current_choice");
 
-                for (int i = indexHistory + 1; i < histories.size(); i++) {
-                    histories.remove(i);
+                while(histories.size() > indexHistory+1){
+                    histories.remove(histories.size()-1);
                 }
 
                 /* Getting current time. Check after if there's better approach */

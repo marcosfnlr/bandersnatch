@@ -5,10 +5,7 @@
  */
 package controller;
 
-import dao.DAOException;
-import dao.BookDAO;
-import dao.ParagraphDAO;
-import dao.ChoiceDAO;
+import dao.*;
 
 import java.io.*;
 import java.util.Arrays;
@@ -38,13 +35,14 @@ public class CreateParagraphController extends AbstractController {
         BookDAO bookDAO = new BookDAO(ds);
         ParagraphDAO paragraphDAO = new ParagraphDAO(ds);
         ChoiceDAO choiceDAO = new ChoiceDAO(ds);
+        InvitationDAO invitationDAO = new InvitationDAO(ds);
 
         try {
             int idBook;
 
             switch (action) {
                 case "create_book":
-                    idBook = addBook(request, response, bookDAO);
+                    idBook = addBook(request, response, bookDAO, invitationDAO);
                     createParagraphWithChoices(request, response, idBook, paragraphDAO, choiceDAO);
                     break;
                 case "add_paragraph":
@@ -72,14 +70,20 @@ public class CreateParagraphController extends AbstractController {
     /**
      * Adds a book and returns its generated id.
      */
-    private int addBook(HttpServletRequest request, HttpServletResponse response, BookDAO bookDAO) throws ServletException, IOException {
+    private int addBook(HttpServletRequest request, HttpServletResponse response, BookDAO bookDAO, InvitationDAO invitationDAO) throws ServletException, IOException {
 
         String title = request.getParameter("title");
         boolean openToWrite = Boolean.parseBoolean(request.getParameter("open_write"));
         Account account = (Account) request.getSession().getAttribute("logged_account");
         String creator = account.getIdAccount();
 
-        return bookDAO.addBook(title, openToWrite, creator);
+        int idBook = bookDAO.addBook(title, openToWrite, creator);
+
+        if(!openToWrite) {
+            invitationDAO.addInvitation(creator, idBook);
+        }
+
+        return idBook;
     }
 
     /**

@@ -31,7 +31,7 @@
     Account user = (Account) request.getSession().getAttribute("logged_account");
     List<Book> authorBooks = (List<Book>) request.getAttribute("author_books");
     List<Book> invitedBooks = (List<Book>) request.getAttribute("invited_books");
-    List<History> userHistories = (List<History>) request.getAttribute("account_histories");
+    List<Book> startedBooks = (List<Book>) request.getAttribute("started_books");
 %>
 <%
     boolean isLogged = request.getSession().getAttribute("logged_account") != null;
@@ -140,18 +140,18 @@
     </div>
     <hr>
     <%
-        if (userHistories.isEmpty()) {
+        if (startedBooks.isEmpty()) {
     %>
     <div class="col-12 text-center">Aucune aventure à finir</div>
     <%
         }
     %>
     <%
-        for (History h : userHistories) {
+        for (Book b : startedBooks) {
     %>
     <div class="col-12 col-lg-3 mt-3">
-        <a href="history_controller?action=read_book&id=TODO" class="btn w-100 text-left"><i
-                class="fas fa-book"></i> <%=h.getBook().getLabelTitle()%>
+        <a href="read_controller?action=start_reading&id_book=<%=b.getIdBook()%>" class="btn w-100 text-left"><i
+                class="fas fa-book"></i> <%=b.getLabelTitle()%>
         </a>
     </div>
     <%

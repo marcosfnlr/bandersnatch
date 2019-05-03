@@ -84,7 +84,7 @@
     %>
     <form action="invitation_controller" method="post">
         <input type="hidden" name="action" value="add_invitation_list">
-        <input type="hidden" name="id_book" value="<%=request.getAttribute("id_book")%>">
+        <input type="hidden" name="id_book" value="<%=request.getParameter("id_book")%>">
         <%
             for (Account u : users) {
         %>
