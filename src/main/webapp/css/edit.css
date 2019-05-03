@@ -25,6 +25,14 @@
     color: black;
 }
 
-#list-parag{
+.current-p {
+    height: 30px;
+    line-height: 30px;
+    color: black;
+    font-weight: bold;
+    padding: 0 15px;
+}
+
+#list-parag {
     padding: 0;
 }

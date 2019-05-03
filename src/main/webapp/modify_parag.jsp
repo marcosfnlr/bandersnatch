@@ -232,11 +232,19 @@
         <div class="col-12 col-lg-2" id="list-parag">
             <%
                 for (Paragraph p : paragraphs) {
+                    if (p.equals(paragraph)) {
+            %>
+            <div class="current-p">
+                <%=p.getLabelText()%>
+            </div>
+            <%
+                    } else {
             %>
             <a class="link-p mt-2" href="paragraph_controller?action=modify_paragraph&id=<%=p.getIdParagraph()%>">
                 <%=p.getLabelText()%>
             </a>
             <%
+                    }
                 }
             %>
         </div>
