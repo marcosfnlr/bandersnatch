@@ -131,10 +131,13 @@
             </div>
         </div>
         <div class="row justify-content-center">
+            <%if (!"true".equals(isNewBook)) {%>
+            <a href="paragraph_controller?action=renoncer&id=<%=request.getParameter("id_choice_orig")%>"
+               class="btn btn-danger mr-2">Renoncer</a>
+            <%
+                }
+            %>
             <button type="submit" class="btn btn-danger">Ajouter</button>
-        </div>
-        <div class="row justify-content-center">
-            <button type="submit" class="btn btn-danger">Renoncer</button>
         </div>
     </form>
 </div>
