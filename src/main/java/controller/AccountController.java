@@ -76,11 +76,11 @@ public class AccountController extends AbstractController {
 
         List<Book> invitedBooks = bookDAO.listInvitationBooks(account.getIdAccount());
         List<Book> authorBooks = bookDAO.listAuthorBooks(account.getIdAccount());
-        List<History> accountHistories = historyDAO.listUserHistory(account.getIdAccount());
+        List<Book> startedBooks = historyDAO.listBooksUserHistory(account.getIdAccount());
 
         request.setAttribute("invited_books", invitedBooks);
         request.setAttribute("author_books", authorBooks);
-        request.setAttribute("account_histories", accountHistories);
+        request.setAttribute("started_books", startedBooks);
 
         request.getRequestDispatcher("/profile.jsp").forward(request, response);
 

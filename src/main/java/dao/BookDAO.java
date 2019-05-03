@@ -232,7 +232,7 @@ public class BookDAO extends AbstractDAO {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
         }
 
-        for (int i = 0; i < userList.size(); i++) {
+        for (int i = 0; i < accounts.size(); i++) {
             Account account = accountDAO.getAccount(accounts.get(i));
             userList.add(account);
         }
@@ -251,7 +251,7 @@ public class BookDAO extends AbstractDAO {
 
         String query = "SELECT id_account FROM Account " +
                 "MINUS " +
-                "SELECT fk_account AS id_account FROM Invitation WHERE fk_book = ?";
+                "SELECT fk_account FROM Invitation WHERE fk_book = ?";
 
         try (
                 Connection conn = getConn();
@@ -261,14 +261,14 @@ public class BookDAO extends AbstractDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                accounts.add(rs.getString("fk_account"));
+                accounts.add(rs.getString("id_account"));
             }
 
         } catch (SQLException e) {
             throw new DAOException("Erreur BD " + e.getMessage(), e);
         }
 
-        for (int i = 0; i < userList.size(); i++) {
+        for (int i = 0; i < accounts.size(); i++) {
             Account account = accountDAO.getAccount(accounts.get(i));
             userList.add(account);
         }

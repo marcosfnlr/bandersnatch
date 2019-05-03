@@ -133,6 +133,9 @@
         <div class="row justify-content-center">
             <button type="submit" class="btn btn-danger">Ajouter</button>
         </div>
+        <div class="row justify-content-center">
+            <button type="submit" class="btn btn-danger">Renoncer</button>
+        </div>
     </form>
 </div>
 </body>
